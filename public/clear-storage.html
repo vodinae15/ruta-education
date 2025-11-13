@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Storage</title>
+</head>
+<body>
+    <h1>Очистка localStorage</h1>
+    <button onclick="clearStorage()">Очистить все данные</button>
+    <div id="result"></div>
+    
+    <script>
+        function clearStorage() {
+            // Показываем что было до очистки
+            const keys = Object.keys(localStorage).filter(key => 
+                key.includes('supabase') || key.includes('auth')
+            );
+            console.log('Найдены ключи:', keys);
+            
+            // Очищаем все
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            document.getElementById('result').innerHTML = 
+                '<p style="color: green;">✅ localStorage и sessionStorage очищены!</p>' +
+                '<p>Было найдено ключей: ' + keys.length + '</p>' +
+                '<p><a href="/auth">Перейти к авторизации</a></p>';
+                
+            console.log('✅ Storage cleared');
+        }
+        
+        // Показываем текущие ключи
+        window.onload = function() {
+            const keys = Object.keys(localStorage);
+            console.log('Текущие ключи localStorage:', keys);
+        }
+    </script>
+</body>
+</html>

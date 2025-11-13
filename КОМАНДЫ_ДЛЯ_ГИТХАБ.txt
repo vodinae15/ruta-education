@@ -1,0 +1,25 @@
+============================================
+КОМАНДЫ ДЛЯ ЗАГРУЗКИ НА GITHUB
+============================================
+Скопируйте и вставьте в терминал по порядку:
+
+cd /Users/vbthy/Downloads/ruta-edu-project
+
+git init
+
+git add .
+
+git commit -m "Initial commit: Ruta Education project ready for deployment"
+
+git remote add origin https://github.com/vodinae15/ruta-education.git
+
+git branch -M main
+
+git push -u origin main
+
+============================================
+ВАЖНО: При запросе введите:
+- Username: vodinae15
+- Password: ВАШ_ACCESS_TOKEN (не пароль от GitHub!)
+============================================
+
