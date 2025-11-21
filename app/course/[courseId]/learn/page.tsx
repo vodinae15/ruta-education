@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { createClient } from "@/lib/supabase/client"
-import { BookOpenIcon, CheckCircleIcon, PlayIcon, ArrowRightIcon, ArrowLeftIcon, UserIcon, MessageCircleIcon, StarIcon, LightbulbIcon } from "@/components/ui/icons"
+import { BookOpenIcon, CheckCircleIcon, PlayIcon, ArrowRightIcon, ArrowLeftIcon, UserIcon, MessageCircleIcon, StarIcon, LightbulbIcon, LockIcon } from "@/components/ui/icons"
 import { UnifiedAdaptation } from "@/components/ui/unified-adaptation"
 import { AdaptationModeSwitcher } from "@/components/ui/adaptation-mode-switcher"
 import { CourseAccessStatus } from "@/components/ui/course-access-status"
@@ -297,6 +297,29 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
     }
   }
 
+  // Проверка доступности урока: все адаптации должны быть опубликованы
+  const checkLessonAccessibility = (lesson: any): {
+    isAccessible: boolean
+    unpublishedTypes: string[]
+  } => {
+    const adaptations = lesson.lesson_adaptations || []
+    const requiredTypes = ['visual', 'auditory', 'kinesthetic', 'original']
+
+    const unpublishedTypes: string[] = []
+
+    for (const type of requiredTypes) {
+      const adaptation = adaptations.find((a: any) => a.adaptation_type === type)
+      if (!adaptation || adaptation.status !== 'published') {
+        unpublishedTypes.push(type)
+      }
+    }
+
+    return {
+      isAccessible: unpublishedTypes.length === 0,
+      unpublishedTypes
+    }
+  }
+
   const loadCourseData = async () => {
     try {
       setLoading(true)
@@ -341,13 +364,20 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
       else {
         const { data: lessonsData, error: lessonsError } = await supabase
           .from("course_lessons")
-          .select("*")
+          .select(`
+            *,
+            lesson_adaptations(
+              id,
+              adaptation_type,
+              status
+            )
+          `)
           .eq("course_id", params.courseId)
           .order("order_index")
 
         if (!lessonsError && lessonsData) {
           lessons = lessonsData
-          console.log("📚 Loading lessons from course_lessons table:", lessons)
+          console.log("📚 Loading lessons from course_lessons table with adaptations:", lessons)
         }
       }
 
@@ -661,13 +691,23 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                   {lessons.map((lesson: any, index: number) => {
                     const isCompleted = completedLessons.includes(index)
                     const isCurrent = index === currentLesson
-                    
+                    const { isAccessible, unpublishedTypes } = checkLessonAccessibility(lesson)
+
                     return (
                       <button
                         key={index}
-                        onClick={() => setCurrentLesson(index)}
+                        onClick={() => {
+                          if (!isAccessible) {
+                            // Блокируем переход к неопубликованному уроку
+                            return
+                          }
+                          setCurrentLesson(index)
+                        }}
+                        disabled={!isAccessible}
                         className={`w-full text-left p-4 rounded-lg transition-all duration-200 ${
-                          isCurrent
+                          !isAccessible
+                            ? "bg-slate-50 text-slate-400 border-2 border-slate-200 cursor-not-allowed opacity-60"
+                            : isCurrent
                             ? "bg-[#659AB8] text-white"
                             : isCompleted
                             ? "bg-green-50 text-green-800 border-2 border-green-200 hover:border-green-300"
@@ -675,7 +715,9 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          {isCompleted ? (
+                          {!isAccessible ? (
+                            <LockIcon className="w-5 h-5 text-slate-400" />
+                          ) : isCompleted ? (
                             <CheckCircleIcon className="w-5 h-5 text-green-600" />
                           ) : (
                             <div
@@ -686,9 +728,21 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                               }`}
                             />
                           )}
-                          <div>
-                            <div className="font-medium text-sm">{lesson.title}</div>
-                            <div className="text-xs opacity-75">{lesson.blocks?.length || 0} блоков</div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <div className="font-medium text-sm">{lesson.title}</div>
+                              {!isAccessible && (
+                                <Badge variant="secondary" className="bg-slate-100 text-slate-600 text-xs">
+                                  Скоро
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="text-xs opacity-75">
+                              {!isAccessible
+                                ? "Адаптация в процессе"
+                                : `${lesson.blocks?.length || 0} блоков`
+                              }
+                            </div>
                           </div>
                         </div>
                       </button>
