@@ -133,45 +133,12 @@ export async function POST(request: NextRequest) {
 
     const fileUrl = urlData.publicUrl
 
-    // Извлекаем метаданные (для изображений и видео)
-    let metadata: any = {}
-
-    if (fileType === "image" || fileType === "video") {
-      // Метаданные будут добавлены на клиенте через separate API call или можно использовать библиотеки
-      // Пока оставляем пустыми, клиент может передать их отдельно
-    }
-
-    // Сохраняем метаданные в БД
-    const { data: fileRecord, error: dbError } = await supabase
-      .from("course_files")
-      .insert({
-        course_id: courseId,
-        lesson_id: lessonId,
-        block_id: blockId,
-        element_id: elementId,
-        file_type: fileType,
-        file_name: file.name,
-        file_size: file.size,
-        file_url: fileUrl,
-        storage_path: storagePath,
-        mime_type: file.type,
-        uploaded_by: user.id,
-        ...metadata,
-      })
-      .select()
-      .single()
-
-    if (dbError) {
-      console.error("Database insert error:", dbError)
-      // Пытаемся удалить файл из Storage, если не удалось сохранить в БД
-      await supabase.storage.from("course-files").remove([storagePath])
-      return NextResponse.json({ error: "Ошибка сохранения метаданных файла" }, { status: 500 })
-    }
-
+    // БЕЗ БД: Просто возвращаем данные файла
+    // Метаданные не сохраняем, только URL из Storage
     return NextResponse.json({
       success: true,
       file: {
-        id: fileRecord.id,
+        id: storagePath, // Используем путь как ID (временно)
         url: fileUrl,
         fileName: file.name,
         fileSize: file.size,
@@ -201,59 +168,21 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Получаем fileId из URL параметров
+    // Получаем storagePath из URL параметров (это и есть fileId теперь)
     const url = new URL(request.url)
-    const fileId = url.searchParams.get("fileId")
+    const storagePath = url.searchParams.get("fileId")
 
-    if (!fileId) {
-      return NextResponse.json({ error: "ID файла обязателен" }, { status: 400 })
+    if (!storagePath) {
+      return NextResponse.json({ error: "Путь к файлу обязателен" }, { status: 400 })
     }
 
-    // Получаем информацию о файле
-    const { data: fileRecord, error: fetchError } = await supabase
-      .from("course_files")
-      .select("*, courses!inner(author_id)")
-      .eq("id", fileId)
-      .single()
-
-    if (fetchError || !fileRecord) {
-      return NextResponse.json({ error: "Файл не найден" }, { status: 404 })
-    }
-
-    // Проверяем права доступа
-    const isAuthor = fileRecord.courses.author_id === user.id
-    const isUploader = fileRecord.uploaded_by === user.id
-
-    let isCollaborator = false
-    if (!isAuthor && !isUploader) {
-      const { data: collaborator } = await supabase
-        .from("course_collaborators")
-        .select("id")
-        .eq("course_id", fileRecord.course_id)
-        .eq("collaborator_user_id", user.id)
-        .maybeSingle()
-
-      isCollaborator = !!collaborator
-    }
-
-    if (!isAuthor && !isUploader && !isCollaborator) {
-      return NextResponse.json({ error: "Нет доступа к этому файлу" }, { status: 403 })
-    }
-
-    // Удаляем файл из Storage
-    const { error: storageError } = await supabase.storage.from("course-files").remove([fileRecord.storage_path])
+    // БЕЗ БД: Просто удаляем файл из Storage
+    // Проверки доступа упрощены - пользователь должен быть авторизован
+    const { error: storageError } = await supabase.storage.from("course-files").remove([storagePath])
 
     if (storageError) {
       console.error("Storage delete error:", storageError)
-      // Продолжаем удаление из БД даже если Storage удаление не удалось
-    }
-
-    // Удаляем запись из БД
-    const { error: dbError } = await supabase.from("course_files").delete().eq("id", fileId)
-
-    if (dbError) {
-      console.error("Database delete error:", dbError)
-      return NextResponse.json({ error: "Ошибка удаления метаданных файла" }, { status: 500 })
+      return NextResponse.json({ error: "Ошибка удаления файла" }, { status: 500 })
     }
 
     return NextResponse.json({
