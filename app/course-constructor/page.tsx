@@ -364,6 +364,9 @@ export default function CourseConstructor() {
   const [loading, setLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved")
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
+  const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [showTestPrompt, setShowTestPrompt] = useState(false)
   const [draggedElement, setDraggedElement] = useState<string | null>(null)
   const [draggedBlock, setDraggedBlock] = useState<string | null>(null)
@@ -711,6 +714,49 @@ export default function CourseConstructor() {
     }
   }, [currentCourseId])
 
+  // Автосохранение каждые 4 минуты
+  useEffect(() => {
+    // Очищаем предыдущий таймер
+    if (autosaveTimerRef.current) {
+      clearInterval(autosaveTimerRef.current)
+    }
+
+    // Устанавливаем новый таймер (4 минуты = 240000 мс)
+    if (courseTitle.trim()) {
+      autosaveTimerRef.current = setInterval(() => {
+        autosaveCourse(true)
+      }, 240000) // 4 минуты
+    }
+
+    // Очищаем таймер при размонтировании компонента
+    return () => {
+      if (autosaveTimerRef.current) {
+        clearInterval(autosaveTimerRef.current)
+      }
+    }
+  }, [courseTitle, courseDescription, courseLessons, courseBlocks])
+
+  // Отмечаем данные как "несохраненные" при изменениях
+  useEffect(() => {
+    if (courseTitle.trim() && lastSavedAt) {
+      setSaveStatus("unsaved")
+    }
+  }, [courseTitle, courseDescription, courseLessons, courseBlocks])
+
+  // Сохраняем в localStorage для восстановления при перезагрузке
+  useEffect(() => {
+    if (courseTitle.trim()) {
+      const draftData = {
+        title: courseTitle,
+        description: courseDescription,
+        lessons: courseLessons,
+        blocks: courseBlocks,
+        timestamp: new Date().toISOString(),
+      }
+      localStorage.setItem("courseConstructorDraft", JSON.stringify(draftData))
+    }
+  }, [courseTitle, courseDescription, courseLessons, courseBlocks])
+
   const checkAuthorProfile = async () => {
     try {
       setLoading(true)
@@ -851,10 +897,71 @@ export default function CourseConstructor() {
 
           // Загружаем тарифы
           await loadCoursePricing(course.id)
+
+          // Проверяем наличие несохраненного черновика в localStorage
+          const draftString = localStorage.getItem("courseConstructorDraft")
+          if (draftString) {
+            try {
+              const draft = JSON.parse(draftString)
+              const draftTimestamp = new Date(draft.timestamp)
+              const courseUpdatedAt = new Date(course.updated_at || 0)
+
+              // Если черновик новее, чем сохраненная версия, восстанавливаем его
+              if (draftTimestamp > courseUpdatedAt) {
+                setCourseTitle(draft.title || "")
+                setCourseDescription(draft.description || "")
+                if (draft.lessons && draft.lessons.length > 0) {
+                  setCourseLessons(draft.lessons)
+                  setActiveLessonId(draft.lessons[0].id)
+                  setCourseBlocks(draft.lessons[0].blocks)
+                  setActiveBlockId(draft.lessons[0].blocks[0]?.id || "")
+                }
+                setSaveStatus("unsaved")
+                toast({
+                  title: "Восстановлен несохраненный черновик",
+                  description: `Восстановлены изменения от ${draftTimestamp.toLocaleString("ru-RU")}`,
+                })
+              } else {
+                // Черновик старше - удаляем его
+                localStorage.removeItem("courseConstructorDraft")
+                setLastSavedAt(courseUpdatedAt)
+              }
+            } catch (e) {
+              console.error("Error parsing draft:", e)
+              localStorage.removeItem("courseConstructorDraft")
+            }
+          } else {
+            // Нет черновика в localStorage, устанавливаем lastSavedAt
+            setLastSavedAt(new Date(course.updated_at || Date.now()))
+          }
         }
       } catch (err) {
         console.error("[v0] Error loading course:", err)
         localStorage.removeItem("currentCourseId")
+      }
+    } else {
+      // Нет сохраненного курса, проверяем localStorage draft
+      const draftString = localStorage.getItem("courseConstructorDraft")
+      if (draftString) {
+        try {
+          const draft = JSON.parse(draftString)
+          setCourseTitle(draft.title || "")
+          setCourseDescription(draft.description || "")
+          if (draft.lessons && draft.lessons.length > 0) {
+            setCourseLessons(draft.lessons)
+            setActiveLessonId(draft.lessons[0].id)
+            setCourseBlocks(draft.lessons[0].blocks)
+            setActiveBlockId(draft.lessons[0].blocks[0]?.id || "")
+          }
+          setSaveStatus("unsaved")
+          toast({
+            title: "Восстановлен несохраненный черновик",
+            description: "Восстановлены ваши последние изменения",
+          })
+        } catch (e) {
+          console.error("Error parsing draft:", e)
+          localStorage.removeItem("courseConstructorDraft")
+        }
       }
     }
   }
@@ -1501,6 +1608,78 @@ export default function CourseConstructor() {
     setActiveBlockId(newBlock.id)
   }
 
+  // Функция автосохранения
+  const autosaveCourse = async (silent = true) => {
+    // Не сохраняем, если нет названия курса
+    if (!courseTitle.trim()) {
+      return
+    }
+
+    // Не сохраняем, если уже идет сохранение
+    if (isSaving) {
+      return
+    }
+
+    try {
+      setSaveStatus("saving")
+
+      const courseId = localStorage.getItem("currentCourseId")
+
+      const response = await fetch("/api/drafts/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseId,
+          title: courseTitle,
+          description: courseDescription,
+          lessons: courseLessons,
+          blocks: courseBlocks,
+          personalizedInterface,
+          authorType: authorProfile?.author_type,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Ошибка при сохранении")
+      }
+
+      // Сохраняем ID курса, если это новый черновик
+      if (data.courseId && !courseId) {
+        localStorage.setItem("currentCourseId", data.courseId)
+        setCurrentCourseId(data.courseId)
+        window.history.replaceState({}, "", `?courseId=${data.courseId}`)
+      }
+
+      setSaveStatus("saved")
+      setLastSavedAt(new Date())
+
+      // Очищаем localStorage draft после успешного сохранения
+      localStorage.removeItem("courseConstructorDraft")
+
+      if (!silent) {
+        toast({
+          title: "Черновик сохранен",
+          description: "Все изменения успешно сохранены",
+        })
+      }
+    } catch (err) {
+      console.error("Autosave error:", err)
+      setSaveStatus("unsaved")
+
+      if (!silent) {
+        toast({
+          title: "Ошибка сохранения",
+          description: "Не удалось сохранить изменения",
+          variant: "destructive",
+        })
+      }
+    }
+  }
+
   const saveCourse = async () => {
     if (!courseTitle.trim()) {
       setModalState({ isOpen: true, type: "save" })
@@ -1527,6 +1706,11 @@ export default function CourseConstructor() {
           // RLS политики проверяют доступ (автор или соавтор)
 
         if (updateError) throw updateError
+
+        // Очищаем localStorage draft после успешного сохранения
+        localStorage.removeItem("courseConstructorDraft")
+        setSaveStatus("saved")
+        setLastSavedAt(new Date())
 
         setModalState({ isOpen: true, type: "save" })
       } else {
@@ -1561,6 +1745,11 @@ export default function CourseConstructor() {
 
         // Загружаем тарифы (если они уже созданы)
         await loadCoursePricing(courseData.id)
+
+        // Очищаем localStorage draft после успешного сохранения
+        localStorage.removeItem("courseConstructorDraft")
+        setSaveStatus("saved")
+        setLastSavedAt(new Date())
 
         setModalState({ isOpen: true, type: "save" })
       }
@@ -1988,25 +2177,56 @@ export default function CourseConstructor() {
           { label: "Создание курса" },
         ]}
         actions={
-          <div className="flex gap-4 mb-6">
-            {currentCourseId && isCourseAuthor && (
-              <Button
-                onClick={() => setShowCollaboratorsModal(true)}
-                variant="outline"
-                className="border-primary text-primary hover:bg-light-blue bg-transparent transition-colors flex items-center gap-2"
-              >
-                <UsersIcon className="w-4 h-4" />
-                Управление соавторами
-              </Button>
+          <div className="space-y-2">
+            {/* Индикатор статуса автосохранения */}
+            {courseTitle.trim() && (
+              <div className="flex items-center justify-end gap-2 text-sm">
+                {saveStatus === "saving" && (
+                  <span className="text-blue-600 flex items-center gap-1">
+                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Сохранение...
+                  </span>
+                )}
+                {saveStatus === "saved" && lastSavedAt && (
+                  <span className="text-green-600 flex items-center gap-1">
+                    <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Сохранено {new Date(lastSavedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                )}
+                {saveStatus === "unsaved" && (
+                  <span className="text-amber-600 flex items-center gap-1">
+                    <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Не сохранено
+                  </span>
+                )}
+              </div>
             )}
-            <Button
-              onClick={saveCourse}
-              disabled={isSaving}
-              variant="outline"
-              className="border-primary text-primary hover:bg-light-blue bg-transparent transition-colors"
-            >
-              {isSaving ? "Сохранение..." : "Сохранить черновик"}
-            </Button>
+            <div className="flex gap-4">
+              {currentCourseId && isCourseAuthor && (
+                <Button
+                  onClick={() => setShowCollaboratorsModal(true)}
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-light-blue bg-transparent transition-colors flex items-center gap-2"
+                >
+                  <UsersIcon className="w-4 h-4" />
+                  Управление соавторами
+                </Button>
+              )}
+              <Button
+                onClick={saveCourse}
+                disabled={isSaving}
+                variant="outline"
+                className="border-primary text-primary hover:bg-light-blue bg-transparent transition-colors"
+              >
+                {isSaving ? "Сохранение..." : "Сохранить черновик"}
+              </Button>
             <Button
               onClick={publishCourse}
               disabled={isPublishing}
@@ -2023,6 +2243,7 @@ export default function CourseConstructor() {
                 Снять с публикации
               </Button>
             )}
+            </div>
           </div>
         }
       />
@@ -2057,13 +2278,15 @@ export default function CourseConstructor() {
               <div className="space-y-3">
                 <Button
                   variant="secondary"
-                  onClick={() => {
+                  onClick={async () => {
+                    // Сохраняем перед переключением режима
+                    await autosaveCourse(false)
                     setConstructorMode("standard")
                     if (authorProfile) loadTemplate(authorProfile)
                   }}
                   className={`w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 ${
-                    constructorMode === "standard" 
-                      ? "bg-primary text-white border-primary hover:bg-primary-hover" 
+                    constructorMode === "standard"
+                      ? "bg-primary text-white border-primary hover:bg-primary-hover"
                       : "border-primary text-primary hover:bg-light-blue bg-transparent"
                   }`}
                 >
@@ -2071,13 +2294,15 @@ export default function CourseConstructor() {
                 </Button>
                 <Button
                   variant="secondary"
-                  onClick={() => {
+                  onClick={async () => {
+                    // Сохраняем перед переключением режима
+                    await autosaveCourse(false)
                     setConstructorMode("personalized")
                     if (authorProfile) loadTemplate(authorProfile)
                   }}
                   className={`w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 ${
-                    constructorMode === "personalized" 
-                      ? "bg-primary text-white border-primary hover:bg-primary-hover" 
+                    constructorMode === "personalized"
+                      ? "bg-primary text-white border-primary hover:bg-primary-hover"
                       : "border-primary text-primary hover:bg-light-blue bg-transparent"
                   }`}
                 >
