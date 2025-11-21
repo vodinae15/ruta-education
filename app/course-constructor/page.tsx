@@ -55,6 +55,7 @@ import { AudioUpload } from "@/components/ui/audio-upload"
 import { createDefaultPricing } from "@/lib/course-pricing"
 import { VideoUpload } from "@/components/ui/video-upload"
 import { ImageLibrary } from "@/components/ui/image-library"
+import { ModeSwitchWarning } from "@/components/ui/mode-switch-warning"
 
 type ElementMode = "lesson" | "notes"
 type EducationalBlockType = "theory" | "example" | "practice" | "knowledge_check"
@@ -414,6 +415,10 @@ export default function CourseConstructor() {
   const [showStructuralHint, setShowStructuralHint] = useState(false)
   const [showCollaboratorsModal, setShowCollaboratorsModal] = useState(false)
   const [isCourseAuthor, setIsCourseAuthor] = useState(false)
+
+  // Состояния для переключения режимов
+  const [showModeSwitchWarning, setShowModeSwitchWarning] = useState(false)
+  const [pendingMode, setPendingMode] = useState<"standard" | "personalized" | null>(null)
   
   // Состояния для динамических подсказок
   const [dynamicHints, setDynamicHints] = useState<DynamicHint[]>([])
@@ -1608,6 +1613,97 @@ export default function CourseConstructor() {
     setActiveBlockId(newBlock.id)
   }
 
+  // Функции для работы с данными режимов
+  const saveModeData = (mode: "standard" | "personalized") => {
+    const modeData = {
+      title: courseTitle,
+      description: courseDescription,
+      lessons: courseLessons,
+      blocks: courseBlocks,
+      timestamp: new Date().toISOString(),
+    }
+    localStorage.setItem(`courseMode_${mode}`, JSON.stringify(modeData))
+  }
+
+  const loadModeData = (mode: "standard" | "personalized") => {
+    const modeDataString = localStorage.getItem(`courseMode_${mode}`)
+    if (modeDataString) {
+      try {
+        const modeData = JSON.parse(modeDataString)
+        setCourseTitle(modeData.title || "")
+        setCourseDescription(modeData.description || "")
+        if (modeData.lessons && modeData.lessons.length > 0) {
+          setCourseLessons(modeData.lessons)
+          setActiveLessonId(modeData.lessons[0].id)
+          setCourseBlocks(modeData.lessons[0].blocks)
+          setActiveBlockId(modeData.lessons[0].blocks[0]?.id || "")
+        } else {
+          // Если нет данных режима, загружаем шаблон
+          if (authorProfile) {
+            loadTemplate(authorProfile)
+          }
+        }
+        return true
+      } catch (e) {
+        console.error("Error loading mode data:", e)
+        return false
+      }
+    }
+    return false
+  }
+
+  const handleModeSwitch = (targetMode: "standard" | "personalized") => {
+    // Если уже в этом режиме, ничего не делаем
+    if (targetMode === constructorMode) {
+      return
+    }
+
+    // Показываем предупреждение
+    setPendingMode(targetMode)
+    setShowModeSwitchWarning(true)
+  }
+
+  const confirmModeSwitch = async (saveBeforeSwitch: boolean) => {
+    if (!pendingMode) return
+
+    try {
+      // Сохраняем данные текущего режима
+      saveModeData(constructorMode)
+
+      // Если нужно сохранить в БД перед переключением
+      if (saveBeforeSwitch && courseTitle.trim()) {
+        await autosaveCourse(false)
+      }
+
+      // Переключаем режим
+      setConstructorMode(pendingMode)
+
+      // Загружаем данные нового режима
+      const loaded = loadModeData(pendingMode)
+
+      // Если не удалось загрузить сохраненные данные, загружаем шаблон
+      if (!loaded && authorProfile) {
+        loadTemplate(authorProfile)
+      }
+
+      // Закрываем модалку
+      setShowModeSwitchWarning(false)
+      setPendingMode(null)
+
+      toast({
+        title: "Режим переключён",
+        description: `Вы работаете в режиме «${pendingMode === "standard" ? "Стандартная сборка" : "Сборка по типу автора"}»`,
+      })
+    } catch (error) {
+      console.error("Error switching mode:", error)
+      toast({
+        title: "Ошибка переключения",
+        description: "Не удалось переключить режим",
+        variant: "destructive",
+      })
+    }
+  }
+
   // Функция автосохранения
   const autosaveCourse = async (silent = true) => {
     // Не сохраняем, если нет названия курса
@@ -2178,6 +2274,20 @@ export default function CourseConstructor() {
         ]}
         actions={
           <div className="space-y-2">
+            {/* Плашка текущего режима */}
+            <div className="flex items-center justify-end gap-2 text-sm mb-2">
+              <span className="text-slate-600">Режим:</span>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  constructorMode === "standard"
+                    ? "bg-blue-100 text-blue-700 border border-blue-300"
+                    : "bg-purple-100 text-purple-700 border border-purple-300"
+                }`}
+              >
+                {constructorMode === "standard" ? "Стандартная сборка" : "По типу автора"}
+              </span>
+            </div>
+
             {/* Индикатор статуса автосохранения */}
             {courseTitle.trim() && (
               <div className="flex items-center justify-end gap-2 text-sm">
@@ -2278,12 +2388,7 @@ export default function CourseConstructor() {
               <div className="space-y-3">
                 <Button
                   variant="secondary"
-                  onClick={async () => {
-                    // Сохраняем перед переключением режима
-                    await autosaveCourse(false)
-                    setConstructorMode("standard")
-                    if (authorProfile) loadTemplate(authorProfile)
-                  }}
+                  onClick={() => handleModeSwitch("standard")}
                   className={`w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 ${
                     constructorMode === "standard"
                       ? "bg-primary text-white border-primary hover:bg-primary-hover"
@@ -2294,12 +2399,7 @@ export default function CourseConstructor() {
                 </Button>
                 <Button
                   variant="secondary"
-                  onClick={async () => {
-                    // Сохраняем перед переключением режима
-                    await autosaveCourse(false)
-                    setConstructorMode("personalized")
-                    if (authorProfile) loadTemplate(authorProfile)
-                  }}
+                  onClick={() => handleModeSwitch("personalized")}
                   className={`w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 ${
                     constructorMode === "personalized"
                       ? "bg-primary text-white border-primary hover:bg-primary-hover"
@@ -3324,6 +3424,20 @@ export default function CourseConstructor() {
           </Card>
         </div>
       )}
+
+      {/* Модалка переключения режимов */}
+      <ModeSwitchWarning
+        isOpen={showModeSwitchWarning}
+        onClose={() => {
+          setShowModeSwitchWarning(false)
+          setPendingMode(null)
+        }}
+        onConfirm={() => confirmModeSwitch(false)}
+        onSaveAndSwitch={() => confirmModeSwitch(true)}
+        currentMode={constructorMode}
+        targetMode={pendingMode || "standard"}
+        hasUnsavedChanges={saveStatus === "unsaved"}
+      />
     </div>
   )
 }
