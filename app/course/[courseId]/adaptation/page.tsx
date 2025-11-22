@@ -2,25 +2,19 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { createClient } from "@/lib/supabase/client"
 import { MainNavigation } from "@/components/ui/main-navigation"
 import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
 import {
   EyeIcon,
   EarIcon,
   HandIcon,
-  ArrowLeftIcon,
   RefreshCwIcon,
   CheckCircleIcon,
   ClockIcon,
-  EditIcon,
   BookOpenIcon,
-  SaveIcon,
-  LightbulbIcon,
   XIcon
 } from "@/components/ui/icons"
 import { UnifiedAdaptation } from "@/components/ui/unified-adaptation"
@@ -140,7 +134,6 @@ export default function CourseAdaptationPage() {
   const [adaptationProgress, setAdaptationProgress] = useState<Record<string, number>>({})
   const [isEditing, setIsEditing] = useState(false)
   const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false)
-  const [isPublishingAll, setIsPublishingAll] = useState(false)
 
   const supabase = createClient()
   const { toast } = useToast()
@@ -868,80 +861,6 @@ export default function CourseAdaptationPage() {
     }
   }
 
-  const publishAllAdaptations = async () => {
-    if (!selectedLesson) return
-
-    setIsPublishingAll(true)
-    try {
-      const adaptationTypes: AdaptationType[] = ['visual', 'auditory', 'kinesthetic', 'original']
-      const publishPromises = adaptationTypes.map(async (type) => {
-        const adaptation = adaptations[type]
-        if (adaptation && (adaptation.status === 'completed' || adaptation.status === 'edited') && adaptation.content) {
-          const response = await fetch('/api/lesson-adaptation', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              lessonId: selectedLesson.id,
-              courseId: courseId,
-              type: type
-            }),
-          })
-          return { type, success: response.ok, response }
-        }
-        return { type, success: true, skipped: true }
-      })
-
-      const results = await Promise.all(publishPromises)
-      const successCount = results.filter(r => r.success).length
-      const skippedCount = results.filter(r => r.skipped).length
-      const failedCount = results.filter(r => !r.success && !r.skipped).length
-
-      setAdaptations(prev => {
-        const updated = { ...prev }
-        results.forEach(result => {
-          if (result.success && !result.skipped && updated[result.type]) {
-            updated[result.type] = {
-              ...updated[result.type],
-              status: 'published'
-            }
-          }
-        })
-        return updated
-      })
-
-      await loadAdaptationsFromDB(selectedLesson.id)
-
-      if (failedCount === 0) {
-        toast({
-          title: "Адаптации опубликованы",
-          description: `Опубликовано адаптаций: ${successCount - skippedCount}${skippedCount > 0 ? `, пропущено: ${skippedCount}` : ''}. Теперь они доступны для студентов.`,
-        })
-      } else {
-        toast({
-          title: "Публикация завершена с ошибками",
-          description: `Опубликовано: ${successCount - skippedCount}, ошибок: ${failedCount}${skippedCount > 0 ? `, пропущено: ${skippedCount}` : ''}.`,
-          variant: "destructive",
-        })
-      }
-    } catch (error: any) {
-      toast({
-        title: "Ошибка публикации",
-        description: error.message || "Произошла ошибка при публикации адаптаций.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsPublishingAll(false)
-    }
-  }
-
-  const hasUnpublishedAdaptations = () => {
-    return Object.values(adaptations).some(adaptation =>
-      (adaptation.status === 'completed' || adaptation.status === 'edited') && adaptation.content
-    )
-  }
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -1014,17 +933,16 @@ export default function CourseAdaptationPage() {
                 Как курс «{course.title}» будет выглядеть для разных режимов представления материала
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-shrink-0">
               <button
                 onClick={() => router.push(`/course/${courseId}`)}
-                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white flex items-center gap-2"
+                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap"
               >
-                <ArrowLeftIcon className="w-4 h-4" />
                 К курсу
               </button>
               <button
                 onClick={() => router.push("/dashboard")}
-                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
               >
                 В дашборд
               </button>
@@ -1035,33 +953,6 @@ export default function CourseAdaptationPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-6xl mx-auto space-y-8">
-
-          {/* Информация о курсе */}
-          <Card className="border">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg text-[#5589a7]">
-                Информация о курсе
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div>
-                  <h3 className="font-semibold text-slate-900">{course.title}</h3>
-                  {course.description && (
-                    <p className="text-sm text-slate-600 mt-1">{course.description}</p>
-                  )}
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="bg-[#FDF8F3] text-slate-900 px-3 py-1 rounded-md text-sm border border-[#E5E7EB]">
-                    {course.status}
-                  </span>
-                  <span className="text-sm text-slate-600">
-                    ID курса: <span className="font-mono text-xs">{course.id}</span>
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Выбор урока */}
           {lessons.length > 0 && (
@@ -1098,33 +989,6 @@ export default function CourseAdaptationPage() {
             </Card>
           )}
 
-          {/* Информация о системе */}
-          <div className={`rounded-lg p-4 border ${lessons.length > 0 ? 'bg-[#FDF8F3] border-[#E5E7EB]' : 'bg-light-gray border-[#E5E7EB]'}`}>
-            <h4 className="font-semibold mb-2 text-slate-900">
-              {lessons.length > 0 ? 'ИИ-адаптация активна' : 'Уроки не найдены'}
-            </h4>
-            <div className="text-sm text-slate-600">
-              {lessons.length > 0 ? (
-                <>
-                  <p>Система использует Claude-3.5-Sonnet для адаптации контента под разные типы обучения.</p>
-                  <p className="mt-2">
-                    <strong>Уроков найдено: {lessons.length}</strong> |
-                    Выбранный урок: {selectedLesson ? selectedLesson.title : 'Нет'}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="mb-2">Уроки не найдены в курсе. Пожалуйста, проверьте:</p>
-                  <ul className="list-disc list-inside mt-2 space-y-1 mb-2">
-                    <li>Есть ли уроки в таблице <code className="bg-slate-100 px-1 rounded">course_lessons</code> для этого курса</li>
-                    <li>Есть ли уроки в поле <code className="bg-slate-100 px-1 rounded">modules.lessons</code> данных курса</li>
-                    <li>Есть ли уроки в поле <code className="bg-slate-100 px-1 rounded">course_data.lessons</code> данных курса</li>
-                  </ul>
-                </>
-              )}
-            </div>
-          </div>
-
           {/* Кнопка запуска/перегенерации адаптации */}
           {selectedLesson && (
             <Card className="border">
@@ -1147,38 +1011,18 @@ export default function CourseAdaptationPage() {
                       <button
                         onClick={startAdaptation}
                         disabled={isAdapting}
-                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {isAdapting ? (
-                          <>
-                            <RefreshCwIcon className="w-4 h-4 animate-spin" />
-                            Адаптация в процессе...
-                          </>
-                        ) : (
-                          <>
-                            <EditIcon className="w-4 h-4" />
-                            Запустить адаптацию
-                          </>
-                        )}
+                        {isAdapting ? 'Адаптация в процессе...' : 'Запустить адаптацию'}
                       </button>
                     )}
                     {hasExistingAdaptations() && (
                       <button
                         onClick={handleRegenerateClick}
                         disabled={isAdapting}
-                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {isAdapting ? (
-                          <>
-                            <RefreshCwIcon className="w-4 h-4 animate-spin" />
-                            Перегенерация в процессе...
-                          </>
-                        ) : (
-                          <>
-                            <RefreshCwIcon className="w-4 h-4" />
-                            Перегенерировать адаптацию
-                          </>
-                        )}
+                        {isAdapting ? 'Перегенерация в процессе...' : 'Перегенерировать адаптацию'}
                       </button>
                     )}
                   </div>
@@ -1240,50 +1084,6 @@ export default function CourseAdaptationPage() {
             </Card>
           )}
 
-          {/* Рекомендации по материалам */}
-          {materialsAnalysis && materialsAnalysis.recommendations && materialsAnalysis.recommendations.length > 0 && (
-            <Card className="border bg-light-gray">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg text-[#5589a7] flex items-center gap-2">
-                  <LightbulbIcon className="w-5 h-5" />
-                  Рекомендации по улучшению контента
-                </CardTitle>
-                <CardDescription className="text-slate-600">
-                  Следующие рекомендации помогут улучшить качество адаптации для разных режимов представления материала
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {materialsAnalysis.recommendations.map((rec: any, index: number) => {
-                    const priority = rec.priority || 'medium'
-
-                    return (
-                      <div
-                        key={index}
-                        className="p-3 rounded-lg bg-[#FDF8F3] border border-[#E5E7EB]"
-                      >
-                        <div className="flex items-start gap-2">
-                          <LightbulbIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#5589a7]" />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-slate-900">{rec.message}</p>
-                            {rec.type && (
-                              <p className="text-xs mt-1 text-slate-600">
-                                Тип материала: {rec.type === 'audio' ? 'Аудио' : rec.type === 'visual' ? 'Визуальный' : rec.type === 'practice' ? 'Практика' : rec.type}
-                              </p>
-                            )}
-                          </div>
-                          {priority === 'high' && (
-                            <span className="bg-[#659AB8] text-white text-xs px-2 py-1 rounded">Важно</span>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           {/* Шаблоны адаптации */}
           {selectedLesson && (
             <Card className="border">
@@ -1305,44 +1105,23 @@ export default function CourseAdaptationPage() {
                       availableModes={['visual', 'auditory', 'kinesthetic', 'original']}
                     />
                     <div className="flex gap-2">
-                      {hasUnpublishedAdaptations() && (
-                        <button
-                          onClick={publishAllAdaptations}
-                          disabled={isPublishingAll}
-                          className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                        >
-                          {isPublishingAll ? (
-                            <>
-                              <RefreshCwIcon className="w-4 h-4 animate-spin" />
-                              Публикация...
-                            </>
-                          ) : (
-                            <>
-                              <CheckCircleIcon className="w-4 h-4" />
-                              Опубликовать все адаптации
-                            </>
-                          )}
-                        </button>
-                      )}
                       {(adaptations[currentMode]?.content || (currentMode === 'original' && (adaptations['original']?.status === 'completed' || adaptations['original']?.status === 'published'))) && (
                         <>
                           <button
                             onClick={() => setIsEditing(!isEditing)}
-                            className={`px-6 py-2 border-2 rounded-lg text-sm font-semibold transition-colors duration-200 flex items-center gap-2 ${
+                            className={`px-6 py-2 border-2 rounded-lg text-sm font-semibold transition-colors duration-200 whitespace-nowrap ${
                               isEditing
                                 ? "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7] hover:border-[#5589a7]"
                                 : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
                             }`}
                           >
-                            <EditIcon className="w-4 h-4" />
                             {isEditing ? 'Закрыть редактор' : 'Редактировать'}
                           </button>
                           {!isEditing && adaptations[currentMode]?.status !== 'published' && (
                             <button
                               onClick={() => publishAdaptation(currentMode)}
-                              className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center gap-2"
+                              className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
                             >
-                              <CheckCircleIcon className="w-4 h-4" />
                               Опубликовать
                             </button>
                           )}
@@ -1462,9 +1241,8 @@ export default function CourseAdaptationPage() {
                           <p className="text-slate-600 mb-4">Адаптация ещё не создана</p>
                           <button
                             onClick={() => startAdaptation()}
-                            className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center gap-2 mx-auto"
+                            className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                           >
-                            <EditIcon className="w-4 h-4" />
                             Создать адаптацию
                           </button>
                         </div>
