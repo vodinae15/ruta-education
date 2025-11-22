@@ -57,7 +57,7 @@ export function NotificationsBell({ authorId }: NotificationsBellProps) {
           size="icon"
           className="relative h-10 w-10 rounded-full hover:bg-light-blue"
         >
-          <BellIcon className="h-5 w-5 text-primary" />
+          <BellIcon className="h-5 w-5 text-[#5589a7]" />
           {unreadCount > 0 && (
             <Badge
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500 text-white text-xs rounded-full"

@@ -158,7 +158,7 @@ export function CourseCollaboratorsManager({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-primary">
+          <DialogTitle className="text-2xl font-bold text-[#5589a7]">
             Управление соавторами
           </DialogTitle>
           <DialogDescription className="text-slate-600">
@@ -169,8 +169,8 @@ export function CourseCollaboratorsManager({
         <div className="space-y-6 mt-4">
           {/* Форма добавления соавтора */}
           {isAuthor && (
-            <div className="space-y-4 p-4 bg-light-blue/30 rounded-lg border border-primary/20">
-              <h3 className="font-semibold text-primary">Добавить соавтора</h3>
+            <div className="space-y-4 p-4 bg-light-blue/30 rounded-lg border border-[#659AB8]/20">
+              <h3 className="font-semibold text-[#5589a7]">Добавить соавтора</h3>
               <div className="flex gap-2">
                 <div className="flex-1">
                   <Input
@@ -194,7 +194,7 @@ export function CourseCollaboratorsManager({
                 <Button
                   onClick={handleAddCollaborator}
                   disabled={adding || !email.trim()}
-                  className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+                  className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white flex items-center gap-2"
                 >
                   {adding ? (
                     <>
@@ -220,7 +220,7 @@ export function CourseCollaboratorsManager({
 
           {/* Список соавторов */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-primary">
+            <h3 className="font-semibold text-[#5589a7]">
               Соавторы ({collaborators.length})
             </h3>
 
@@ -243,11 +243,11 @@ export function CourseCollaboratorsManager({
                 {collaborators.map((collaborator) => (
                   <div
                     key={collaborator.id}
-                    className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg hover:border-primary/20 transition-colors"
+                    className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg hover:border-[#659AB8]/20 transition-colors"
                   >
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                        <UserIcon className="w-5 h-5 text-primary" />
+                      <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                        <UserIcon className="w-5 h-5 text-[#5589a7]" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-slate-900 truncate">
@@ -257,7 +257,7 @@ export function CourseCollaboratorsManager({
                           Добавлен {formatDate(collaborator.added_at)}
                         </p>
                       </div>
-                      <Badge className="bg-primary/10 text-primary border-primary/20">
+                      <Badge className="bg-[#659AB8]/10 text-[#5589a7] border-[#659AB8]/20">
                         Соавтор
                       </Badge>
                     </div>
@@ -279,7 +279,7 @@ export function CourseCollaboratorsManager({
           </div>
 
           {/* Информация о правах */}
-          <div className="p-4 bg-light-blue/20 rounded-lg border border-primary/10">
+          <div className="p-4 bg-light-blue/20 rounded-lg border border-[#659AB8]/10">
             <p className="text-sm text-slate-700">
               <strong>Важно:</strong> Соавторы имеют те же права редактирования, что и автор курса. 
               Они могут создавать и редактировать уроки, блоки и весь контент курса.

@@ -246,7 +246,7 @@ export default function StudentCoursePage() {
               ) : element.type === "audio" && element.content ? (
                 <div className="space-y-2">
                   <div className="p-4 bg-slate-100 rounded-lg">
-                    <p className="text-[#6B7280]">Аудио: {element.content}</p>
+                    <p className="text-slate-600">Аудио: {element.content}</p>
                   </div>
                   {!isCompleted && (
                     <Button
@@ -366,7 +366,7 @@ export default function StudentCoursePage() {
     return (
       <div className="min-h-screen bg-[#CDE6F9] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-[#6B7280] text-xl mb-4">Курс не найден</div>
+          <div className="text-slate-600 text-xl mb-4">Курс не найден</div>
           <Button
             onClick={() => router.push("/student-dashboard")}
             className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
@@ -382,7 +382,7 @@ export default function StudentCoursePage() {
     return (
       <div className="min-h-screen bg-[#CDE6F9] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-[#6B7280] text-xl mb-4">Курс пока не содержит материалов</div>
+          <div className="text-slate-600 text-xl mb-4">Курс пока не содержит материалов</div>
           <Button
             onClick={() => router.push("/student-dashboard")}
             className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
@@ -403,7 +403,7 @@ export default function StudentCoursePage() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-[#659AB8] mb-2">{course.title}</h1>
           <div className="flex items-center gap-4">
-            <span className="text-[#6B7280]">
+            <span className="text-slate-600">
               Блок {currentBlockIndex + 1} из {course.modules.blocks.length}
             </span>
             <div className="flex-1 bg-white rounded-full h-2">

@@ -1267,10 +1267,10 @@ export default function CourseAdaptationPage() {
   if (error || !course) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white border-2 rounded-lg shadow-ruta-sm">
+        <Card className="w-full max-w-md bg-white border-2 rounded-lg ">
           <CardContent className="text-center py-8">
             <p className="text-red-600 mb-4">{error || "Курс не найден"}</p>
-            <Button onClick={() => router.push("/dashboard")} className="bg-primary hover:bg-primary/90 text-white">
+            <Button onClick={() => router.push("/dashboard")} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
               Вернуться в дашборд
             </Button>
           </CardContent>
@@ -1297,14 +1297,14 @@ export default function CourseAdaptationPage() {
             <Button
               variant="secondary"
               onClick={() => router.push(`/course/${courseId}`)}
-              className="flex items-center gap-2 border-primary text-primary hover:bg-primary/5"
+              className="flex items-center gap-2 border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"
             >
               <ArrowLeftIcon className="w-4 h-4" />
               К курсу
             </Button>
             <Button
               onClick={() => router.push("/dashboard")}
-              className="bg-primary hover:bg-primary/90 text-white"
+              className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
             >
               В дашборд
             </Button>
@@ -1316,9 +1316,9 @@ export default function CourseAdaptationPage() {
         <div className="max-w-6xl mx-auto">
           
           {/* Информация о курсе */}
-          <Card className="bg-white border-2 rounded-lg shadow-ruta-sm mb-8">
+          <Card className="bg-white border-2 rounded-lg  mb-8">
             <CardHeader>
-              <CardTitle className="text-xl text-primary font-bold">
+              <CardTitle className="text-xl text-[#5589a7] font-bold">
                 Информация о курсе
               </CardTitle>
             </CardHeader>
@@ -1327,14 +1327,14 @@ export default function CourseAdaptationPage() {
                 <div>
                   <h3 className="font-semibold text-slate-900">{course.title}</h3>
                   {course.description && (
-                    <p className="text-[#6B7280] mt-1">{course.description}</p>
+                    <p className="text-slate-600 mt-1">{course.description}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-4">
-                  <Badge className="border-primary text-primary">
+                  <Badge className="border-[#659AB8] text-[#5589a7]">
                     {course.status}
                   </Badge>
-                  <span className="text-sm text-[#6B7280]">
+                  <span className="text-sm text-slate-600">
                     ID курса: <span className="font-mono text-xs">{course.id}</span>
                   </span>
                 </div>
@@ -1344,9 +1344,9 @@ export default function CourseAdaptationPage() {
 
           {/* Выбор урока */}
           {lessons.length > 0 && (
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm mb-8">
+            <Card className="bg-white border-2 rounded-lg  mb-8">
               <CardHeader>
-                <CardTitle className="text-lg text-primary font-bold">
+                <CardTitle className="text-lg text-[#5589a7] font-bold">
                   Выберите урок для адаптации
                 </CardTitle>
               </CardHeader>
@@ -1410,13 +1410,13 @@ export default function CourseAdaptationPage() {
 
           {/* Кнопка запуска/перегенерации адаптации */}
           {selectedLesson && (
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm mb-8">
+            <Card className="bg-white border-2 rounded-lg  mb-8">
               <CardContent className="py-6">
                 <div className="text-center">
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">
                     {hasExistingAdaptations() ? 'Перегенерировать адаптацию урока' : 'Запустить адаптацию урока'}
                   </h3>
-                  <p className="text-[#6B7280] mb-2">
+                  <p className="text-slate-600 mb-2">
                     {hasExistingAdaptations() 
                       ? `ИИ перегенерирует адаптацию урока "${selectedLesson.title}" для всех режимов представления материала. Старая версия будет удалена.`
                       : `ИИ адаптирует урок "${selectedLesson.title}" для всех режимов представления материала`
@@ -1430,7 +1430,7 @@ export default function CourseAdaptationPage() {
                       <Button
                         onClick={startAdaptation}
                         disabled={isAdapting}
-                        className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
+                        className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white px-8 py-3"
                       >
                         {isAdapting ? (
                           <>
@@ -1449,7 +1449,7 @@ export default function CourseAdaptationPage() {
                       <Button
                         onClick={handleRegenerateClick}
                         disabled={isAdapting}
-                        className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
+                        className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white px-8 py-3"
                       >
                         {isAdapting ? (
                           <>
@@ -1472,19 +1472,19 @@ export default function CourseAdaptationPage() {
 
           {/* Прогресс-бар */}
           {isAdapting && (
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm mb-8">
+            <Card className="bg-white border-2 rounded-lg  mb-8">
               <CardContent className="py-6">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-900">
                       Прогресс адаптации
                     </h3>
-                    <span className="text-sm text-[#6B7280] font-semibold">
+                    <span className="text-sm text-slate-600 font-semibold">
                       {Math.round(overallProgress)}%
                     </span>
                   </div>
                   <Progress value={overallProgress} className="h-3" showLabel />
-                  <p className="text-sm text-[#6B7280]">
+                  <p className="text-sm text-slate-600">
                     Адаптация контента может занять несколько минут...
                   </p>
                   
@@ -1511,7 +1511,7 @@ export default function CourseAdaptationPage() {
                                 <XIcon className="w-3 h-3 text-red-600" />
                               )}
                             </div>
-                            <span className="text-[#6B7280]">{Math.round(progress)}%</span>
+                            <span className="text-slate-600">{Math.round(progress)}%</span>
                           </div>
                           <Progress value={progress} className="h-2" />
                         </div>
@@ -1575,9 +1575,9 @@ export default function CourseAdaptationPage() {
 
           {/* Шаблоны адаптации */}
           {selectedLesson && (
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+            <Card className="bg-white border-2 rounded-lg ">
               <CardHeader>
-                <CardTitle className="text-xl text-primary font-bold">
+                <CardTitle className="text-xl text-[#5589a7] font-bold">
                   Просмотр адаптации урока
                 </CardTitle>
                 <CardDescription>
@@ -1618,7 +1618,7 @@ export default function CourseAdaptationPage() {
                           <Button
                             onClick={() => setIsEditing(!isEditing)}
                             variant={isEditing ? "primary" : "secondary"}
-                            className={isEditing ? "bg-primary hover:bg-primary/90 text-white" : "border-primary text-primary hover:bg-primary/5"}
+                            className={isEditing ? "bg-[#659AB8] hover:bg-[#659AB8]/90 text-white" : "border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"}
                           >
                             <EditIcon className="w-4 h-4 mr-2" />
                             {isEditing ? 'Закрыть редактор' : 'Редактировать'}
@@ -1626,7 +1626,7 @@ export default function CourseAdaptationPage() {
                           {!isEditing && adaptations[currentMode]?.status !== 'published' && (
                             <Button
                               onClick={() => publishAdaptation(currentMode)}
-                              className="bg-primary hover:bg-primary/90 text-white"
+                              className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
                             >
                               <CheckCircleIcon className="w-4 h-4 mr-2" />
                               Опубликовать
@@ -1735,7 +1735,7 @@ export default function CourseAdaptationPage() {
                           <p className="text-red-800">Ошибка при адаптации контента</p>
                           <Button
                             onClick={() => startAdaptation()}
-                            className="mt-4 bg-primary hover:bg-primary/90 text-white"
+                            className="mt-4 bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
                           >
                             Попробовать снова
                           </Button>
@@ -1746,7 +1746,7 @@ export default function CourseAdaptationPage() {
                           <p className="text-gray-600 mb-4">Адаптация еще не создана</p>
                           <Button
                             onClick={() => startAdaptation()}
-                            className="bg-primary hover:bg-primary/90 text-white"
+                            className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
                           >
                             <EditIcon className="w-4 h-4 mr-2" />
                             Создать адаптацию

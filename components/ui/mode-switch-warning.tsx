@@ -51,8 +51,8 @@ export function ModeSwitchWarning({
         {/* Content */}
         <div className="p-6 space-y-4">
           <p className="text-slate-700 leading-relaxed">
-            Вы переключаетесь с режима <span className="font-semibold text-primary">«{modeNames[currentMode]}»</span> на{" "}
-            <span className="font-semibold text-primary">«{modeNames[targetMode]}»</span>.
+            Вы переключаетесь с режима <span className="font-semibold text-[#5589a7]">«{modeNames[currentMode]}»</span> на{" "}
+            <span className="font-semibold text-[#5589a7]">«{modeNames[targetMode]}»</span>.
           </p>
 
           {hasUnsavedChanges ? (
@@ -97,12 +97,12 @@ export function ModeSwitchWarning({
               >
                 Переключить без сохранения
               </Button>
-              <Button onClick={onSaveAndSwitch} className="flex-1 bg-primary hover:bg-primary-hover text-white">
+              <Button onClick={onSaveAndSwitch} className="flex-1 bg-[#659AB8] hover:bg-[#659AB8]-hover text-white">
                 Сохранить и переключить
               </Button>
             </>
           ) : (
-            <Button onClick={onConfirm} className="flex-1 bg-primary hover:bg-primary-hover text-white">
+            <Button onClick={onConfirm} className="flex-1 bg-[#659AB8] hover:bg-[#659AB8]-hover text-white">
               Переключить режим
             </Button>
           )}

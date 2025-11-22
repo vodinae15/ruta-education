@@ -19,7 +19,7 @@ export function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
         <React.Fragment key={index}>
           {index > 0 && <ChevronRightIcon className="w-4 h-4 text-slate-400" />}
           {item.href ? (
-            <Link href={item.href} className="hover:text-primary transition-colors">
+            <Link href={item.href} className="hover:text-[#5589a7] transition-colors">
               {item.label}
             </Link>
           ) : (

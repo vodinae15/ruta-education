@@ -581,7 +581,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-bold text-[#659AB8]">{course.title}</h1>
-                <p className="text-sm text-[#6B7280]">Курс</p>
+                <p className="text-sm text-slate-600">Курс</p>
               </div>
               <div className="flex items-center gap-4">
                 <Button
@@ -604,7 +604,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
               <h2 className="text-xl font-semibold text-slate-900 mb-2">
                 Уроки курса не найдены
               </h2>
-              <p className="text-[#6B7280] mb-6">
+              <p className="text-slate-600 mb-6">
                 В этом курсе пока нет уроков. Обратитесь к преподавателю для получения доступа к контенту.
               </p>
               <Button
@@ -925,14 +925,14 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-[#1E293B]">Бонусные материалы</h3>
-                      <p className="text-sm text-[#6B7280]">Дополнительный контент от автора</p>
+                      <p className="text-sm text-slate-600">Дополнительный контент от автора</p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="p-4 bg-primary/5 border-2 border-primary/20 rounded-lg">
+                  <div className="p-4 bg-[#659AB8]/5 border-2 border-[#659AB8]/20 rounded-lg">
                     <div className="flex items-center gap-2 mb-3">
-                      <Badge className="bg-primary text-white text-xs">Автор курса</Badge>
+                      <Badge className="bg-[#659AB8] text-white text-xs">Автор курса</Badge>
                     </div>
                     <div className="text-slate-900 whitespace-pre-wrap leading-relaxed">
                       {purchaseInfo.bonusContent}
@@ -944,21 +944,21 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
             {/* Компонент для обмена заметками (если тариф с обратной связью) */}
             {purchaseInfo?.hasFeedback && studentId && (
-              <Card className="border-2 border-primary/30 bg-white rounded-lg mt-6">
+              <Card className="border-2 border-[#659AB8]/30 bg-white rounded-lg mt-6">
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-[#659AB8] flex items-center justify-center">
                         <MessageCircleIcon className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-[#1E293B]">Обратная связь с автором</h3>
-                        <p className="text-sm text-[#6B7280]">Обменивайтесь заметками с автором курса</p>
+                        <p className="text-sm text-slate-600">Обменивайтесь заметками с автором курса</p>
                       </div>
                     </div>
                     <Button
                       onClick={() => setNotesModalOpen(true)}
-                      className="bg-primary hover:bg-primary-hover text-white"
+                      className="bg-[#659AB8] hover:bg-[#659AB8]-hover text-white"
                     >
                       <MessageCircleIcon className="w-4 h-4 mr-2" />
                       Открыть заметки
@@ -966,14 +966,14 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="p-4 bg-light-blue/30 border border-primary/20 rounded-lg">
+                  <div className="p-4 bg-light-blue/30 border border-[#659AB8]/20 rounded-lg">
                     <p className="text-sm text-[#111827] mb-3">
                       {purchaseInfo.pricingName 
                         ? `Вы приобрели тариф "${purchaseInfo.pricingName}" с обратной связью от автора.`
                         : "Вы приобрели тариф с обратной связью от автора."
                       }
                     </p>
-                    <p className="text-sm text-[#6B7280]">
+                    <p className="text-sm text-slate-600">
                       Нажмите на кнопку "Открыть заметки", чтобы начать обмен сообщениями с автором курса.
                     </p>
                   </div>

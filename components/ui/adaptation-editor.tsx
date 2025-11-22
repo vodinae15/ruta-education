@@ -363,7 +363,7 @@ export function AdaptationEditor({ content, onSave, onCancel, isSaving = false }
           <Button
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-primary hover:bg-primary/90 text-white"
+            className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
           >
             {isSaving ? (
               <>

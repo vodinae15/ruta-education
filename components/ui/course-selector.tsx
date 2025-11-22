@@ -68,7 +68,7 @@ export function CourseSelector({ courses, selectedCourseId, onCourseChange, clas
                 className={cn(
                   "w-full text-left px-4 py-3 rounded-lg transition-colors",
                   "hover:bg-light-blue/50",
-                  !selectedCourseId && "bg-light-blue text-primary font-medium"
+                  !selectedCourseId && "bg-light-blue text-[#5589a7] font-medium"
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -84,7 +84,7 @@ export function CourseSelector({ courses, selectedCourseId, onCourseChange, clas
                   className={cn(
                     "w-full text-left px-4 py-3 rounded-lg transition-colors",
                     "hover:bg-light-blue/50",
-                    selectedCourseId === course.id && "bg-light-blue text-primary font-medium"
+                    selectedCourseId === course.id && "bg-light-blue text-[#5589a7] font-medium"
                   )}
                 >
                   <div className="flex items-center gap-2">

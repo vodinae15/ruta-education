@@ -121,7 +121,7 @@ export function NotificationsList({ authorId, onNotificationRead }: Notification
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "purchase_with_feedback":
-        return <MessageCircleIcon className="w-5 h-5 text-primary" />
+        return <MessageCircleIcon className="w-5 h-5 text-[#5589a7]" />
       case "stream_started":
         return <ClockIcon className="w-5 h-5 text-blue-600" />
       case "course_published":
@@ -134,7 +134,7 @@ export function NotificationsList({ authorId, onNotificationRead }: Notification
   const getNotificationColor = (type: string) => {
     switch (type) {
       case "purchase_with_feedback":
-        return "bg-primary/10 border-primary/20"
+        return "bg-[#659AB8]/10 border-[#659AB8]/20"
       case "stream_started":
         return "bg-blue-50 border-blue-200"
       case "course_published":
@@ -155,7 +155,7 @@ export function NotificationsList({ authorId, onNotificationRead }: Notification
             variant="ghost"
             size="sm"
             onClick={markAllAsRead}
-            className="text-xs text-primary hover:text-primary/80"
+            className="text-xs text-[#5589a7] hover:text-[#5589a7]/80"
           >
             Отметить все как прочитанные
           </Button>
@@ -209,7 +209,7 @@ export function NotificationsList({ authorId, onNotificationRead }: Notification
                           })}
                         </p>
                         {!notification.is_read && (
-                          <Badge className="bg-primary text-white text-xs">Новое</Badge>
+                          <Badge className="bg-[#659AB8] text-white text-xs">Новое</Badge>
                         )}
                       </div>
                     </div>

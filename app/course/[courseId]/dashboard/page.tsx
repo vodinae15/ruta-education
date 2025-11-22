@@ -105,7 +105,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
               </Button>
               <div>
                 <h1 className="text-xl font-bold text-[#659AB8]">Личный кабинет</h1>
-                <p className="text-sm text-[#6B7280]">{course.title}</p>
+                <p className="text-sm text-slate-600">{course.title}</p>
               </div>
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-[#659AB8]">Профиль ученика</h2>
-                  <p className="text-sm text-[#6B7280]">{studentSession.email}</p>
+                  <p className="text-sm text-slate-600">{studentSession.email}</p>
                 </div>
               </div>
             </CardHeader>
@@ -138,7 +138,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
 
                 <div>
                   <Label className="text-sm font-medium text-slate-700">Дата начала обучения</Label>
-                  <p className="text-sm text-[#6B7280] mt-1">
+                  <p className="text-sm text-slate-600 mt-1">
                     {new Date(studentSession.created_at).toLocaleDateString("ru-RU")}
                   </p>
                 </div>
@@ -166,7 +166,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-[#659AB8]">Прогресс обучения</h2>
-                  <p className="text-sm text-[#6B7280]">Ваши достижения в курсе</p>
+                  <p className="text-sm text-slate-600">Ваши достижения в курсе</p>
                 </div>
               </div>
             </CardHeader>
@@ -175,7 +175,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-slate-700">Общий прогресс</span>
-                    <span className="text-sm text-[#6B7280]">{Math.round(progress)}%</span>
+                    <span className="text-sm text-slate-600">{Math.round(progress)}%</span>
                   </div>
                   <Progress value={progress} className="h-3" />
                 </div>
@@ -183,11 +183,11 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-slate-50 rounded-lg">
                     <div className="text-2xl font-bold text-[#659AB8]">{completedModules.length}</div>
-                    <div className="text-xs text-[#6B7280]">Завершено модулей</div>
+                    <div className="text-xs text-slate-600">Завершено модулей</div>
                   </div>
                   <div className="text-center p-3 bg-slate-50 rounded-lg">
                     <div className="text-2xl font-bold text-[#659AB8]">{blocks.length}</div>
-                    <div className="text-xs text-[#6B7280]">Всего модулей</div>
+                    <div className="text-xs text-slate-600">Всего модулей</div>
                   </div>
                 </div>
 
@@ -209,7 +209,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-[#659AB8]">Мои курсы</h2>
-                  <p className="text-sm text-[#6B7280]">Курсы, в которых вы участвуете</p>
+                  <p className="text-sm text-slate-600">Курсы, в которых вы участвуете</p>
                 </div>
               </div>
             </CardHeader>
@@ -224,7 +224,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                         </div>
                         <div>
                           <h3 className="font-medium text-slate-800">{course.title}</h3>
-                          <p className="text-sm text-[#6B7280]">
+                          <p className="text-sm text-slate-600">
                             {completedModules.length} из {blocks.length} модулей завершено
                           </p>
                         </div>
@@ -236,7 +236,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                               ? "bg-green-100 text-green-800"
                               : progress > 0
                                 ? "bg-blue-100 text-blue-800"
-                                : "bg-slate-100 text-[#6B7280]"
+                                : "bg-slate-100 text-slate-600"
                           }`}
                         >
                           {progress === 100 ? "Завершен" : progress > 0 ? "В процессе" : "Не начат"}

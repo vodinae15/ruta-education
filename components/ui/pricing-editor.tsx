@@ -158,7 +158,7 @@ export function PricingEditor({ pricing, onUpdate, isUpdating }: PricingEditorPr
               htmlFor={`feedback-${pricing.id}`}
               className="text-sm font-medium text-slate-700 cursor-pointer flex items-center gap-2"
             >
-              <MessageCircleIcon className="w-4 h-4 text-primary" />
+              <MessageCircleIcon className="w-4 h-4 text-[#5589a7]" />
               Обратная связь от автора
             </Label>
           </div>

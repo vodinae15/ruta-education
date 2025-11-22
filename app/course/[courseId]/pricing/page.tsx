@@ -286,7 +286,7 @@ export default function CoursePricingPage() {
         {pricing.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
-              <p className="text-[#6B7280]">Тарифы для этого курса пока не настроены</p>
+              <p className="text-slate-600">Тарифы для этого курса пока не настроены</p>
             </CardContent>
           </Card>
         ) : (
@@ -313,7 +313,7 @@ export default function CoursePricingPage() {
               <li>• <strong>С обратной связью</strong> — доступ к курсу с поддержкой автора</li>
               <li>• <strong>Премиум</strong> — полный доступ с обратной связью и дополнительными материалами</li>
             </ul>
-            <p className="mt-4 text-xs text-[#6B7280]">
+            <p className="mt-4 text-xs text-slate-600">
               Это тестовая оплата. В реальной версии здесь будет подключена платежная система.
             </p>
           </CardContent>

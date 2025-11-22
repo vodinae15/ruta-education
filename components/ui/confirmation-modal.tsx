@@ -62,7 +62,7 @@ export function ConfirmationModal({
             <Button
               variant="primary"
               onClick={handleConfirm}
-              className="px-6 bg-primary hover:bg-primary/90 text-white"
+              className="px-6 bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
             >
               {confirmText}
             </Button>

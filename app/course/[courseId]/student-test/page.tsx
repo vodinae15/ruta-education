@@ -206,24 +206,24 @@ export default function StudentTestPage({ params }: { params: { courseId: string
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <StudentTestResults studentTypeResult={studentTypeResult} />
           <div className="max-w-4xl mx-auto mt-8">
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+            <Card className="bg-white border-2 rounded-lg ">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold text-primary mb-3">Готовы начать обучение?</h3>
-                  <p className="text-[#6B7280] mb-6">
+                  <h3 className="text-lg font-semibold text-[#5589a7] mb-3">Готовы начать обучение?</h3>
+                  <p className="text-slate-600 mb-6">
                     Теперь курс будет адаптирован под ваш стиль обучения. Начните изучение материала.
                   </p>
                   <div className="flex gap-4 justify-center">
                     <Button 
                       onClick={() => router.push(`/course/${params.courseId}/learn`)} 
-                      className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
+                      className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
                     >
                       Начать обучение
                     </Button>
                     <Button 
                       onClick={handleRetakeTest} 
                       variant="secondary" 
-                      className="flex items-center gap-2 border-primary text-primary hover:bg-primary/5"
+                      className="flex items-center gap-2 border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"
                     >
                       Пройти тест заново
                     </Button>
@@ -256,18 +256,18 @@ export default function StudentTestPage({ params }: { params: { courseId: string
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-primary">
+              <span className="text-lg font-semibold text-[#5589a7]">
                 Вопрос {currentQuestion + 1} из {studentTestQuestions.length}
               </span>
-              <span className="text-lg font-semibold text-primary">{Math.round(progress)}% завершено</span>
+              <span className="text-lg font-semibold text-[#5589a7]">{Math.round(progress)}% завершено</span>
             </div>
             <Progress value={progress} className="h-3" />
           </div>
 
           {/* Question Card */}
-          <Card className="mb-8 bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+          <Card className="mb-8 bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg ">
             <CardHeader className="pb-6">
-              <CardTitle className="text-xl lg:text-2xl text-primary font-bold leading-relaxed">
+              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed">
                 {studentTestQuestions[currentQuestion].question}
               </CardTitle>
             </CardHeader>
@@ -282,7 +282,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
                     <RadioGroupItem
                       value={option.value}
                       id={option.id}
-                      className="mt-1 border-primary text-primary"
+                      className="mt-1 border-[#659AB8] text-[#5589a7]"
                     />
                     <Label
                       htmlFor={option.id}
@@ -343,7 +343,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-[#6B7280]">
+            <p className="text-sm text-slate-600">
               {!canProceed && "Выберите один из вариантов ответа для продолжения"}
             </p>
           </div>

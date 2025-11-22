@@ -133,7 +133,7 @@ const getAccentElement = (authorType: string): AccentElement => {
       return {
         buttonText: "Добавить план / схему",
         visibleHint: "Начни с плана: 3–5 пунктов — потом легко развернуть в содержание",
-        color: "bg-cream border-primary text-primary",
+        color: "bg-cream border-[#659AB8] text-[#5589a7]",
       }
     case "Автор на вдохновении":
       return {
@@ -2236,13 +2236,13 @@ export default function CourseConstructor() {
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-          <Card className="bg-white border-2 rounded-lg shadow-ruta-sm text-center">
+          <Card className="bg-white border-2 rounded-lg  text-center">
             <CardContent className="p-6 sm:p-8 lg:p-10">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <AlertTriangleIcon className="w-8 h-8 text-primary" />
+              <div className="w-16 h-16 bg-[#659AB8]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <AlertTriangleIcon className="w-8 h-8 text-[#5589a7]" />
               </div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-4">Пройдите тест на определение типа автора</h1>
-              <p className="text-lg text-[#6B7280] mb-8 leading-relaxed">
+              <h1 className="text-2xl lg:text-3xl font-bold text-[#5589a7] mb-4">Пройдите тест на определение типа автора</h1>
+              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 Чтобы приступить к созданию курса, сначала пройдите диагностический тест. Это поможет нам
                 персонализировать конструктор под ваш стиль работы.
               </p>
@@ -2323,7 +2323,7 @@ export default function CourseConstructor() {
                 <Button
                   onClick={() => setShowCollaboratorsModal(true)}
                   variant="outline"
-                  className="border-primary text-primary hover:bg-light-blue bg-transparent transition-colors flex items-center gap-2"
+                  className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent transition-colors flex items-center gap-2"
                 >
                   <UsersIcon className="w-4 h-4" />
                   Управление соавторами
@@ -2333,14 +2333,14 @@ export default function CourseConstructor() {
                 onClick={saveCourse}
                 disabled={isSaving}
                 variant="outline"
-                className="border-primary text-primary hover:bg-light-blue bg-transparent transition-colors"
+                className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent transition-colors"
               >
                 {isSaving ? "Сохранение..." : "Сохранить черновик"}
               </Button>
             <Button
               onClick={publishCourse}
               disabled={isPublishing}
-              className="bg-primary hover:bg-primary-hover text-white transition-colors"
+              className="bg-[#659AB8] hover:bg-[#5589a7] text-white transition-colors"
             >
               {isPublishing ? "Публикация..." : "Опубликовать курс"}
             </Button>
@@ -2348,7 +2348,7 @@ export default function CourseConstructor() {
               <Button
                 onClick={unpublishCourse}
                 variant="secondary"
-                className="border-primary text-primary hover:bg-primary/5 bg-transparent transition-colors"
+                className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 bg-transparent transition-colors"
               >
                 Снять с публикации
               </Button>
@@ -2377,11 +2377,11 @@ export default function CourseConstructor() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Левый столбец - Режим создания курса */}
-          <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+          <Card className="bg-white border-2 rounded-lg ">
             <CardContent className="p-6 sm:p-8 lg:p-10">
               <div className="text-center mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-primary mb-2">Выберите режим создания курса</h3>
-                <p className="text-lg text-[#6B7280]">
+                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Выберите режим создания курса</h3>
+                <p className="text-lg text-slate-600">
                   Стандартный режим подходит всем, персонализированный — адаптирован под ваш тип автора
                 </p>
               </div>
@@ -2389,10 +2389,10 @@ export default function CourseConstructor() {
                 <Button
                   variant="secondary"
                   onClick={() => handleModeSwitch("standard")}
-                  className={`w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 ${
+                  className={`w-full h-14 px-8 text-lg font-medium  border-2 transition-all duration-200 ${
                     constructorMode === "standard"
-                      ? "bg-primary text-white border-primary hover:bg-primary-hover"
-                      : "border-primary text-primary hover:bg-light-blue bg-transparent"
+                      ? "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7]"
+                      : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent"
                   }`}
                 >
                   Стандартная сборка курса
@@ -2400,10 +2400,10 @@ export default function CourseConstructor() {
                 <Button
                   variant="secondary"
                   onClick={() => handleModeSwitch("personalized")}
-                  className={`w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 ${
+                  className={`w-full h-14 px-8 text-lg font-medium  border-2 transition-all duration-200 ${
                     constructorMode === "personalized"
-                      ? "bg-primary text-white border-primary hover:bg-primary-hover"
-                      : "border-primary text-primary hover:bg-light-blue bg-transparent"
+                      ? "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7]"
+                      : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent"
                   }`}
                 >
                   Сборка по вашему типу автора
@@ -2418,7 +2418,7 @@ export default function CourseConstructor() {
                       alert('Сначала сохраните курс, чтобы просмотреть адаптацию')
                     }
                   }}
-                  className="w-full h-14 px-8 text-lg font-medium shadow-ruta-sm border-2 transition-all duration-200 border-primary text-primary hover:bg-light-blue bg-transparent"
+                  className="w-full h-14 px-8 text-lg font-medium  border-2 transition-all duration-200 border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent"
                 >
                   Просмотр адаптации
                 </Button>
@@ -2427,11 +2427,11 @@ export default function CourseConstructor() {
           </Card>
 
           {/* Правый столбец - Приглашение учеников */}
-          <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+          <Card className="bg-white border-2 rounded-lg ">
             <CardContent className="p-6 sm:p-8 lg:p-10">
               <div className="text-center mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-primary mb-2">Пригласите учеников по почте</h3>
-                <p className="text-lg text-[#6B7280]">
+                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Пригласите учеников по почте</h3>
+                <p className="text-lg text-slate-600">
                   Введите email-адреса учеников, которым нужно открыть доступ к курсу
                 </p>
               </div>
@@ -2451,7 +2451,7 @@ export default function CourseConstructor() {
                   }`}
                   rows={4}
                 />
-                <p className="text-sm text-[#6B7280] mt-2">
+                <p className="text-sm text-slate-600 mt-2">
                   💡 Подсказка: Можно вводить email-адреса через запятую, точку с запятой или с новой строки
                 </p>
                 
@@ -2483,7 +2483,7 @@ export default function CourseConstructor() {
                   <Button
                     onClick={inviteStudents}
                     disabled={!inviteEmails.trim() || isInviting || !emailValidation.isValid}
-                    className="w-full h-12 px-8 text-lg font-medium shadow-ruta-sm transition-colors"
+                    className="w-full h-12 px-8 text-lg font-medium  transition-colors"
                   >
                     {isInviting ? "Открываем доступ..." : "Открыть доступ к курсу"}
                   </Button>
@@ -2494,14 +2494,14 @@ export default function CourseConstructor() {
         </div>
 
         {/* Список студентов с доступом */}
-        <Card className="mb-8 bg-white border-2 rounded-lg shadow-ruta-sm">
+        <Card className="mb-8 bg-white border-2 rounded-lg ">
           <CardContent className="p-6 sm:p-8 lg:p-10">
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-4 mb-2">
-                <h3 className="text-xl lg:text-2xl font-semibold text-primary">
+                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7]">
                   Студенты с доступом к курсу
                   {studentsWithAccess.length > 0 && (
-                    <span className="ml-2 px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+                    <span className="ml-2 px-3 py-1 bg-[#659AB8]/10 text-[#5589a7] text-sm font-medium rounded-full">
                       {studentsWithAccess.length}
                     </span>
                   )}
@@ -2511,7 +2511,7 @@ export default function CourseConstructor() {
                   disabled={loadingStudents}
                   variant="secondary"
                   size="sm"
-                  className="border-primary text-primary hover:bg-light-blue transition-colors"
+                  className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue transition-colors"
                 >
                   {loadingStudents ? (
                     <Skeleton className="h-4 w-4 rounded-full" />
@@ -2520,7 +2520,7 @@ export default function CourseConstructor() {
                   )}
                 </Button>
               </div>
-              <p className="text-lg text-[#6B7280]">
+              <p className="text-lg text-slate-600">
                 Управляйте доступом студентов к курсу
               </p>
             </div>
@@ -2536,7 +2536,7 @@ export default function CourseConstructor() {
               </div>
             ) : studentsWithAccess.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[#6B7280] text-lg mb-4">Пока никто не имеет доступа к курсу</p>
+                <p className="text-slate-600 text-lg mb-4">Пока никто не имеет доступа к курсу</p>
                 <p className="text-slate-400 text-sm">Пригласите студентов, чтобы они появились в этом списке</p>
               </div>
             ) : (
@@ -2544,22 +2544,22 @@ export default function CourseConstructor() {
                 {studentsWithAccess.map((student) => (
                   <div
                     key={student.id}
-                    className="flex items-center justify-between p-4 bg-light-blue/20 rounded-lg border border-primary/20"
+                    className="flex items-center justify-between p-4 bg-light-blue/20 rounded-lg border border-[#659AB8]/20"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <span className="text-primary font-semibold text-sm">
+                        <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                          <span className="text-[#5589a7] font-semibold text-sm">
                             {student.email.charAt(0).toUpperCase()}
                           </span>
                         </div>
                         <div>
                           <p className="font-medium text-[#111827]">{student.email}</p>
-                          <p className="text-sm text-[#6B7280]">
+                          <p className="text-sm text-slate-600">
                             Доступ предоставлен: {new Date(student.first_accessed_at).toLocaleDateString('ru-RU')}
                           </p>
                           {student.last_accessed_at !== student.first_accessed_at && (
-                            <p className="text-sm text-[#6B7280]">
+                            <p className="text-sm text-slate-600">
                               Последний вход: {new Date(student.last_accessed_at).toLocaleDateString('ru-RU')}
                             </p>
                           )}
@@ -2583,11 +2583,11 @@ export default function CourseConstructor() {
         </Card>
 
         {/* Course Info */}
-        <Card className="mb-8 bg-white border-2 rounded-lg shadow-ruta-sm">
+        <Card className="mb-8 bg-white border-2 rounded-lg ">
           <CardContent className="p-6 sm:p-8 lg:p-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <Label htmlFor="course-title" className="text-lg font-semibold text-primary mb-2 block">
+                <Label htmlFor="course-title" className="text-lg font-semibold text-[#5589a7] mb-2 block">
                   Название курса
                 </Label>
                 <Input
@@ -2599,7 +2599,7 @@ export default function CourseConstructor() {
                 />
               </div>
               <div>
-                <Label htmlFor="course-description" className="text-lg font-semibold text-primary mb-2 block">
+                <Label htmlFor="course-description" className="text-lg font-semibold text-[#5589a7] mb-2 block">
                   Описание курса
                 </Label>
                 <Textarea
@@ -2625,18 +2625,18 @@ export default function CourseConstructor() {
 
         {/* Тарифы и оплата */}
         {currentCourseId && (
-          <Card className="mb-8 bg-white border-2 rounded-lg shadow-ruta-sm">
+          <Card className="mb-8 bg-white border-2 rounded-lg ">
             <CardContent className="p-6 sm:p-8 lg:p-10">
               <div className="text-center mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-primary mb-2">Тарифы и оплата</h3>
-                <p className="text-lg text-[#6B7280]">
+                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Тарифы и оплата</h3>
+                <p className="text-lg text-slate-600">
                   Настройте тарифы курса и режим запуска
                 </p>
               </div>
 
               {/* Режим запуска курса */}
-              <div className="mb-8 p-6 bg-light-blue/30 border border-primary/20 rounded-lg">
-                <Label className="text-lg font-semibold text-primary mb-4 block">
+              <div className="mb-8 p-6 bg-light-blue/30 border border-[#659AB8]/20 rounded-lg">
+                <Label className="text-lg font-semibold text-[#5589a7] mb-4 block">
                   Режим запуска курса
                 </Label>
                 <div className="space-y-4">
@@ -2649,8 +2649,8 @@ export default function CourseConstructor() {
                       }}
                       className={`flex-1 h-12 ${
                         launchMode === "permanent"
-                          ? "bg-primary text-white"
-                          : "border-primary text-primary hover:bg-light-blue"
+                          ? "bg-[#659AB8] text-white"
+                          : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue"
                       }`}
                     >
                       Постоянный (доступ сразу после оплаты)
@@ -2660,8 +2660,8 @@ export default function CourseConstructor() {
                       onClick={() => setLaunchMode("stream")}
                       className={`flex-1 h-12 ${
                         launchMode === "stream"
-                          ? "bg-primary text-white"
-                          : "border-primary text-primary hover:bg-light-blue"
+                          ? "bg-[#659AB8] text-white"
+                          : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue"
                       }`}
                     >
                       Потоковый (запуск по дате)
@@ -2682,7 +2682,7 @@ export default function CourseConstructor() {
                         min={new Date().toISOString().split('T')[0]}
                         required
                       />
-                      <p className="text-xs text-[#6B7280] mt-1">
+                      <p className="text-xs text-slate-600 mt-1">
                         Ученики смогут оплатить курс заранее, но доступ откроется только в указанную дату
                       </p>
                     </div>
@@ -2691,7 +2691,7 @@ export default function CourseConstructor() {
                   <Button
                     onClick={saveLaunchMode}
                     disabled={launchMode === "stream" && !streamStartDate}
-                    className="w-full bg-primary hover:bg-primary-hover text-white"
+                    className="w-full bg-[#659AB8] hover:bg-[#5589a7] text-white"
                   >
                     Сохранить режим запуска
                   </Button>
@@ -2700,7 +2700,7 @@ export default function CourseConstructor() {
 
               {/* Редактирование тарифов */}
               <div>
-                <Label className="text-lg font-semibold text-primary mb-4 block">
+                <Label className="text-lg font-semibold text-[#5589a7] mb-4 block">
                   Тарифы курса
                 </Label>
                 {loadingPricing ? (
@@ -2718,11 +2718,11 @@ export default function CourseConstructor() {
                   </div>
                 ) : coursePricing.length === 0 ? (
                   <div className="text-center py-8 space-y-4">
-                    <p className="text-[#6B7280] mb-4">Тарифы для курса еще не созданы</p>
+                    <p className="text-slate-600 mb-4">Тарифы для курса еще не созданы</p>
                     <Button
                       onClick={createDefaultPricingHandler}
                       disabled={loadingPricing}
-                      className="bg-primary hover:bg-primary-hover text-white"
+                      className="bg-[#659AB8] hover:bg-[#5589a7] text-white"
                     >
                       {loadingPricing ? "Создание..." : "Создать тарифы по умолчанию"}
                     </Button>
@@ -2751,15 +2751,15 @@ export default function CourseConstructor() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column - Lessons and Blocks */}
           <div className="lg:col-span-3">
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm mb-6">
+            <Card className="bg-white border-2 rounded-lg  mb-6">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl lg:text-2xl font-bold text-primary">Уроки курса</h2>
-                  <Button onClick={addLesson} size="sm" className="bg-primary hover:bg-primary-hover text-white transition-colors">
+                  <h2 className="text-xl lg:text-2xl font-bold text-[#5589a7]">Уроки курса</h2>
+                  <Button onClick={addLesson} size="sm" className="bg-[#659AB8] hover:bg-[#5589a7] text-white transition-colors">
                     + Урок
                   </Button>
                 </div>
-                <p className="text-lg text-[#6B7280]">Управляйте структурой курса</p>
+                <p className="text-lg text-slate-600">Управляйте структурой курса</p>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-2 p-6">
@@ -2768,7 +2768,7 @@ export default function CourseConstructor() {
                       key={lesson.id}
                       className={`cursor-pointer transition-all ${
                         activeLessonId === lesson.id
-                          ? "ring-2 ring-primary bg-primary/5 border-primary/30"
+                          ? "ring-2 ring-primary bg-[#659AB8]/5 border-[#659AB8]/30"
                           : "hover:bg-background-gray"
                       }`}
                       onClick={() => selectLesson(lesson.id)}
@@ -2779,10 +2779,10 @@ export default function CourseConstructor() {
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="font-medium text-[#111827] text-sm">{lesson.title}</h3>
                               {activeLessonId === lesson.id && (
-                                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                <div className="w-2 h-2 bg-[#659AB8] rounded-full"></div>
                               )}
                             </div>
-                            <p className="text-xs text-[#6B7280]">{lesson.blocks.length} блоков</p>
+                            <p className="text-xs text-slate-600">{lesson.blocks.length} блоков</p>
                           </div>
                           <div className="flex items-center gap-1">
                             <Button
@@ -2824,12 +2824,12 @@ export default function CourseConstructor() {
 
                   {courseLessons.length === 0 && (
                     <div className="text-center py-8">
-                      <p className="text-[#6B7280] text-sm mb-3">Нет уроков</p>
+                      <p className="text-slate-600 text-sm mb-3">Нет уроков</p>
                       <Button
                         onClick={addLesson}
                         size="sm"
                         variant="secondary"
-                        className="border-primary text-primary hover:bg-primary/10 bg-transparent transition-colors"
+                        className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/10 bg-transparent transition-colors"
                       >
                         Создать первый урок
                       </Button>
@@ -2858,7 +2858,7 @@ export default function CourseConstructor() {
                       </Button>
                     </div>
                   </div>
-                  <p className="text-sm text-[#6B7280]">Перетаскивайте блоки для изменения порядка</p>
+                  <p className="text-sm text-slate-600">Перетаскивайте блоки для изменения порядка</p>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="space-y-2 p-6">
@@ -2875,7 +2875,7 @@ export default function CourseConstructor() {
                           onDrop={(e) => handleBlockDrop(e, block.id)}
                           className={`cursor-pointer transition-all ${
                             activeBlockId === block.id
-                              ? "ring-2 ring-primary bg-primary/5 border-primary/30"
+                              ? "ring-2 ring-primary bg-[#659AB8]/5 border-[#659AB8]/30"
                               : "hover:bg-background-gray"
                           } ${draggedBlock === block.id ? "opacity-50" : ""}`}
                           onClick={() => setActiveBlockId(block.id)}
@@ -2886,10 +2886,10 @@ export default function CourseConstructor() {
                                 <div className="flex items-center gap-2 mb-1">
                                   <h3 className="font-medium text-[#111827] text-sm">{block.title}</h3>
                                   {activeBlockId === block.id && (
-                                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                    <div className="w-2 h-2 bg-[#659AB8] rounded-full"></div>
                                   )}
                                 </div>
-                                <p className="text-xs text-[#6B7280]">
+                                <p className="text-xs text-slate-600">
                                   {completedElements}/{totalElements} элементов заполнено
                                 </p>
                                 {totalElements > 0 && (
@@ -2925,7 +2925,7 @@ export default function CourseConstructor() {
 
                     {courseBlocks.length === 0 && (
                       <div className="text-center py-6">
-                        <p className="text-[#6B7280] text-sm mb-3">Нет блоков в уроке</p>
+                        <p className="text-slate-600 text-sm mb-3">Нет блоков в уроке</p>
                         <div className="flex flex-wrap gap-1 justify-center">
                           {[
                             { type: "introduction", label: "Дополнительный блок" },
@@ -2966,12 +2966,12 @@ export default function CourseConstructor() {
                           {courseLessons.find((l) => l.id === activeLessonId)?.title}
                         </div>
                       </div>
-                      <p className="text-sm text-[#6B7280] mt-1">
+                      <p className="text-sm text-slate-600 mt-1">
                         {courseBlocks.find((b) => b.id === activeBlockId)?.description}
                       </p>
                     </div>
                   </div>
-                  <p className="text-sm text-[#6B7280]">Перетаскивайте элементы для изменения порядка</p>
+                  <p className="text-sm text-slate-600">Перетаскивайте элементы для изменения порядка</p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -3046,7 +3046,7 @@ export default function CourseConstructor() {
                                     placeholder={getElementPlaceholder(element.type, element.educationalType)}
                                     className="h-11"
                                   />
-                                  <div className="text-xs text-[#6B7280] bg-background-gray p-2 rounded">
+                                  <div className="text-xs text-slate-600 bg-background-gray p-2 rounded">
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
@@ -3059,7 +3059,7 @@ export default function CourseConstructor() {
                                     placeholder={getElementPlaceholder(element.type, element.educationalType)}
                                     className="h-11"
                                   />
-                                  <div className="text-xs text-[#6B7280] bg-background-gray p-2 rounded">
+                                  <div className="text-xs text-slate-600 bg-background-gray p-2 rounded">
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
@@ -3156,7 +3156,7 @@ export default function CourseConstructor() {
                                     placeholder="Напишите, о чём вы хотели бы рассказать в этом блоке"
                                     rows={4}
                                   />
-                                  <div className="text-xs text-[#6B7280] bg-background-gray p-2 rounded">
+                                  <div className="text-xs text-slate-600 bg-background-gray p-2 rounded">
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
@@ -3168,7 +3168,7 @@ export default function CourseConstructor() {
 
                     <Card className="bg-background-gray border-2 border-dashed border-slate-300">
                       <CardContent className="p-6 sm:p-8 lg:p-10">
-                        <h3 className="font-semibold text-[#6B7280] mb-4 text-center">Добавить элемент</h3>
+                        <h3 className="font-semibold text-slate-600 mb-4 text-center">Добавить элемент</h3>
 
                         <div className="space-y-4">
                           <div>
@@ -3251,7 +3251,7 @@ export default function CourseConstructor() {
                     <BookOpenIcon className="w-8 h-8 text-[#659AB8]" />
                   </div>
                   <h3 className="text-lg font-semibold text-[#659AB8] mb-2">Выберите урок и блок для редактирования</h3>
-                  <p className="text-[#6B7280] mb-6">Создайте урок и выберите блок, чтобы начать добавлять контент</p>
+                  <p className="text-slate-600 mb-6">Создайте урок и выберите блок, чтобы начать добавлять контент</p>
                   {courseLessons.length === 0 && (
                     <Button onClick={addLesson} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
                       Создать первый урок
@@ -3335,7 +3335,7 @@ export default function CourseConstructor() {
                   {/* Сообщение если нет профиля автора */}
                   {!authorProfile && constructorMode === "personalized" && (
                     <div className="text-center py-6">
-                      <p className="text-[#6B7280] text-sm">
+                      <p className="text-slate-600 text-sm">
                         Пройдите тест автора для получения персонализированных подсказок
                       </p>
                     </div>
@@ -3357,7 +3357,7 @@ export default function CourseConstructor() {
                             variant="ghost"
                             size="sm"
                             onClick={() => dismissHint(activeHint.id)}
-                            className="text-[#6B7280] hover:text-[#111827] text-xs px-2 py-1 h-auto flex-shrink-0"
+                            className="text-slate-600 hover:text-[#111827] text-xs px-2 py-1 h-auto flex-shrink-0"
                           >
                             Позже
                           </Button>
@@ -3381,12 +3381,12 @@ export default function CourseConstructor() {
       {/* Модальное окно подтверждения удаления доступа */}
       {showRemoveAccessModal && studentToRemove && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-          <Card className="w-full max-w-md mx-4 bg-white border-2 border-primary">
+          <Card className="w-full max-w-md mx-4 bg-white border-2 border-[#659AB8]">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                  <h2 className="text-xl font-semibold text-primary mb-2">Закрыть доступ</h2>
-                  <p className="text-[#6B7280] text-sm">
+                  <h2 className="text-xl font-semibold text-[#5589a7] mb-2">Закрыть доступ</h2>
+                  <p className="text-slate-600 text-sm">
                     Вы уверены, что хотите закрыть доступ к курсу для {studentToRemove.email}?
                   </p>
                 </div>
@@ -3409,7 +3409,7 @@ export default function CourseConstructor() {
                     setShowRemoveAccessModal(false)
                     setStudentToRemove(null)
                   }}
-                  className="text-[#6B7280]"
+                  className="text-slate-600"
                 >
                   Отменить
                 </Button>
