@@ -80,7 +80,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
                 )}
                 <div className="flex items-center space-x-2">
                   <UserIcon className="w-4 h-4 text-slate-600" />
-                  <span className="text-sm text-slate-700">{user.email?.split("@")[0] || "Автор"}</span>
+                  <span className="text-sm text-slate-600">{user.email?.split("@")[0] || "Автор"}</span>
                 </div>
                 <Button
                   variant="ghost"

@@ -1785,7 +1785,10 @@ export default function CourseConstructor() {
 
   const saveCourse = async () => {
     if (!courseTitle.trim()) {
-      alert("Введите название курса для сохранения")
+      toast({
+        title: "Внимание",
+        description: "Введите название курса для сохранения",
+      })
       return
     }
 
@@ -1858,7 +1861,11 @@ export default function CourseConstructor() {
       }
     } catch (err) {
       console.error("Error saving course:", err)
-      alert("Ошибка при сохранении курса")
+      toast({
+        title: "Ошибка",
+        description: "Не удалось сохранить курс",
+        variant: "destructive",
+      })
     } finally {
       setIsSaving(false)
     }
@@ -1936,7 +1943,11 @@ export default function CourseConstructor() {
       setModalState({ isOpen: true, type: "publish", courseLink })
     } catch (err) {
       console.error("Error publishing course:", err)
-      alert("Ошибка при публикации курса")
+      toast({
+        title: "Ошибка",
+        description: "Не удалось опубликовать курс",
+        variant: "destructive",
+      })
     } finally {
       setIsPublishing(false)
     }
@@ -1960,7 +1971,11 @@ export default function CourseConstructor() {
       setModalState({ isOpen: true, type: "hide" })
     } catch (err) {
       console.error("Error hiding course:", err)
-      alert("Ошибка при снятии с публикации курса")
+      toast({
+        title: "Ошибка",
+        description: "Не удалось снять курс с публикации",
+        variant: "destructive",
+      })
     }
   }
 
@@ -2398,7 +2413,10 @@ export default function CourseConstructor() {
                     if (currentCourseId) {
                       window.open(`/course/${currentCourseId}/adaptation`, '_blank')
                     } else {
-                      alert('Сначала сохраните курс, чтобы просмотреть адаптацию')
+                      toast({
+                        title: "Внимание",
+                        description: "Сначала сохраните курс, чтобы просмотреть адаптацию",
+                      })
                     }
                   }}
                   className="w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 border-[#659AB8] bg-white text-[#659AB8] hover:bg-[#659AB8] hover:text-white"

@@ -8,7 +8,7 @@ export function Logo({ className = "" }: { className?: string }) {
         alt="Ruta.education"
         width={360}
         height={144}
-        className="h-36 w-[90px]"
+        className="h-10 w-auto"
         priority
       />
     </div>
