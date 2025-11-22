@@ -138,6 +138,12 @@ export default function CourseAdaptationPage() {
   const supabase = createClient()
   const { toast } = useToast()
 
+  // Функция для получения названия типа адаптации
+  const getAdaptationTypeName = (type: AdaptationType): string => {
+    const typeInfo = STUDENT_TYPES.find(t => t.id === type)
+    return typeInfo?.name || type
+  }
+
   // Загрузка уроков из БД
   const loadLessonsFromDB = async (courseId: string, courseData?: any): Promise<Lesson[]> => {
     try {
@@ -794,7 +800,7 @@ export default function CourseAdaptationPage() {
 
         toast({
           title: "Изменения сохранены",
-          description: `Адаптация для типа «${adaptationType}» успешно сохранена.`,
+          description: `Адаптация для типа «${getAdaptationTypeName(adaptationType)}» успешно сохранена.`,
         })
       } else {
         const errorData = await response.json().catch(() => ({ error: "Неизвестная ошибка" }))
@@ -842,7 +848,7 @@ export default function CourseAdaptationPage() {
 
         toast({
           title: "Адаптация опубликована",
-          description: `Адаптация для режима «${adaptationType}» теперь доступна для студентов.`,
+          description: `Адаптация для режима «${getAdaptationTypeName(adaptationType)}» теперь доступна для студентов.`,
         })
       } else {
         const errorData = await response.json().catch(() => ({ error: "Неизвестная ошибка" }))
@@ -904,7 +910,7 @@ export default function CourseAdaptationPage() {
       <div className="min-h-screen bg-cream flex items-center justify-center p-4">
         <Card className="w-full max-w-md border">
           <CardContent className="text-center py-8">
-            <p className="text-red-600 mb-4">{error || "Курс не найден"}</p>
+            <p className="text-slate-900 mb-4">{error || "Курс не найден"}</p>
             <button
               onClick={() => router.push("/dashboard")}
               className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
