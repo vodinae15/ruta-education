@@ -220,7 +220,7 @@ export function StudentStatisticsTable({
                           variant="text"
                           size="sm"
                           onClick={() => onRevokeAccess(student.studentId, student.email)}
-                              className="text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                          className="text-slate-600 hover:bg-[#659AB8]/10 hover:text-[#5589a7] transition-colors"
                           title="Удалить доступ"
                         >
                           <TrashIcon className="w-4 h-4" />
