@@ -2376,8 +2376,8 @@ export default function CourseConstructor() {
                   onClick={() => handleModeSwitch("standard")}
                   className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 border-[#659AB8] ${
                     constructorMode === "standard"
-                      ? "bg-[#659AB8] text-white"
-                      : "bg-[#659AB8] text-white hover:bg-white hover:text-[#659AB8]"
+                      ? "bg-[#659AB8] text-white hover:bg-[#5589a7] hover:border-[#5589a7]"
+                      : "bg-[#659AB8] text-white hover:bg-[#5589a7] hover:border-[#5589a7]"
                   }`}
                 >
                   Стандартная сборка
@@ -2386,8 +2386,8 @@ export default function CourseConstructor() {
                   onClick={() => handleModeSwitch("personalized")}
                   className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 border-[#659AB8] ${
                     constructorMode === "personalized"
-                      ? "bg-[#659AB8] text-white"
-                      : "bg-[#659AB8] text-white hover:bg-white hover:text-[#659AB8]"
+                      ? "bg-[#659AB8] text-white hover:bg-[#5589a7] hover:border-[#5589a7]"
+                      : "bg-[#659AB8] text-white hover:bg-[#5589a7] hover:border-[#5589a7]"
                   }`}
                 >
                   По типу автора
@@ -2936,8 +2936,8 @@ export default function CourseConstructor() {
             <Card className="border-0">
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-2">
-                  <LightbulbIcon className="w-5 h-5 text-[#659AB8]" />
-                  <h2 className="text-lg font-bold text-[#659AB8]">Подсказки</h2>
+                  <LightbulbIcon className="w-5 h-5 text-[#5589a7]" />
+                  <h2 className="text-lg font-semibold text-[#5589a7]">Подсказки</h2>
                 </div>
               </CardHeader>
               <CardContent>
@@ -2968,13 +2968,13 @@ export default function CourseConstructor() {
 
                       {/* Структурная подсказка (скрытая) */}
                       <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
-                        <h4 className="font-semibold text-[#5589a7] mb-3 text-sm">Структурная подсказка:</h4>
-                        <div className="flex justify-start mb-3">
+                        <h4 className="font-semibold text-[#5589a7] mb-2 text-sm">Структурная подсказка:</h4>
+                        <div className="flex justify-start mb-2">
                           <Button
                             variant="text"
                             size="sm"
                             onClick={() => setShowStructuralHint(!showStructuralHint)}
-                            className="text-[#659AB8] hover:text-[#659AB8]/80"
+                            className="text-[#5589a7] hover:text-[#5589a7]/80"
                           >
                             {showStructuralHint ? "Скрыть" : "Показать"}
                           </Button>

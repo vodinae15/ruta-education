@@ -33,7 +33,7 @@ export function CourseCollaboratorsManager({
 }: CourseCollaboratorsManagerProps) {
   const [collaborators, setCollaborators] = useState<Collaborator[]>([])
   const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
