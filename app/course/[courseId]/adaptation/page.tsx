@@ -1327,14 +1327,14 @@ export default function CourseAdaptationPage() {
                 <div>
                   <h3 className="font-semibold text-slate-900">{course.title}</h3>
                   {course.description && (
-                    <p className="text-slate-600 mt-1">{course.description}</p>
+                    <p className="text-[#6B7280] mt-1">{course.description}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-4">
                   <Badge className="border-primary text-primary">
                     {course.status}
                   </Badge>
-                  <span className="text-sm text-slate-600">
+                  <span className="text-sm text-[#6B7280]">
                     ID курса: <span className="font-mono text-xs">{course.id}</span>
                   </span>
                 </div>
@@ -1377,12 +1377,12 @@ export default function CourseAdaptationPage() {
           )}
 
           {/* Информация о системе */}
-          <Card className={`border-2 mb-4 ${lessons.length > 0 ? 'bg-yellow-50 border-yellow-200' : 'bg-slate-50 border-slate-200'}`}>
+          <Card className={`border-2 mb-4 ${lessons.length > 0 ? 'bg-yellow-50 border-yellow-200' : 'bg-background-gray border-[#E5E7EB]'}`}>
             <CardContent className="py-4">
               <h4 className={`font-semibold mb-2 ${lessons.length > 0 ? 'text-yellow-800' : 'text-slate-800'}`}>
                 {lessons.length > 0 ? '🤖 ИИ-адаптация активна' : '⚠️ Уроки не найдены'}
               </h4>
-              <div className={`text-sm ${lessons.length > 0 ? 'text-yellow-700' : 'text-slate-700'}`}>
+              <div className={`text-sm ${lessons.length > 0 ? 'text-yellow-700' : 'text-[#111827]'}`}>
                 {lessons.length > 0 ? (
                   <>
                     <p>Система использует Claude-3.5-Sonnet для адаптации контента под разные типы обучения.</p>
@@ -1416,7 +1416,7 @@ export default function CourseAdaptationPage() {
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">
                     {hasExistingAdaptations() ? 'Перегенерировать адаптацию урока' : 'Запустить адаптацию урока'}
                   </h3>
-                  <p className="text-slate-600 mb-2">
+                  <p className="text-[#6B7280] mb-2">
                     {hasExistingAdaptations() 
                       ? `ИИ перегенерирует адаптацию урока "${selectedLesson.title}" для всех режимов представления материала. Старая версия будет удалена.`
                       : `ИИ адаптирует урок "${selectedLesson.title}" для всех режимов представления материала`
@@ -1479,18 +1479,18 @@ export default function CourseAdaptationPage() {
                     <h3 className="text-lg font-semibold text-slate-900">
                       Прогресс адаптации
                     </h3>
-                    <span className="text-sm text-slate-600 font-semibold">
+                    <span className="text-sm text-[#6B7280] font-semibold">
                       {Math.round(overallProgress)}%
                     </span>
                   </div>
                   <Progress value={overallProgress} className="h-3" showLabel />
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-[#6B7280]">
                     Адаптация контента может занять несколько минут...
                   </p>
                   
                   {/* Детальный прогресс по типам */}
                   <div className="space-y-3 pt-4 border-t border-gray-200">
-                    <h4 className="text-sm font-semibold text-slate-700">Прогресс по типам:</h4>
+                    <h4 className="text-sm font-semibold text-[#111827]">Прогресс по типам:</h4>
                     {STUDENT_TYPES.map((type) => {
                       const progress = adaptationProgress[type.id] || 0
                       const status = adaptations[type.id]?.status || 'pending'
@@ -1500,7 +1500,7 @@ export default function CourseAdaptationPage() {
                           <div className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-2">
                               {type.icon}
-                              <span className="text-slate-700">{type.name}</span>
+                              <span className="text-[#111827]">{type.name}</span>
                               {status === 'processing' && (
                                 <RefreshCwIcon className="w-3 h-3 text-blue-600 animate-spin" />
                               )}
@@ -1511,7 +1511,7 @@ export default function CourseAdaptationPage() {
                                 <XIcon className="w-3 h-3 text-red-600" />
                               )}
                             </div>
-                            <span className="text-slate-600">{Math.round(progress)}%</span>
+                            <span className="text-[#6B7280]">{Math.round(progress)}%</span>
                           </div>
                           <Progress value={progress} className="h-2" />
                         </div>
@@ -1525,13 +1525,13 @@ export default function CourseAdaptationPage() {
 
           {/* Рекомендации по материалам */}
           {materialsAnalysis && materialsAnalysis.recommendations && materialsAnalysis.recommendations.length > 0 && (
-            <Card className="bg-slate-50 border-2 border-slate-200 mb-8">
+            <Card className="bg-background-gray border-2 border-[#E5E7EB] mb-8">
               <CardHeader>
                 <CardTitle className="text-slate-800 flex items-center gap-2">
                   <LightbulbIcon className="w-5 h-5" />
                   Рекомендации по улучшению контента
                 </CardTitle>
-                <CardDescription className="text-slate-700">
+                <CardDescription className="text-[#111827]">
                   Следующие рекомендации помогут улучшить качество адаптации для разных режимов представления материала
                 </CardDescription>
               </CardHeader>

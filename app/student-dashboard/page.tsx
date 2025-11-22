@@ -293,7 +293,7 @@ export default function StudentDashboardPage() {
                   <h2 className="text-xl lg:text-2xl font-bold text-primary mb-2">
                     {student?.email}
                   </h2>
-                  <p className="text-slate-600 mb-4">Ученик Ruta.Education</p>
+                  <p className="text-[#6B7280] mb-4">Ученик Ruta.Education</p>
                   
                   {student?.test_results && student.test_results.test_version === "3.0" ? (
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -307,7 +307,7 @@ export default function StudentDashboardPage() {
                     </div>
                   ) : (
                     <div className="p-4 bg-light-blue/30 border border-primary/20 rounded-lg">
-                      <p className="text-slate-700 mb-3">
+                      <p className="text-[#111827] mb-3">
                         <span className="font-semibold">Пройдите тест, чтобы настроить профиль</span>
                       </p>
                       <Button 
@@ -337,7 +337,7 @@ export default function StudentDashboardPage() {
                 <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3">
                   У вас пока нет доступных курсов
                 </h3>
-                <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                <p className="text-[#6B7280] mb-6 max-w-md mx-auto">
                   Получите ссылку на курс от автора, чтобы начать обучение
                 </p>
                 <Button 
@@ -362,7 +362,7 @@ export default function StudentDashboardPage() {
                         <CardTitle className="text-lg font-bold text-primary mb-2 leading-tight">
                           {courseAccess.courses.title || "Без названия"}
                         </CardTitle>
-                        <CardDescription className="text-slate-600 leading-relaxed">
+                        <CardDescription className="text-[#6B7280] leading-relaxed">
                           {courseAccess.courses.description || "Описание курса не добавлено"}
                         </CardDescription>
                       </div>
@@ -379,11 +379,11 @@ export default function StudentDashboardPage() {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="space-y-3 mb-6">
-                      <div className="text-sm text-slate-600">
+                      <div className="text-sm text-[#6B7280]">
                         <span className="font-medium">Добавлен:</span>{" "}
                         {new Date(courseAccess.first_accessed_at).toLocaleDateString("ru-RU")}
                       </div>
-                      <div className="text-sm text-slate-600">
+                      <div className="text-sm text-[#6B7280]">
                         <span className="font-medium">Последний доступ:</span>{" "}
                         {new Date(courseAccess.last_accessed_at).toLocaleDateString("ru-RU")}
                       </div>

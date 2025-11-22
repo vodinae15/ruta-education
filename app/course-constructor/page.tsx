@@ -1957,7 +1957,7 @@ export default function CourseConstructor() {
                 <AlertTriangleIcon className="w-8 h-8 text-primary" />
               </div>
               <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-4">Пройдите тест на определение типа автора</h1>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+              <p className="text-lg text-[#6B7280] mb-8 leading-relaxed">
                 Чтобы приступить к созданию курса, сначала пройдите диагностический тест. Это поможет нам
                 персонализировать конструктор под ваш стиль работы.
               </p>
@@ -2050,7 +2050,7 @@ export default function CourseConstructor() {
             <CardContent className="p-6 sm:p-8 lg:p-10">
               <div className="text-center mb-6">
                 <h3 className="text-xl lg:text-2xl font-semibold text-primary mb-2">Выберите режим создания курса</h3>
-                <p className="text-lg text-slate-600">
+                <p className="text-lg text-[#6B7280]">
                   Стандартный режим подходит всем, персонализированный — адаптирован под ваш тип автора
                 </p>
               </div>
@@ -2106,7 +2106,7 @@ export default function CourseConstructor() {
             <CardContent className="p-6 sm:p-8 lg:p-10">
               <div className="text-center mb-6">
                 <h3 className="text-xl lg:text-2xl font-semibold text-primary mb-2">Пригласите учеников по почте</h3>
-                <p className="text-lg text-slate-600">
+                <p className="text-lg text-[#6B7280]">
                   Введите email-адреса учеников, которым нужно открыть доступ к курсу
                 </p>
               </div>
@@ -2126,7 +2126,7 @@ export default function CourseConstructor() {
                   }`}
                   rows={4}
                 />
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="text-sm text-[#6B7280] mt-2">
                   💡 Подсказка: Можно вводить email-адреса через запятую, точку с запятой или с новой строки
                 </p>
                 
@@ -2195,7 +2195,7 @@ export default function CourseConstructor() {
                   )}
                 </Button>
               </div>
-              <p className="text-lg text-slate-600">
+              <p className="text-lg text-[#6B7280]">
                 Управляйте доступом студентов к курсу
               </p>
             </div>
@@ -2211,7 +2211,7 @@ export default function CourseConstructor() {
               </div>
             ) : studentsWithAccess.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-slate-500 text-lg mb-4">Пока никто не имеет доступа к курсу</p>
+                <p className="text-[#6B7280] text-lg mb-4">Пока никто не имеет доступа к курсу</p>
                 <p className="text-slate-400 text-sm">Пригласите студентов, чтобы они появились в этом списке</p>
               </div>
             ) : (
@@ -2229,12 +2229,12 @@ export default function CourseConstructor() {
                           </span>
                         </div>
                         <div>
-                          <p className="font-medium text-slate-900">{student.email}</p>
-                          <p className="text-sm text-slate-500">
+                          <p className="font-medium text-[#111827]">{student.email}</p>
+                          <p className="text-sm text-[#6B7280]">
                             Доступ предоставлен: {new Date(student.first_accessed_at).toLocaleDateString('ru-RU')}
                           </p>
                           {student.last_accessed_at !== student.first_accessed_at && (
-                            <p className="text-sm text-slate-500">
+                            <p className="text-sm text-[#6B7280]">
                               Последний вход: {new Date(student.last_accessed_at).toLocaleDateString('ru-RU')}
                             </p>
                           )}
@@ -2304,7 +2304,7 @@ export default function CourseConstructor() {
             <CardContent className="p-6 sm:p-8 lg:p-10">
               <div className="text-center mb-6">
                 <h3 className="text-xl lg:text-2xl font-semibold text-primary mb-2">Тарифы и оплата</h3>
-                <p className="text-lg text-slate-600">
+                <p className="text-lg text-[#6B7280]">
                   Настройте тарифы курса и режим запуска
                 </p>
               </div>
@@ -2345,7 +2345,7 @@ export default function CourseConstructor() {
 
                   {launchMode === "stream" && (
                     <div>
-                      <Label htmlFor="stream-start-date" className="text-sm font-medium text-slate-700 mb-2 block">
+                      <Label htmlFor="stream-start-date" className="text-sm font-medium text-[#111827] mb-2 block">
                         Дата старта потока *
                       </Label>
                       <Input
@@ -2357,7 +2357,7 @@ export default function CourseConstructor() {
                         min={new Date().toISOString().split('T')[0]}
                         required
                       />
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-[#6B7280] mt-1">
                         Ученики смогут оплатить курс заранее, но доступ откроется только в указанную дату
                       </p>
                     </div>
@@ -2393,7 +2393,7 @@ export default function CourseConstructor() {
                   </div>
                 ) : coursePricing.length === 0 ? (
                   <div className="text-center py-8 space-y-4">
-                    <p className="text-slate-500 mb-4">Тарифы для курса еще не созданы</p>
+                    <p className="text-[#6B7280] mb-4">Тарифы для курса еще не созданы</p>
                     <Button
                       onClick={createDefaultPricingHandler}
                       disabled={loadingPricing}
@@ -2434,7 +2434,7 @@ export default function CourseConstructor() {
                     + Урок
                   </Button>
                 </div>
-                <p className="text-lg text-slate-600">Управляйте структурой курса</p>
+                <p className="text-lg text-[#6B7280]">Управляйте структурой курса</p>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-2 p-6">
@@ -2444,7 +2444,7 @@ export default function CourseConstructor() {
                       className={`cursor-pointer transition-all ${
                         activeLessonId === lesson.id
                           ? "ring-2 ring-primary bg-primary/5 border-primary/30"
-                          : "hover:bg-slate-50"
+                          : "hover:bg-background-gray"
                       }`}
                       onClick={() => selectLesson(lesson.id)}
                     >
@@ -2452,12 +2452,12 @@ export default function CourseConstructor() {
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-medium text-slate-900 text-sm">{lesson.title}</h3>
+                              <h3 className="font-medium text-[#111827] text-sm">{lesson.title}</h3>
                               {activeLessonId === lesson.id && (
                                 <div className="w-2 h-2 bg-primary rounded-full"></div>
                               )}
                             </div>
-                            <p className="text-xs text-slate-500">{lesson.blocks.length} блоков</p>
+                            <p className="text-xs text-[#6B7280]">{lesson.blocks.length} блоков</p>
                           </div>
                           <div className="flex items-center gap-1">
                             <Button
@@ -2499,7 +2499,7 @@ export default function CourseConstructor() {
 
                   {courseLessons.length === 0 && (
                     <div className="text-center py-8">
-                      <p className="text-slate-500 text-sm mb-3">Нет уроков</p>
+                      <p className="text-[#6B7280] text-sm mb-3">Нет уроков</p>
                       <Button
                         onClick={addLesson}
                         size="sm"
@@ -2533,7 +2533,7 @@ export default function CourseConstructor() {
                       </Button>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-600">Перетаскивайте блоки для изменения порядка</p>
+                  <p className="text-sm text-[#6B7280]">Перетаскивайте блоки для изменения порядка</p>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="space-y-2 p-6">
@@ -2551,7 +2551,7 @@ export default function CourseConstructor() {
                           className={`cursor-pointer transition-all ${
                             activeBlockId === block.id
                               ? "ring-2 ring-primary bg-primary/5 border-primary/30"
-                              : "hover:bg-slate-50"
+                              : "hover:bg-background-gray"
                           } ${draggedBlock === block.id ? "opacity-50" : ""}`}
                           onClick={() => setActiveBlockId(block.id)}
                         >
@@ -2559,12 +2559,12 @@ export default function CourseConstructor() {
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
-                                  <h3 className="font-medium text-slate-900 text-sm">{block.title}</h3>
+                                  <h3 className="font-medium text-[#111827] text-sm">{block.title}</h3>
                                   {activeBlockId === block.id && (
                                     <div className="w-2 h-2 bg-primary rounded-full"></div>
                                   )}
                                 </div>
-                                <p className="text-xs text-slate-500">
+                                <p className="text-xs text-[#6B7280]">
                                   {completedElements}/{totalElements} элементов заполнено
                                 </p>
                                 {totalElements > 0 && (
@@ -2600,7 +2600,7 @@ export default function CourseConstructor() {
 
                     {courseBlocks.length === 0 && (
                       <div className="text-center py-6">
-                        <p className="text-slate-500 text-sm mb-3">Нет блоков в уроке</p>
+                        <p className="text-[#6B7280] text-sm mb-3">Нет блоков в уроке</p>
                         <div className="flex flex-wrap gap-1 justify-center">
                           {[
                             { type: "introduction", label: "Дополнительный блок" },
@@ -2641,12 +2641,12 @@ export default function CourseConstructor() {
                           {courseLessons.find((l) => l.id === activeLessonId)?.title}
                         </div>
                       </div>
-                      <p className="text-sm text-slate-600 mt-1">
+                      <p className="text-sm text-[#6B7280] mt-1">
                         {courseBlocks.find((b) => b.id === activeBlockId)?.description}
                       </p>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-600">Перетаскивайте элементы для изменения порядка</p>
+                  <p className="text-sm text-[#6B7280]">Перетаскивайте элементы для изменения порядка</p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -2721,7 +2721,7 @@ export default function CourseConstructor() {
                                     placeholder={getElementPlaceholder(element.type, element.educationalType)}
                                     className="h-11"
                                   />
-                                  <div className="text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                                  <div className="text-xs text-[#6B7280] bg-background-gray p-2 rounded">
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
@@ -2734,7 +2734,7 @@ export default function CourseConstructor() {
                                     placeholder={getElementPlaceholder(element.type, element.educationalType)}
                                     className="h-11"
                                   />
-                                  <div className="text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                                  <div className="text-xs text-[#6B7280] bg-background-gray p-2 rounded">
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
@@ -2831,7 +2831,7 @@ export default function CourseConstructor() {
                                     placeholder="Напишите, о чём вы хотели бы рассказать в этом блоке"
                                     rows={4}
                                   />
-                                  <div className="text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                                  <div className="text-xs text-[#6B7280] bg-background-gray p-2 rounded">
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
@@ -2841,13 +2841,13 @@ export default function CourseConstructor() {
                         )
                       })}
 
-                    <Card className="bg-slate-50 border-2 border-dashed border-slate-300">
+                    <Card className="bg-background-gray border-2 border-dashed border-slate-300">
                       <CardContent className="p-6 sm:p-8 lg:p-10">
-                        <h3 className="font-semibold text-slate-600 mb-4 text-center">Добавить элемент</h3>
+                        <h3 className="font-semibold text-[#6B7280] mb-4 text-center">Добавить элемент</h3>
 
                         <div className="space-y-4">
                           <div>
-                            <h4 className="text-sm font-medium text-slate-700 mb-3">Образовательные блоки</h4>
+                            <h4 className="text-sm font-medium text-[#111827] mb-3">Образовательные блоки</h4>
                             <div className="grid grid-cols-2 gap-2">
                               <Button
                                 variant="secondary"
@@ -2885,7 +2885,7 @@ export default function CourseConstructor() {
                           </div>
 
                           <div>
-                            <h4 className="text-sm font-medium text-slate-700 mb-3">
+                            <h4 className="text-sm font-medium text-[#111827] mb-3">
                               {constructorMode === "personalized" && authorProfile
                                 ? `Рекомендуемые элементы для типа "${authorProfile.author_type}"`
                                 : "Базовые элементы"}
@@ -2926,7 +2926,7 @@ export default function CourseConstructor() {
                     <BookOpenIcon className="w-8 h-8 text-[#659AB8]" />
                   </div>
                   <h3 className="text-lg font-semibold text-[#659AB8] mb-2">Выберите урок и блок для редактирования</h3>
-                  <p className="text-slate-600 mb-6">Создайте урок и выберите блок, чтобы начать добавлять контент</p>
+                  <p className="text-[#6B7280] mb-6">Создайте урок и выберите блок, чтобы начать добавлять контент</p>
                   {courseLessons.length === 0 && (
                     <Button onClick={addLesson} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
                       Создать первый урок
@@ -2967,14 +2967,14 @@ export default function CourseConstructor() {
                       {/* Основная подсказка */}
                       <div className="p-4 bg-[#FEFDF2] border border-[#659AB8]/20 rounded-lg">
                         <h4 className="font-semibold text-[#659AB8] mb-2">Основная подсказка:</h4>
-                        <p className="text-sm text-slate-700 leading-relaxed">
+                        <p className="text-sm text-[#111827] leading-relaxed">
                           {getPedagogicalHints(authorProfile.author_type).main}
                         </p>
                       </div>
 
                       {/* Структурная подсказка (скрытая) */}
-                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
-                        <h4 className="font-semibold text-slate-700 mb-3">Структурная подсказка:</h4>
+                      <div className="p-4 bg-background-gray border border-[#E5E7EB] rounded-lg">
+                        <h4 className="font-semibold text-[#111827] mb-3">Структурная подсказка:</h4>
                         <div className="flex justify-start mb-3">
                           <Button
                             variant="text"
@@ -2986,7 +2986,7 @@ export default function CourseConstructor() {
                           </Button>
                         </div>
                         {showStructuralHint && (
-                          <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                          <div className="text-sm text-[#111827] leading-relaxed whitespace-pre-line">
                             {getPedagogicalHints(authorProfile.author_type).structural}
                           </div>
                         )}
@@ -2999,9 +2999,9 @@ export default function CourseConstructor() {
                       <div className="p-4 bg-[#FEFDF2] border border-[#659AB8]/20 rounded-lg">
                         <h4 className="font-semibold text-[#659AB8] mb-2">Универсальные подсказки:</h4>
                         <div className="space-y-2">
-                          <p className="text-sm text-slate-700">• Правило: 1 блок = 1 ключевая мысль</p>
-                          <p className="text-sm text-slate-700">• Структура: теория → пример → практика</p>
-                          <p className="text-sm text-slate-700">• Добавляйте переходы между темами</p>
+                          <p className="text-sm text-[#111827]">• Правило: 1 блок = 1 ключевая мысль</p>
+                          <p className="text-sm text-[#111827]">• Структура: теория → пример → практика</p>
+                          <p className="text-sm text-[#111827]">• Добавляйте переходы между темами</p>
                         </div>
                       </div>
                     </div>
@@ -3010,7 +3010,7 @@ export default function CourseConstructor() {
                   {/* Сообщение если нет профиля автора */}
                   {!authorProfile && constructorMode === "personalized" && (
                     <div className="text-center py-6">
-                      <p className="text-slate-500 text-sm">
+                      <p className="text-[#6B7280] text-sm">
                         Пройдите тест автора для получения персонализированных подсказок
                       </p>
                     </div>
@@ -3018,21 +3018,21 @@ export default function CourseConstructor() {
 
                   {/* Динамические подсказки */}
                   {activeHint && (
-                    <div className="mt-4 pt-4 border-t border-slate-200">
+                    <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
                       <div className="p-4 bg-[#FEFDF2] border border-[#659AB8]/20 rounded-lg">
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-start gap-2 flex-1">
                             <LightbulbIcon className="w-5 h-5 text-[#659AB8] mt-0.5 flex-shrink-0" />
                             <div className="flex-1">
                               <h4 className="font-semibold text-[#659AB8] mb-1 text-sm">Рекомендация</h4>
-                              <p className="text-sm text-slate-700">{activeHint.message}</p>
+                              <p className="text-sm text-[#111827]">{activeHint.message}</p>
                             </div>
                           </div>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => dismissHint(activeHint.id)}
-                            className="text-slate-500 hover:text-slate-700 text-xs px-2 py-1 h-auto flex-shrink-0"
+                            className="text-[#6B7280] hover:text-[#111827] text-xs px-2 py-1 h-auto flex-shrink-0"
                           >
                             Позже
                           </Button>
@@ -3061,7 +3061,7 @@ export default function CourseConstructor() {
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <h2 className="text-xl font-semibold text-primary mb-2">Закрыть доступ</h2>
-                  <p className="text-slate-600 text-sm">
+                  <p className="text-[#6B7280] text-sm">
                     Вы уверены, что хотите закрыть доступ к курсу для {studentToRemove.email}?
                   </p>
                 </div>
@@ -3084,7 +3084,7 @@ export default function CourseConstructor() {
                     setShowRemoveAccessModal(false)
                     setStudentToRemove(null)
                   }}
-                  className="text-slate-600"
+                  className="text-[#6B7280]"
                 >
                   Отменить
                 </Button>

@@ -345,7 +345,7 @@ export default function AuthPage() {
                   setSuccess("")
                 }}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  userType === "teacher" ? "bg-[#659AB8] text-white" : "text-slate-600 hover:text-slate-900"
+                  userType === "teacher" ? "bg-[#659AB8] text-white" : "text-[#6B7280] hover:text-[#111827]"
                 }`}
               >
                 Преподаватель
@@ -358,7 +358,7 @@ export default function AuthPage() {
                   setSuccess("")
                 }}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  userType === "student" ? "bg-[#659AB8] text-white" : "text-slate-600 hover:text-slate-900"
+                  userType === "student" ? "bg-[#659AB8] text-white" : "text-[#6B7280] hover:text-[#111827]"
                 }`}
               >
                 Студент
@@ -429,7 +429,7 @@ export default function AuthPage() {
                         checked={agreements.terms}
                         onCheckedChange={(checked) => setAgreements((prev) => ({ ...prev, terms: checked as boolean }))}
                       />
-                      <label htmlFor="terms" className="text-sm text-slate-600 leading-relaxed">
+                      <label htmlFor="terms" className="text-sm text-[#6B7280] leading-relaxed">
                         Я соглашаюсь с{" "}
                         <a href="https://docs.google.com/document/d/1gD6B9RPVtZDHXn9Jsha4GLi7kaSWY3Ve/edit?usp=drive_link&ouid=117485244745598251135&rtpof=true&sd=true" target="_blank" className="text-[#659AB8] hover:underline" rel="noreferrer">
                           пользовательским соглашением
@@ -444,7 +444,7 @@ export default function AuthPage() {
                           setAgreements((prev) => ({ ...prev, privacy: checked as boolean }))
                         }
                       />
-                      <label htmlFor="privacy" className="text-sm text-slate-600 leading-relaxed">
+                      <label htmlFor="privacy" className="text-sm text-[#6B7280] leading-relaxed">
                         Я соглашаюсь с{" "}
                         <a href="https://docs.google.com/document/d/18EkmXPeV0ays8ZGx_cz79duNZhr-cwnW/edit?usp=drive_link&ouid=117485244745598251135&rtpof=true&sd=true" target="_blank" className="text-[#659AB8] hover:underline" rel="noreferrer">
                           политикой конфиденциальности
@@ -482,7 +482,7 @@ export default function AuthPage() {
 
               {/* Toggle between login/register for both teachers and students */}
               <div className="mt-8 text-center">
-                <p className="text-sm text-slate-600">{isLogin ? "Ещё нет аккаунта?" : "Уже есть аккаунт?"}</p>
+                <p className="text-sm text-[#6B7280]">{isLogin ? "Ещё нет аккаунта?" : "Уже есть аккаунт?"}</p>
                 <Button
                   variant="text"
                   onClick={() => {
@@ -517,7 +517,7 @@ export default function AuthPage() {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-[#6B7280]">
               {userType === "student" ? "Студенты получают доступ к персонализированному обучению" : "Преподаватели создают курсы и управляют обучением"}
             </p>
           </div>
