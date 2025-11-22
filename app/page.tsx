@@ -68,13 +68,13 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="text-center">
-            <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-6">
+            <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-8">
               Образовательная платформа{" "}
               <br />
               <span className="text-primary">с двойной персонализацией</span>
             </h1>
 
-            <div className="bg-light-blue rounded-2xl p-6 sm:p-8 lg:p-10 mb-10 max-w-4xl mx-auto">
+            <div className="bg-light-blue rounded-2xl p-6 sm:p-8 mb-8 max-w-4xl mx-auto">
               <p className="text-xl lg:text-2xl text-slate-900 font-medium">
                 Ruta.education адаптирует коммуникацию{" "}
                 <span className="text-primary">под стиль преподавателя</span> и тип восприятия каждого
@@ -98,7 +98,7 @@ export default function HomePage() {
       {/* How It Works Section */}
       <section id="how-it-works" className="py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
               <span className="text-primary">Принцип</span> двойной персонализации
             </h2>
@@ -109,7 +109,7 @@ export default function HomePage() {
           </div>
 
           {/* Tab Switcher */}
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-center mb-8">
             <div className="bg-light-gray rounded-lg p-1 flex">
               <button
                 onClick={() => setActiveTab("teachers")}
@@ -250,35 +250,33 @@ export default function HomePage() {
           <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
             <span className="text-primary">Почему</span> это работает
           </h2>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+          <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
             Ruta.education адаптирует один курс <span className="text-primary">под стиль автора</span> и{" "}
             <span className="text-primary">тип восприятия учеников</span>
           </p>
 
           {/* Stats Section */}
-          <div className="mt-12">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                  <TrendingUpIcon className="w-10 h-10 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-primary mb-2">8 типов</div>
-                <p className="text-slate-600 font-medium">авторов с персонализированными конструкторами</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUpIcon className="w-8 h-8 text-white" />
               </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                  <UserIcon className="w-10 h-10 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-primary mb-2">9 типов</div>
-                <p className="text-slate-600 font-medium">учеников с адаптивным контентом</p>
+              <div className="text-3xl font-bold text-primary mb-2">8 типов</div>
+              <p className="text-slate-600">авторов с персонализированными конструкторами</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <UserIcon className="w-8 h-8 text-white" />
               </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                  <BookIcon className="w-10 h-10 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-primary mb-2">72 подхода</div>
-                <p className="text-slate-600 font-medium">к обучению и прохождению курсов</p>
+              <div className="text-3xl font-bold text-primary mb-2">9 типов</div>
+              <p className="text-slate-600">учеников с адаптивным контентом</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookIcon className="w-8 h-8 text-white" />
               </div>
+              <div className="text-3xl font-bold text-primary mb-2">72 подхода</div>
+              <p className="text-slate-600">к обучению и прохождению курсов</p>
             </div>
           </div>
         </div>
@@ -287,13 +285,11 @@ export default function HomePage() {
       {/* Final CTA Section */}
       <section className="py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-light-blue rounded-2xl p-8 sm:p-10 lg:p-12 max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-              <span className="text-primary">Создайте</span> свой первый курс
-              <br />
-              за 15 минут
+          <div className="bg-light-blue rounded-2xl p-6 sm:p-8 max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-4">
+              <span className="text-primary">Создайте</span> свой первый курс за 15 минут
             </h2>
-            <p className="text-lg text-slate-600 mb-8">
+            <p className="text-slate-600 mb-6">
               Пройдите тест, выберите шаблон и наполните курс контентом. Система сама адаптирует материал
               под разные типы восприятия студентов
             </p>
@@ -305,19 +301,19 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-light-gray py-8 sm:py-10">
+      <footer className="bg-light-gray py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center justify-center mb-2">
               <Image
                 src="/images/ruta-logo-compact.png"
                 alt="Ruta.education"
-                width={360}
-                height={144}
-                className="h-36 w-auto"
+                width={240}
+                height={96}
+                className="h-24 w-auto"
               />
             </div>
-            <p className="text-slate-600">Платформа персонализированного обучения</p>
+            <p className="text-sm text-slate-600">Платформа персонализированного обучения</p>
           </div>
         </div>
       </footer>
