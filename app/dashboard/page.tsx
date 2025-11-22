@@ -949,7 +949,7 @@ export default function DashboardPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              <span className="text-[#5589a7]">Ваши</span> курсы
+              Ваши <span className="text-[#5589a7]">курсы</span>
             </h2>
             {!coursesLoading && courses.length > 0 && (
               <Link
