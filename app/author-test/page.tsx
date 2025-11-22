@@ -209,35 +209,7 @@ export default function AuthorTestPage() {
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           {authorTypeResult ? (
-            <>
-              <AuthorTestResults authorTypeResult={authorTypeResult} onRetakeTest={handleRetakeTest} />
-              <div className="max-w-4xl mx-auto mt-8">
-                <Card className="border">
-                  <CardContent className="p-6">
-                    <div className="text-center">
-                      <h3 className="text-lg font-semibold text-[#5589a7] mb-3">Хотите пройти тест заново?</h3>
-                      <p className="text-slate-600 mb-6">
-                        Ваши взгляды могли измениться. Пройдите тест повторно, чтобы получить актуальные рекомендации.
-                      </p>
-                      <div className="flex gap-4 justify-center">
-                        <Link
-                          href="/dashboard"
-                          className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
-                        >
-                          Перейти в личный кабинет
-                        </Link>
-                        <button
-                          onClick={handleRetakeTest}
-                          className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
-                        >
-                          Пройти тест заново
-                        </button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </>
+            <AuthorTestResults authorTypeResult={authorTypeResult} onRetakeTest={handleRetakeTest} />
           ) : (
             <div className="max-w-4xl mx-auto">
               <Card className="border mb-8">

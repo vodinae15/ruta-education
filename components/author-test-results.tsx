@@ -25,19 +25,11 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
                 <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{authorTypeResult.description}</p>
               </div>
 
-              {/* Strength highlight as a prominent side element */}
+              {/* Superpower as simple badge */}
               <div className="lg:w-80">
-                <div className="bg-white border rounded-2xl p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-[#659AB8] rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">★</span>
-                    </div>
-                    <h3 className="font-bold text-[#5589a7] text-lg">Ваша суперсила</h3>
-                  </div>
-                  <p className="text-slate-700 font-semibold text-lg leading-tight">
-                    {authorTypeResult.superpower}
-                  </p>
-                </div>
+                <span className="inline-block bg-[#659AB8] text-white px-6 py-4 text-lg font-semibold rounded-lg leading-tight">
+                  {authorTypeResult.superpower}
+                </span>
               </div>
             </div>
           </CardContent>
@@ -50,10 +42,10 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
           <CardHeader className="pb-4">
             <CardTitle className="text-lg text-[#5589a7] font-bold">По стилю подачи</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-1">
+          <CardContent className="space-y-2">
             {authorTypeResult.recommendations.style.map((tip, index) => (
-              <div key={index} className="flex items-start bg-light-blue p-2 rounded-lg">
-                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-2 flex-shrink-0"></div>
+              <div key={index} className="flex items-start py-1">
+                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                 <p className="text-sm text-slate-600 leading-relaxed">{tip}</p>
               </div>
             ))}
@@ -65,10 +57,10 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
           <CardHeader className="pb-4">
             <CardTitle className="text-lg text-[#5589a7] font-bold">По мотивации</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-1">
+          <CardContent className="space-y-2">
             {authorTypeResult.recommendations.motivation.map((tip, index) => (
-              <div key={index} className="flex items-start bg-light-blue p-2 rounded-lg">
-                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-2 flex-shrink-0"></div>
+              <div key={index} className="flex items-start py-1">
+                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                 <p className="text-sm text-slate-600 leading-relaxed">{tip}</p>
               </div>
             ))}
@@ -80,10 +72,10 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
           <CardHeader className="pb-4">
             <CardTitle className="text-lg text-[#5589a7] font-bold">По преодолению барьеров</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-1">
+          <CardContent className="space-y-2">
             {authorTypeResult.recommendations.barriers.map((tip, index) => (
-              <div key={index} className="flex items-start bg-light-blue p-2 rounded-lg">
-                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-2 flex-shrink-0"></div>
+              <div key={index} className="flex items-start py-1">
+                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                 <p className="text-sm text-slate-600 leading-relaxed">{tip}</p>
               </div>
             ))}
@@ -97,13 +89,13 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
           <CardTitle className="text-xl text-[#5589a7] font-bold">Ваши персональные подсказки</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-2">
+          <div className="grid md:grid-cols-2 gap-3">
             {authorTypeResult.personalTips.map((tip, index) => (
               <div
                 key={index}
-                className="flex items-start p-2 bg-light-blue rounded-lg"
+                className="flex items-start py-1"
               >
-                <div className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm font-bold mr-2 flex-shrink-0 mt-0.5">
+                <div className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0 mt-0.5">
                   {index + 1}
                 </div>
                 <p className="text-sm text-slate-600 leading-relaxed">{tip}</p>
@@ -132,6 +124,14 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
             >
               В личный кабинет
             </Link>
+            {onRetakeTest && (
+              <button
+                onClick={onRetakeTest}
+                className="text-center bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+              >
+                Пройти тест заново
+              </button>
+            )}
           </div>
 
           {/* Additional Info */}
@@ -143,14 +143,6 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
           </div>
         </CardContent>
       </Card>
-
-      {/* Progress Summary */}
-      <div className="text-center py-6">
-        <div className="inline-flex items-center gap-2 bg-[#FDF8F3] text-slate-600 px-4 py-2 rounded-full border border-[#E5E7EB]">
-          <div className="w-2 h-2 bg-[#659AB8] rounded-full"></div>
-          <span className="text-sm font-semibold">Тест завершён • Профиль настроен</span>
-        </div>
-      </div>
     </div>
   )
 }
