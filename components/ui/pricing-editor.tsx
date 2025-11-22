@@ -145,41 +145,38 @@ export function PricingEditor({ pricing, onUpdate, isUpdating }: PricingEditorPr
           />
         </div>
 
-        {/* Чекбокс для обратной связи (недоступен для бесплатного тарифа) */}
-        {!isFirstTier && (
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id={`feedback-${pricing.id}`}
-              checked={hasFeedback}
-              onCheckedChange={(checked) => setHasFeedback(checked as boolean)}
-              disabled={isUpdating}
-            />
-            <Label
-              htmlFor={`feedback-${pricing.id}`}
-              className="text-sm font-medium text-slate-700 cursor-pointer flex items-center gap-2"
-            >
-              <MessageCircleIcon className="w-4 h-4 text-[#5589a7]" />
-              Обратная связь от автора
-            </Label>
-          </div>
-        )}
+        {/* Чекбокс для обратной связи */}
+        <div className={`flex items-center space-x-2 ${isFirstTier ? "opacity-40" : ""}`}>
+          <Checkbox
+            id={`feedback-${pricing.id}`}
+            checked={hasFeedback}
+            onCheckedChange={(checked) => setHasFeedback(checked as boolean)}
+            disabled={isUpdating || isFirstTier}
+          />
+          <Label
+            htmlFor={`feedback-${pricing.id}`}
+            className={`text-sm font-medium text-slate-700 flex items-center gap-2 ${isFirstTier ? "" : "cursor-pointer"}`}
+          >
+            <MessageCircleIcon className="w-4 h-4 text-[#5589a7]" />
+            Обратная связь от автора
+          </Label>
+        </div>
 
-        {pricing.order_index === 2 && (
-          <div>
-            <Label htmlFor={`bonus-${pricing.id}`} className="text-sm font-medium text-slate-700">
-              Бонусный контент (для премиум тарифа)
-            </Label>
-            <Textarea
-              id={`bonus-${pricing.id}`}
-              value={bonusContent}
-              onChange={(e) => setBonusContent(e.target.value)}
-              placeholder="Опишите дополнительные материалы или бонусы"
-              className="mt-1"
-              rows={2}
-              disabled={isUpdating}
-            />
-          </div>
-        )}
+        {/* Бонусный контент */}
+        <div className={pricing.order_index !== 2 ? "opacity-40" : ""}>
+          <Label htmlFor={`bonus-${pricing.id}`} className="text-sm font-medium text-slate-700">
+            Бонусный контент
+          </Label>
+          <Textarea
+            id={`bonus-${pricing.id}`}
+            value={bonusContent}
+            onChange={(e) => setBonusContent(e.target.value)}
+            placeholder={pricing.order_index === 2 ? "Опишите дополнительные материалы или бонусы" : "Только для премиум тарифа"}
+            className="mt-1"
+            rows={2}
+            disabled={isUpdating || pricing.order_index !== 2}
+          />
+        </div>
 
         <button
           onClick={handleSave}

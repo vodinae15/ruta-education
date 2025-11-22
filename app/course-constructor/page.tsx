@@ -2349,9 +2349,9 @@ export default function CourseConstructor() {
         onClose={() => setNotification({ ...notification, isVisible: false })}
       />
 
-      {/* Sticky mode badge */}
-      <div className="fixed top-20 right-6 z-40">
-        <span className="text-xs px-3 py-1.5 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB] shadow-sm">
+      {/* Mode badge at bottom */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <span className="text-sm px-4 py-2 rounded-lg bg-[#659AB8] text-white font-semibold shadow-lg">
           {constructorMode === "standard" ? "Стандартная сборка" : "По типу автора"}
         </span>
       </div>
@@ -2455,11 +2455,11 @@ export default function CourseConstructor() {
             <p className="text-lg text-slate-600">Управляйте структурой курса</p>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="flex flex-wrap gap-2 p-6">
+            <div className="space-y-2 p-6">
               {courseLessons.map((lesson) => (
                 <Card
                   key={lesson.id}
-                  className={`cursor-pointer transition-all flex-shrink-0 ${
+                  className={`cursor-pointer transition-all ${
                     activeLessonId === lesson.id
                       ? "ring-2 ring-[#659AB8] bg-[#659AB8]/5 border-[#659AB8]/30"
                       : "hover:bg-background-gray"
@@ -2467,8 +2467,8 @@ export default function CourseConstructor() {
                   onClick={() => selectLesson(lesson.id)}
                 >
                   <CardContent className="p-3">
-                    <div className="flex items-center gap-3">
-                      <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-medium text-[#111827] text-sm">{lesson.title}</h3>
                           {activeLessonId === lesson.id && (
@@ -2512,7 +2512,7 @@ export default function CourseConstructor() {
               ))}
 
               {courseLessons.length === 0 && (
-                <div className="text-center py-8 w-full">
+                <div className="text-center py-8">
                   <p className="text-slate-600 text-sm mb-3">Нет уроков</p>
                   <Button
                     onClick={addLesson}
@@ -2538,18 +2538,13 @@ export default function CourseConstructor() {
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between">
                     <h2 className="text-lg font-bold text-[#659AB8]">Блоки урока</h2>
-                    <div className="flex gap-1">
-                      {/* Кнопки для добавления блоков */}
-                      <Button
-                        onClick={() => addBlock("introduction")}
-                        size="sm"
-                        variant="secondary"
-                        className="text-xs px-2 py-1 h-6"
-                        title="Добавить блок"
-                      >
-                        +
-                      </Button>
-                    </div>
+                    <button
+                      onClick={() => addBlock("introduction")}
+                      className="bg-[#659AB8] text-white w-8 h-8 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center justify-center"
+                      title="Добавить блок"
+                    >
+                      +
+                    </button>
                   </div>
                   <p className="text-sm text-slate-600">Перетаскивайте блоки для изменения порядка</p>
                 </CardHeader>
@@ -2681,7 +2676,7 @@ export default function CourseConstructor() {
                               draggedElement === element.id ? "opacity-50" : ""
                             } ${
                               element.mode === "notes"
-                                ? "border-2 border-dashed border-amber-300 bg-amber-50/30"
+                                ? "border-2 border-dashed border-[#E5E7EB] bg-[#FDF8F3]"
                                 : "border-0"
                             }`}
                           >
@@ -2697,9 +2692,9 @@ export default function CourseConstructor() {
                                       {getElementLabel(element.type, element.educationalType)}
                                     </span>
                                     {element.mode === "notes" && (
-                                      <div className="flex items-center gap-1 px-2 py-1 bg-amber-100 rounded-full">
-                                        <EyeOffIcon className="w-3 h-3 text-amber-600" />
-                                        <span className="text-xs text-amber-600 font-medium">Заметки</span>
+                                      <div className="flex items-center gap-1 px-2 py-1 bg-[#FDF8F3] border border-[#E5E7EB] rounded-full">
+                                        <EyeOffIcon className="w-3 h-3 text-slate-600" />
+                                        <span className="text-xs text-slate-600 font-medium">Заметки</span>
                                       </div>
                                     )}
                                   </div>
@@ -2711,8 +2706,8 @@ export default function CourseConstructor() {
                                     onClick={() => toggleElementMode(activeBlockId, element.id)}
                                     className={`h-8 px-3 text-xs ${
                                       element.mode === "lesson"
-                                        ? "bg-green-100 text-green-700 hover:bg-green-200"
-                                        : "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                                        ? "bg-[#E8F4FA] text-[#5589a7] hover:bg-[#CDE6F9]"
+                                        : "bg-[#FDF8F3] text-slate-600 hover:bg-[#E5E7EB]"
                                     }`}
                                   >
                                     {element.mode === "lesson" ? "Для урока" : "Заметки"}
