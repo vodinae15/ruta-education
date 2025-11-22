@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { EyeIcon, EarIcon, HandIcon, BookOpenIcon } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -21,45 +20,30 @@ const MODES: Array<{
   name: string
   description: string
   icon: React.ReactNode
-  color: string
-  bgColor: string
-  borderColor: string
 }> = [
   {
     id: 'visual',
     name: 'Визуал',
     description: 'Схемы, диаграммы, структурированная информация',
-    icon: <EyeIcon className="w-5 h-5" />,
-    color: 'text-blue-700',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-500'
+    icon: <EyeIcon className="w-4 h-4" />
   },
   {
     id: 'auditory',
     name: 'Аудиал',
     description: 'Истории, диалоги, эмоциональные примеры',
-    icon: <EarIcon className="w-5 h-5" />,
-    color: 'text-green-700',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-500'
+    icon: <EarIcon className="w-4 h-4" />
   },
   {
     id: 'kinesthetic',
     name: 'Кинестетик',
     description: 'Практика, действия, интерактивные элементы',
-    icon: <HandIcon className="w-5 h-5" />,
-    color: 'text-purple-700',
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-500'
+    icon: <HandIcon className="w-4 h-4" />
   },
   {
     id: 'original',
     name: 'Оригинал',
     description: 'Оригинальный контент автора',
-    icon: <BookOpenIcon className="w-5 h-5" />,
-    color: 'text-gray-700',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-500'
+    icon: <BookOpenIcon className="w-4 h-4" />
   }
 ]
 
@@ -71,17 +55,15 @@ export function AdaptationModeSwitcher({
   className,
   showTooltips = true
 }: AdaptationModeSwitcherProps) {
-  // Фильтруем режимы по доступным
   const modesToShow = MODES.filter(mode => availableModes.includes(mode.id))
 
-  // Определяем рекомендуемый режим на основе режима представления материала
   const getRecommendedMode = (): AdaptationMode | null => {
     if (!studentType) return null
-    
+
     if (studentType.includes('visual')) return 'visual'
     if (studentType.includes('auditory')) return 'auditory'
     if (studentType.includes('kinesthetic')) return 'kinesthetic'
-    
+
     return null
   }
 
@@ -89,24 +71,19 @@ export function AdaptationModeSwitcher({
 
   const renderButton = (mode: typeof MODES[0], isActive: boolean, isRecommended: boolean) => {
     const buttonContent = (
-      <Button
+      <button
         key={mode.id}
-        variant={isActive ? "primary" : "secondary"}
         onClick={() => onModeChange(mode.id)}
         className={cn(
-          "relative flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+          "px-6 py-3 rounded-md font-medium transition-colors duration-200 flex items-center gap-2",
           isActive
-            ? `${mode.bgColor} ${mode.color} border-2 ${mode.borderColor} font-semibold`
-            : "bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300",
-          isRecommended && !isActive && "ring-2 ring-yellow-400 ring-offset-2"
+            ? "bg-white text-[#5589a7]"
+            : "text-slate-600 hover:text-slate-900"
         )}
       >
         {mode.icon}
         <span>{mode.name}</span>
-        {isRecommended && !isActive && (
-          <span className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full" />
-        )}
-      </Button>
+      </button>
     )
 
     if (showTooltips) {
@@ -117,10 +94,7 @@ export function AdaptationModeSwitcher({
           </TooltipTrigger>
           <TooltipContent side="bottom" className="max-w-xs">
             <p className="font-semibold mb-1">{mode.name}</p>
-            <p className="text-xs text-gray-600">{mode.description}</p>
-            {isRecommended && !isActive && (
-              <p className="text-xs text-yellow-600 mt-1">💡 Рекомендуется для вашего режима представления материала</p>
-            )}
+            <p className="text-xs text-slate-600">{mode.description}</p>
           </TooltipContent>
         </Tooltip>
       )
@@ -131,7 +105,7 @@ export function AdaptationModeSwitcher({
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className={cn("flex flex-wrap gap-2", className)}>
+      <div className={cn("bg-light-gray rounded-lg p-1 flex flex-wrap", className)}>
         {modesToShow.map((mode) => {
           const isActive = currentMode === mode.id
           const isRecommended = recommendedMode === mode.id && currentMode !== mode.id
@@ -141,4 +115,3 @@ export function AdaptationModeSwitcher({
     </TooltipProvider>
   )
 }
-

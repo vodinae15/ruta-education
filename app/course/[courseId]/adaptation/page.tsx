@@ -997,14 +997,11 @@ export default function CourseAdaptationPage() {
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">
                     {hasExistingAdaptations() ? 'Перегенерировать адаптацию урока' : 'Запустить адаптацию урока'}
                   </h3>
-                  <p className="text-sm text-slate-600 mb-2">
+                  <p className="text-sm text-slate-600 mb-4">
                     {hasExistingAdaptations()
                       ? `ИИ перегенерирует адаптацию урока «${selectedLesson.title}» для всех режимов представления материала. Старая версия будет удалена.`
                       : `ИИ адаптирует урок «${selectedLesson.title}» для всех режимов представления материала`
                     }
-                  </p>
-                  <p className="text-sm text-slate-600 mb-4">
-                    Визуалы, аудиалы, кинестетики и оригинальная версия
                   </p>
                   <div className="flex gap-3 justify-center">
                     {!hasExistingAdaptations() && (
