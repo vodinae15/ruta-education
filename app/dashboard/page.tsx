@@ -734,21 +734,36 @@ export default function DashboardPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-light-gray">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-          <div className="space-y-6">
+      <div className="min-h-screen bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+          <div className="space-y-8">
             <Skeleton className="h-12 w-64" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <Card key={i} className="p-6">
-                  <Skeleton className="h-6 w-32 mb-4" />
-                  <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-24 w-full rounded-2xl" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Card key={i} className="border h-full">
+                  <CardContent className="p-6">
+                    <Skeleton className="h-6 w-24 mb-2" />
+                    <Skeleton className="h-8 w-16" />
+                  </CardContent>
                 </Card>
               ))}
             </div>
-            <Card className="p-6">
-              <Skeleton className="h-8 w-48 mb-4" />
-              <Skeleton className="h-32 w-full" />
+            <Card className="border">
+              <CardContent className="p-6">
+                <Skeleton className="h-8 w-48 mb-4" />
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex items-center gap-4">
+                      <Skeleton className="h-16 w-16 rounded-lg" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-5 w-48" />
+                        <Skeleton className="h-4 w-32" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
             </Card>
           </div>
         </div>
@@ -826,11 +841,11 @@ export default function DashboardPage() {
         )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           {statsLoading ? (
             <>
               {[1, 2, 3, 4, 5].map((i) => (
-                <Card key={i} className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+                <Card key={i} className="border h-full">
                   <CardContent className="p-6">
                     <Skeleton className="h-6 w-24 mb-2" />
                     <Skeleton className="h-8 w-16" />
@@ -841,14 +856,14 @@ export default function DashboardPage() {
           ) : (
             <>
               <Link href="/students" className="block">
-                <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm cursor-pointer group">
+                <Card className="border h-full">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-semibold text-primary mb-2">Всего учеников</p>
-                        <p className="text-3xl font-bold text-[#111827] group-hover:text-primary transition-colors">{stats.totalStudents}</p>
+                        <p className="text-sm text-slate-600 mb-2">Всего учеников</p>
+                        <p className="text-3xl font-bold text-[#5589a7]">{stats.totalStudents}</p>
                       </div>
-                      <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center group-hover:bg-primary-hover transition-colors">
+                      <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                         <UserIcon className="w-7 h-7 text-white" />
                       </div>
                     </div>
@@ -856,12 +871,12 @@ export default function DashboardPage() {
                 </Card>
               </Link>
 
-              <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+              <Card className="border h-full">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-primary mb-2">Курсов создано</p>
-                      <p className="text-3xl font-bold text-[#111827]">{stats.totalCourses}</p>
+                      <p className="text-sm text-slate-600 mb-2">Курсов создано</p>
+                      <p className="text-3xl font-bold text-[#5589a7]">{stats.totalCourses}</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <BookOpenIcon className="w-7 h-7 text-white" />
@@ -870,12 +885,12 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+              <Card className="border h-full">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-primary mb-2">Опубликовано</p>
-                      <p className="text-3xl font-bold text-[#111827]">{stats.publishedCourses}</p>
+                      <p className="text-sm text-slate-600 mb-2">Опубликовано</p>
+                      <p className="text-3xl font-bold text-[#5589a7]">{stats.publishedCourses}</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <EyeIcon className="w-7 h-7 text-white" />
@@ -884,12 +899,12 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+              <Card className="border h-full">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-primary mb-2">Средний прогресс</p>
-                      <p className="text-3xl font-bold text-[#111827]">{stats.averageProgress}%</p>
+                      <p className="text-sm text-slate-600 mb-2">Средний прогресс</p>
+                      <p className="text-3xl font-bold text-[#5589a7]">{stats.averageProgress}%</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <TrendingUpIcon className="w-7 h-7 text-white" />
@@ -898,12 +913,12 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+              <Card className="border h-full">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-primary mb-2">Доход</p>
-                      <p className="text-3xl font-bold text-[#111827]">{stats.totalRevenueFormatted || "0 ₽"}</p>
+                      <p className="text-sm text-slate-600 mb-2">Доход</p>
+                      <p className="text-3xl font-bold text-[#5589a7]">{stats.totalRevenueFormatted || "0 ₽"}</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <BarChartIcon className="w-7 h-7 text-white" />
@@ -917,17 +932,22 @@ export default function DashboardPage() {
 
         {/* Courses Section */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl lg:text-3xl font-bold text-primary">Ваши курсы</h3>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900">
+              <span className="text-[#5589a7]">Ваши</span> курсы
+            </h2>
             {!coursesLoading && courses.length > 0 && (
-              <Button onClick={handleCreateCourse} variant="secondary" className="flex items-center gap-2 h-12 px-6">
+              <Link
+                href="/course-constructor?mode=new"
+                className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+              >
                 Создать курс
-              </Button>
+              </Link>
             )}
           </div>
 
           {coursesLoading ? (
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+            <Card className="border">
               <CardContent className="p-6">
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
@@ -943,27 +963,30 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           ) : courses.length === 0 ? (
-            <Card className="text-center py-12 bg-white border-2 rounded-lg shadow-ruta-sm">
+            <Card className="text-center py-12 border">
               <CardContent>
-                <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                  <BookOpenIcon className="w-10 h-10 text-white" />
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BookOpenIcon className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-xl font-bold text-primary mb-3">У вас пока нет созданных курсов</h4>
-                <p className="text-[#6B7280] mb-8 text-base leading-relaxed max-w-md mx-auto">
+                <h4 className="text-lg text-[#5589a7] font-semibold mb-4">У вас пока нет созданных курсов</h4>
+                <p className="text-sm text-slate-600 mb-6 max-w-md mx-auto">
                   Создайте первый курс с персонализированными подсказками под ваш стиль преподавания
                 </p>
-                <Button onClick={handleCreateCourse} className="flex items-center gap-2 mx-auto h-12 px-6">
+                <Link
+                  href="/course-constructor?mode=new"
+                  className="inline-block bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                >
                   Создать первый курс
-                </Button>
+                </Link>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {courses.map((course) => (
-                <Card key={course.id} className="bg-white border-2 hover:border-primary/20 transition-colors cursor-pointer rounded-lg shadow-ruta-sm">
+                <Card key={course.id} className="border h-full">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <CardTitle className="text-lg font-bold text-primary flex-1">
+                      <CardTitle className="text-lg text-[#5589a7]">
                         {course.title || "Без названия"}
                       </CardTitle>
                       {course.is_collaborator && (
@@ -972,7 +995,7 @@ export default function DashboardPage() {
                         </Badge>
                       )}
                     </div>
-                    <CardDescription className="text-sm leading-relaxed text-[#6B7280]">
+                    <CardDescription className="text-sm text-slate-600">
                       {course.description || "Описание курса не добавлено"}
                     </CardDescription>
                     {course.launch_mode === "stream" && course.stream_start_date && (
@@ -1038,7 +1061,7 @@ export default function DashboardPage() {
                           ) : analytics && analytics.success === true ? (
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                              <h4 className="text-sm font-semibold text-primary flex items-center gap-1">
+                              <h4 className="text-sm font-semibold text-[#5589a7] flex items-center gap-1">
                                 <BarChartIcon className="w-4 h-4" />
                                 Аналитика курса
                                 {analytics.course?.title && (
@@ -1060,19 +1083,19 @@ export default function DashboardPage() {
                                   <EyeIcon className="w-3 h-3 text-[#6B7280]" />
                                   <span className="text-xs text-[#6B7280]">Просмотры</span>
                                 </div>
-                                <p className="text-lg font-bold text-primary">
+                                <p className="text-lg font-bold text-[#5589a7]">
                                   {analytics.summary?.averageViews ?? 0}
                                 </p>
-                                <p className="text-xs text-[#6B7280]">среднее по урокам</p>
+                                <p className="text-xs text-slate-600">среднее по урокам</p>
                               </div>
 
                               {/* Среднее время изучения */}
                               <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <ClockIcon className="w-3 h-3 text-[#6B7280]" />
-                                  <span className="text-xs text-[#6B7280]">Время</span>
+                                  <ClockIcon className="w-3 h-3 text-slate-600" />
+                                  <span className="text-xs text-slate-600">Время</span>
                                 </div>
-                                <p className="text-lg font-bold text-primary">
+                                <p className="text-lg font-bold text-[#5589a7]">
                                   {analytics.summary?.averageTimeSpentFormatted ?? '0с'}
                                 </p>
                                 <p className="text-xs text-[#6B7280]">среднее изучение</p>
@@ -1083,10 +1106,10 @@ export default function DashboardPage() {
                             <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1">
-                                  <RepeatIcon className="w-3 h-3 text-[#6B7280]" />
-                                  <span className="text-xs text-[#6B7280]">Повторные просмотры</span>
+                                  <RepeatIcon className="w-3 h-3 text-slate-600" />
+                                  <span className="text-xs text-slate-600">Повторные просмотры</span>
                                 </div>
-                                <p className="text-sm font-bold text-primary">
+                                <p className="text-sm font-bold text-[#5589a7]">
                                   {analytics.summary?.totalRepeatViews ?? 0}
                                 </p>
                               </div>
