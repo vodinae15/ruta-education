@@ -1379,13 +1379,6 @@ export default function CourseConstructor() {
     switch (mode) {
       case "new":
         initializeNewCourse()
-        setTimeout(() => {
-          if (courseBlocks.length > 0) {
-            setActiveBlockId(courseBlocks[0].id)
-          } else {
-            setActiveBlockId("1") // Default first block ID
-          }
-        }, 200)
         break
       case "edit":
         if (courseId) {
