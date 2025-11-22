@@ -315,9 +315,9 @@ export default function HomePage() {
             <Image
               src="/images/ruta-logo-compact.png"
               alt="Ruta.education"
-              width={120}
-              height={48}
-              className="h-12 w-auto"
+              width={360}
+              height={144}
+              className="h-36 w-auto"
             />
             <p className="text-sm text-slate-600">Платформа персонализированного обучения</p>
           </div>
