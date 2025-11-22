@@ -423,6 +423,7 @@ export default function CourseConstructor() {
   // Состояния для динамических подсказок
   const [dynamicHints, setDynamicHints] = useState<DynamicHint[]>([])
   const [activeHint, setActiveHint] = useState<DynamicHint | null>(null)
+  const [isHintTransitioning, setIsHintTransitioning] = useState(false)
   const [dismissedHints, setDismissedHints] = useState<string[]>([])
 
   // Состояния для тарифов и режима запуска
@@ -1348,9 +1349,15 @@ export default function CourseConstructor() {
     }
   }, [dismissedHints, dynamicHints])
 
-  // Функция для закрытия подсказки
+  // Функция для закрытия подсказки с анимацией
   const dismissHint = (hintId: string) => {
-    setDismissedHints((prev) => [...prev, hintId])
+    setIsHintTransitioning(true)
+    setTimeout(() => {
+      setDismissedHints((prev) => [...prev, hintId])
+      setTimeout(() => {
+        setIsHintTransitioning(false)
+      }, 300)
+    }, 300)
   }
 
   useEffect(() => {
@@ -1778,7 +1785,7 @@ export default function CourseConstructor() {
 
   const saveCourse = async () => {
     if (!courseTitle.trim()) {
-      setModalState({ isOpen: true, type: "save" })
+      alert("Введите название курса для сохранения")
       return
     }
 
@@ -3166,7 +3173,9 @@ export default function CourseConstructor() {
                   {/* Динамические подсказки */}
                   {activeHint && (
                     <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
-                      <div className="p-4 bg-[#FEFDF2] border border-[#659AB8]/20 rounded-lg">
+                      <div className={`p-4 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg transition-all duration-300 ${
+                        isHintTransitioning ? "opacity-0 transform translate-y-2" : "opacity-100 transform translate-y-0"
+                      }`}>
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-start gap-2 flex-1">
                             <LightbulbIcon className="w-5 h-5 text-[#659AB8] mt-0.5 flex-shrink-0" />
@@ -3179,7 +3188,8 @@ export default function CourseConstructor() {
                             variant="ghost"
                             size="sm"
                             onClick={() => dismissHint(activeHint.id)}
-                            className="text-slate-600 hover:text-[#111827] text-xs px-2 py-1 h-auto flex-shrink-0"
+                            disabled={isHintTransitioning}
+                            className="text-slate-600 text-sm font-semibold hover:underline flex-shrink-0 disabled:opacity-50"
                           >
                             Позже
                           </Button>
