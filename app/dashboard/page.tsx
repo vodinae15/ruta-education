@@ -878,7 +878,7 @@ export default function DashboardPage() {
                         <p className="text-sm text-slate-600 mb-2">Всего учеников</p>
                         <p className="text-3xl font-bold text-[#5589a7]">{stats.totalStudents}</p>
                       </div>
-                      <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
+                      <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center shrink-0">
                         <UserIcon className="w-7 h-7 text-white" />
                       </div>
                     </div>
@@ -893,7 +893,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Курсов создано</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.totalCourses}</p>
                     </div>
-                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
+                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <BookOpenIcon className="w-7 h-7 text-white" />
                     </div>
                   </div>
@@ -907,7 +907,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Опубликовано</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.publishedCourses}</p>
                     </div>
-                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
+                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <EyeIcon className="w-7 h-7 text-white" />
                     </div>
                   </div>
@@ -921,8 +921,8 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Средний прогресс</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.averageProgress}%</p>
                     </div>
-                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
-                      <TrendingUpIcon className="w-6 h-6 text-white" />
+                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center shrink-0">
+                      <TrendingUpIcon className="w-7 h-7 text-white" />
                     </div>
                   </div>
                 </CardContent>
@@ -935,7 +935,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Доход</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.totalRevenueFormatted || "0 ₽"}</p>
                     </div>
-                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
+                    <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center shrink-0">
                       <BarChartIcon className="w-7 h-7 text-white" />
                     </div>
                   </div>
