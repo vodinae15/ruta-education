@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Progress } from "@/components/ui/progress"
@@ -12,7 +11,7 @@ import { MainNavigation } from "@/components/ui/main-navigation"
 import { PageHeader } from "@/components/ui/page-header"
 import { createClient } from "@/lib/supabase/client"
 import { useAuth } from "@/lib/auth"
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "@/components/ui/icons"
+import Link from "next/link"
 import {
   authorTestQuestions,
   determineAuthorType,
@@ -69,11 +68,13 @@ export default function AuthorTestPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="space-y-6">
             <Skeleton className="h-12 w-64" />
-            <Card className="p-6">
-              <Skeleton className="h-8 w-48 mb-4" />
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-3/4" />
+            <Card className="border">
+              <CardContent className="p-6">
+                <Skeleton className="h-8 w-48 mb-4" />
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-3/4" />
+              </CardContent>
             </Card>
           </div>
         </div>
@@ -209,22 +210,28 @@ export default function AuthorTestPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           {authorTypeResult ? (
             <>
-              <AuthorTestResults authorTypeResult={authorTypeResult} />
+              <AuthorTestResults authorTypeResult={authorTypeResult} onRetakeTest={handleRetakeTest} />
               <div className="max-w-4xl mx-auto mt-8">
-                <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+                <Card className="border">
                   <CardContent className="p-6">
                     <div className="text-center">
-                      <h3 className="text-lg font-semibold text-primary mb-3">Хотите пройти тест заново?</h3>
-                      <p className="text-[#6B7280] mb-6">
+                      <h3 className="text-lg font-semibold text-[#5589a7] mb-3">Хотите пройти тест заново?</h3>
+                      <p className="text-slate-600 mb-6">
                         Ваши взгляды могли измениться. Пройдите тест повторно, чтобы получить актуальные рекомендации.
                       </p>
                       <div className="flex gap-4 justify-center">
-                        <Button onClick={() => router.push("/dashboard")} className="flex items-center gap-2">
+                        <Link
+                          href="/dashboard"
+                          className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                        >
                           Перейти в личный кабинет
-                        </Button>
-                        <Button onClick={handleRetakeTest} variant="secondary" className="flex items-center gap-2">
+                        </Link>
+                        <button
+                          onClick={handleRetakeTest}
+                          className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                        >
                           Пройти тест заново
-                        </Button>
+                        </button>
                       </div>
                     </div>
                   </CardContent>
@@ -233,22 +240,30 @@ export default function AuthorTestPage() {
             </>
           ) : (
             <div className="max-w-4xl mx-auto">
-              <Card className="bg-white border-2 rounded-lg shadow-ruta-sm mb-8">
+              <Card className="border mb-8">
                 <CardHeader>
-                  <CardTitle className="text-xl lg:text-2xl text-primary font-bold leading-relaxed">
+                  <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed">
                     Ваш тип автора: {existingProfile.author_type}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <p className="text-[#111827]">
+                    <p className="text-slate-600">
                       Вы уже проходили тест определения типа автора. Ваш результат сохранен в профиле.
                     </p>
                     <div className="flex gap-4">
-                      <Button onClick={() => router.push("/dashboard")}>Перейти в личный кабинет</Button>
-                      <Button onClick={handleRetakeTest} variant="secondary">
+                      <Link
+                        href="/dashboard"
+                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                      >
+                        Перейти в личный кабинет
+                      </Link>
+                      <button
+                        onClick={handleRetakeTest}
+                        className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                      >
                         Пройти тест заново
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 </CardContent>
@@ -275,18 +290,18 @@ export default function AuthorTestPage() {
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-primary">
+              <span className="text-lg font-semibold text-[#5589a7]">
                 Вопрос {currentQuestion + 1} из {authorTestQuestions.length}
               </span>
-              <span className="text-lg font-semibold text-primary">{Math.round(progress)}% завершено</span>
+              <span className="text-lg font-semibold text-[#5589a7]">{Math.round(progress)}% завершено</span>
             </div>
             <Progress value={progress} className="h-3" />
           </div>
 
           {/* Question Card */}
-          <Card className="mb-8 bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+          <Card className="mb-8 border">
             <CardHeader className="pb-6">
-              <CardTitle className="text-xl lg:text-2xl text-primary font-bold leading-relaxed">
+              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed">
                 <span dangerouslySetInnerHTML={{ __html: authorTestQuestions[currentQuestion].question }} />
               </CardTitle>
             </CardHeader>
@@ -297,15 +312,15 @@ export default function AuthorTestPage() {
                 className="space-y-2"
               >
                 {authorTestQuestions[currentQuestion].options.map((option) => (
-                  <div key={option.id} className="flex items-start space-x-4 p-2 rounded-lg hover:bg-light-blue/20 transition-colors">
+                  <div key={option.id} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-light-blue transition-colors">
                     <RadioGroupItem
                       value={option.value}
                       id={option.id}
-                      className="mt-1 border-primary text-primary"
+                      className="mt-1 border-[#659AB8] text-[#659AB8]"
                     />
                     <Label
                       htmlFor={option.id}
-                      className="text-lg leading-relaxed cursor-pointer flex-1 text-[#111827]"
+                      className="text-lg leading-relaxed cursor-pointer flex-1 text-slate-900"
                     >
                       <span dangerouslySetInnerHTML={{ __html: option.text }} />
                     </Label>
@@ -324,39 +339,30 @@ export default function AuthorTestPage() {
 
           {/* Navigation */}
           <div className="flex justify-between items-center">
-            <Button
-              variant="secondary"
+            <button
               onClick={handlePrevious}
               disabled={currentQuestion === 0}
-              className="flex items-center gap-2 h-12 px-6 transition-colors"
+              className="bg-white text-[#659AB8] px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ArrowLeftIcon className="w-5 h-5" />
               Назад
-            </Button>
+            </button>
 
             {isLastQuestion ? (
-              <Button
+              <button
                 onClick={handleSubmit}
                 disabled={!canProceed || isSubmitting}
-                className="flex items-center gap-2 h-12 px-6 transition-colors"
+                className="bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Сохранение...
-                  </>
-                ) : (
-                  <>
-                    <CheckIcon className="w-5 h-5" />
-                    Завершить тест
-                  </>
-                )}
-              </Button>
+                {isSubmitting ? "Сохранение..." : "Завершить тест"}
+              </button>
             ) : (
-              <Button onClick={handleNext} disabled={!canProceed} className="flex items-center gap-2 h-12 px-6 transition-colors">
+              <button
+                onClick={handleNext}
+                disabled={!canProceed}
+                className="bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 Далее
-                <ArrowRightIcon className="w-5 h-5" />
-              </Button>
+              </button>
             )}
           </div>
 
