@@ -345,8 +345,8 @@ export default function StudentsPage() {
               {/* Форма добавления ученика */}
               {selectedCourseId && (
                 <div className="space-y-4 pt-4 border-t border-[#E5E7EB]">
-                  <div className="space-y-2">
-                    <Label htmlFor="student-email" className="text-sm font-medium text-[#111827]">
+                  <div>
+                    <Label htmlFor="student-email" className="text-sm font-medium text-slate-900 mb-4 block">
                       Добавить ученика к выбранному курсу
                     </Label>
                     <div className="flex items-end gap-4">
