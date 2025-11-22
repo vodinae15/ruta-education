@@ -25,38 +25,47 @@ interface CourseCollaboratorsManagerProps {
   isAuthor?: boolean // Является ли текущий пользователь автором
 }
 
-export function CourseCollaboratorsManager({ 
-  courseId, 
-  isOpen, 
+export function CourseCollaboratorsManager({
+  courseId,
+  isOpen,
   onClose,
-  isAuthor = true 
+  isAuthor = true
 }: CourseCollaboratorsManagerProps) {
   const [collaborators, setCollaborators] = useState<Collaborator[]>([])
   const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [initialLoaded, setInitialLoaded] = useState(false)
   const [adding, setAdding] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
   // Загрузка соавторов при открытии модального окна
   useEffect(() => {
-    if (isOpen && courseId) {
+    if (isOpen && courseId && !initialLoaded) {
       fetchCollaborators()
     }
-  }, [isOpen, courseId])
+  }, [isOpen, courseId, initialLoaded])
+
+  // Сброс состояния при закрытии
+  useEffect(() => {
+    if (!isOpen) {
+      setInitialLoaded(false)
+    }
+  }, [isOpen])
 
   const fetchCollaborators = async () => {
     try {
       setLoading(true)
       setError(null)
       const response = await fetch(`/api/course-collaborators?courseId=${courseId}`)
-      
+
       if (!response.ok) {
         throw new Error("Не удалось загрузить соавторов")
       }
 
       const data = await response.json()
       setCollaborators(data.collaborators || [])
+      setInitialLoaded(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Ошибка загрузки соавторов")
     } finally {
@@ -224,7 +233,7 @@ export function CourseCollaboratorsManager({
               Соавторы ({collaborators.length})
             </h3>
 
-            {loading && collaborators.length === 0 ? (
+            {loading || !initialLoaded ? (
               <div className="space-y-3 py-8">
                 {[1, 2, 3].map((i) => (
                   <Skeleton key={i} className="h-16 w-full" />
