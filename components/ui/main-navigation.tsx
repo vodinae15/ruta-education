@@ -52,7 +52,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
             <Link
               href="/"
               className={`text-sm font-medium transition-colors ${
-                isActive("/") ? "text-primary" : "text-slate-600 hover:text-primary"
+                isActive("/") ? "text-[#5589a7]" : "text-slate-600 hover:text-[#5589a7]"
               }`}
             >
               Главная
@@ -62,7 +62,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
               <Link
                 href="/dashboard"
                 className={`text-sm font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-primary" : "text-slate-600 hover:text-primary"
+                  isActive("/dashboard") ? "text-[#5589a7]" : "text-slate-600 hover:text-[#5589a7]"
                 }`}
               >
                 Личный кабинет

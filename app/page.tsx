@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { MainNavigation } from "@/components/ui/main-navigation"
@@ -71,7 +70,7 @@ export default function HomePage() {
             <h1 className="text-4xl lg:text-6xl font-bold text-slate-900 mb-8">
               Образовательная платформа{" "}
               <br />
-              <span className="text-primary">с двойной персонализацией</span>
+              <span className="text-[#5589a7]">с двойной персонализацией</span>
             </h1>
 
             <div className="bg-light-blue rounded-2xl p-6 sm:p-8 mb-8 max-w-4xl mx-auto">
@@ -84,12 +83,18 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
-                <Link href="/auth">Начать использовать платформу</Link>
-              </Button>
-              <Button variant="secondary" size="lg" asChild>
-                <Link href="#why-it-works">Как это работает</Link>
-              </Button>
+              <Link
+                href="/auth"
+                className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+              >
+                Начать использовать платформу
+              </Link>
+              <Link
+                href="#why-it-works"
+                className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+              >
+                Как это работает
+              </Link>
             </div>
           </div>
         </div>
@@ -114,7 +119,7 @@ export default function HomePage() {
               <button
                 onClick={() => setActiveTab("teachers")}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === "teachers" ? "bg-white text-primary shadow-sm" : "text-slate-600 hover:text-slate-900"
+                  activeTab === "teachers" ? "bg-white text-primary" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Для преподавателей
@@ -122,7 +127,7 @@ export default function HomePage() {
               <button
                 onClick={() => setActiveTab("students")}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === "students" ? "bg-white text-primary shadow-sm" : "text-slate-600 hover:text-slate-900"
+                  activeTab === "students" ? "bg-white text-primary" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Для студентов
@@ -133,24 +138,24 @@ export default function HomePage() {
           {/* Tabbed Content */}
           {activeTab === "teachers" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Пройдите тест на тип автора</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Пройдите тест на тип автора</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>Определите свой стиль и начните работать с персонализированными рекомендациями</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <BookIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Создавайте курс в конструкторе</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Создавайте курс в конструкторе</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>
@@ -160,12 +165,12 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <PlayIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Добавьте почту ученика</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Добавьте почту ученика</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>
@@ -174,12 +179,12 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <BarChartIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Получайте обратную связь</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Получайте обратную связь</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>Анализируйте статистику и применяйте конкретные рекомендации по улучшению курса</p>
@@ -190,12 +195,12 @@ export default function HomePage() {
 
           {activeTab === "students" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <PlayIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Откройте доступ</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Откройте доступ</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>
@@ -204,36 +209,36 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Пройдите тест на тип восприятия</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Пройдите тест на тип восприятия</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>Определите свой способ восприятия информации и выберите подходящий формат обратной связи</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <EyeIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Приступите к обучению</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Приступите к обучению</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>Получайте персонализированные рекомендации и адаптированную под ваш тип восприятия подачу</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center border hover:border-primary/30 transition-colors h-full">
+              <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUpIcon className="w-7 h-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary">Отслеживайте свой прогресс</CardTitle>
+                  <CardTitle className="text-lg text-[#5589a7]">Отслеживайте свой прогресс</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-slate-600 text-center">
                   <p>Получайте мотивирующую обратную связь и делитесь прогрессом с преподавателем автоматически</p>
@@ -248,11 +253,11 @@ export default function HomePage() {
       <section id="why-it-works" className="bg-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-            <span className="text-primary">Почему</span> это работает
+            <span className="text-[#5589a7]">Почему</span> это работает
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
-            Ruta.education адаптирует один курс <span className="text-primary">под стиль автора</span> и{" "}
-            <span className="text-primary">тип восприятия учеников</span>
+            Ruta.education адаптирует один курс <span className="text-[#5589a7]">под стиль автора</span> и{" "}
+            <span className="text-[#5589a7]">тип восприятия учеников</span>
           </p>
 
           {/* Stats Section */}
@@ -261,21 +266,21 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUpIcon className="w-8 h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-primary mb-2">8 типов</div>
+              <div className="text-3xl font-bold text-[#5589a7] mb-2">8 типов</div>
               <p className="text-slate-600">авторов с персонализированными конструкторами</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <UserIcon className="w-8 h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-primary mb-2">9 типов</div>
+              <div className="text-3xl font-bold text-[#5589a7] mb-2">9 типов</div>
               <p className="text-slate-600">учеников с адаптивным контентом</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookIcon className="w-8 h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-primary mb-2">72 подхода</div>
+              <div className="text-3xl font-bold text-[#5589a7] mb-2">72 подхода</div>
               <p className="text-slate-600">к обучению и прохождению курсов</p>
             </div>
           </div>
@@ -293,9 +298,12 @@ export default function HomePage() {
               Пройдите тест, выберите шаблон и наполните курс контентом. Система сама адаптирует материал
               под разные типы восприятия студентов
             </p>
-            <Button size="lg" asChild>
-              <Link href="/auth">Начать создание курса</Link>
-            </Button>
+            <Link
+              href="/auth"
+              className="inline-block bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+            >
+              Начать создание курса
+            </Link>
           </div>
         </div>
       </section>
@@ -308,9 +316,9 @@ export default function HomePage() {
               <Image
                 src="/images/ruta-logo-compact.png"
                 alt="Ruta.education"
-                width={240}
-                height={96}
-                className="h-24 w-auto"
+                width={360}
+                height={144}
+                className="h-36 w-auto"
               />
             </div>
             <p className="text-sm text-slate-600">Платформа персонализированного обучения</p>
