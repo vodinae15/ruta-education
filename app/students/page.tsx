@@ -329,8 +329,8 @@ export default function StudentsPage() {
                   Выберите курс
                 </Label>
                 {loading ? (
-                  <div className="flex items-center gap-2 text-[#6B7280]">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                  <div className="flex items-center gap-2 text-slate-600">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#659AB8]"></div>
                     <span>Загрузка курсов...</span>
                   </div>
                 ) : (

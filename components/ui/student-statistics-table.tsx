@@ -115,7 +115,7 @@ export function StudentStatisticsTable({
     return (
       <Card className="border">
         <CardContent className="p-8 text-center">
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
             <UserIcon className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-lg font-semibold text-slate-900 mb-2">
@@ -161,7 +161,7 @@ export function StudentStatisticsTable({
                   <tr key={student.studentId} className="hover:bg-light-blue/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 bg-[#659AB8] rounded-full flex items-center justify-center flex-shrink-0">
                           <UserIcon className="w-5 h-5 text-white" />
                         </div>
                         <div className="min-w-0">
@@ -211,7 +211,7 @@ export function StudentStatisticsTable({
                           variant="text"
                           size="sm"
                           onClick={() => handleOpenNotes(student.studentId)}
-                              className="text-primary hover:bg-primary/10 hover:text-primary transition-colors"
+                          className="text-[#5589a7] hover:bg-[#659AB8]/10 hover:text-[#5589a7] transition-colors"
                           title="Заметки"
                         >
                           <MessageCircleIcon className="w-4 h-4" />
