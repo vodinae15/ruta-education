@@ -18,15 +18,15 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
         <Card className="bg-light-blue border rounded-2xl">
           <CardContent className="p-6 sm:p-8 lg:p-10">
             <div className="space-y-4">
-              <div className="flex items-center gap-3 flex-wrap">
-                <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7]">
-                  {authorTypeResult.title}
-                </h2>
+              <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7]">
+                {authorTypeResult.title}
+              </h2>
+              <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{authorTypeResult.description}</p>
+              <div className="flex items-center gap-2">
                 <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB]">
                   {authorTypeResult.superpower}
                 </span>
               </div>
-              <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{authorTypeResult.description}</p>
             </div>
           </CardContent>
         </Card>

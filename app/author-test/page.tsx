@@ -203,7 +203,7 @@ export default function AuthorTestPage() {
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
         <PageHeader
-          title={`Ваш тип автора: ${existingProfile.author_type}`}
+          title="Ваш тип автора"
           description="Результаты теста определения стиля преподавания"
           breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Тест автора" }]}
         />
