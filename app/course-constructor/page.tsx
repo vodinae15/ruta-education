@@ -2443,220 +2443,95 @@ export default function CourseConstructor() {
           </Card>
         </div>
 
-        {/* Тарифы и оплата */}
-        {currentCourseId && (
-          <Card className="mb-8 bg-white border-2 rounded-lg ">
-            <CardContent className="p-6 sm:p-8 lg:p-10">
-              <div className="text-center mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Тарифы и оплата</h3>
-                <p className="text-lg text-slate-600">
-                  Настройте тарифы курса и режим запуска
-                </p>
-              </div>
-
-              {/* Режим запуска курса */}
-              <div className="mb-8 p-6 bg-light-blue/30 border border-[#659AB8]/20 rounded-lg">
-                <Label className="text-lg font-semibold text-[#5589a7] mb-4 block">
-                  Режим запуска курса
-                </Label>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <Button
-                      variant={launchMode === "permanent" ? "default" : "secondary"}
-                      onClick={() => {
-                        setLaunchMode("permanent")
-                        setStreamStartDate("")
-                      }}
-                      className={`flex-1 h-12 ${
-                        launchMode === "permanent"
-                          ? "bg-[#659AB8] text-white"
-                          : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue"
-                      }`}
-                    >
-                      Постоянный (доступ сразу после оплаты)
-                    </Button>
-                    <Button
-                      variant={launchMode === "stream" ? "default" : "secondary"}
-                      onClick={() => setLaunchMode("stream")}
-                      className={`flex-1 h-12 ${
-                        launchMode === "stream"
-                          ? "bg-[#659AB8] text-white"
-                          : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue"
-                      }`}
-                    >
-                      Потоковый (запуск по дате)
-                    </Button>
-                  </div>
-
-                  {launchMode === "stream" && (
-                    <div>
-                      <Label htmlFor="stream-start-date" className="text-sm font-medium text-[#111827] mb-2 block">
-                        Дата старта потока *
-                      </Label>
-                      <Input
-                        id="stream-start-date"
-                        type="date"
-                        value={streamStartDate}
-                        onChange={(e) => setStreamStartDate(e.target.value)}
-                        className="h-12"
-                        min={new Date().toISOString().split('T')[0]}
-                        required
-                      />
-                      <p className="text-xs text-slate-600 mt-1">
-                        Ученики смогут оплатить курс заранее, но доступ откроется только в указанную дату
-                      </p>
+        {/* Уроки курса - Full Width */}
+        <Card className="bg-white border-2 rounded-lg mb-8">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl lg:text-2xl font-bold text-[#5589a7]">Уроки курса</h2>
+              <button onClick={addLesson} className="bg-[#659AB8] text-white w-8 h-8 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center justify-center">
+                +
+              </button>
+            </div>
+            <p className="text-lg text-slate-600">Управляйте структурой курса</p>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="flex flex-wrap gap-2 p-6">
+              {courseLessons.map((lesson) => (
+                <Card
+                  key={lesson.id}
+                  className={`cursor-pointer transition-all flex-shrink-0 ${
+                    activeLessonId === lesson.id
+                      ? "ring-2 ring-[#659AB8] bg-[#659AB8]/5 border-[#659AB8]/30"
+                      : "hover:bg-background-gray"
+                  }`}
+                  onClick={() => selectLesson(lesson.id)}
+                >
+                  <CardContent className="p-3">
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium text-[#111827] text-sm">{lesson.title}</h3>
+                          {activeLessonId === lesson.id && (
+                            <div className="w-2 h-2 bg-[#659AB8] rounded-full"></div>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-600">{lesson.blocks.length} блоков</p>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          removeLesson(lesson.id)
+                        }}
+                        className="text-[#659AB8] hover:text-[#5589a7] h-6 w-6 p-0 flex items-center justify-center"
+                      >
+                        <TrashIcon className="w-3 h-3" />
+                      </button>
                     </div>
-                  )}
 
+                    {activeLessonId === lesson.id && (
+                      <div className="mt-3 space-y-2">
+                        <Input
+                          value={lesson.title}
+                          onChange={(e) => updateLessonTitle(lesson.id, e.target.value)}
+                          placeholder="Название урока"
+                          className="h-8 text-sm"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <Textarea
+                          value={lesson.description}
+                          onChange={(e) => updateLessonDescription(lesson.id, e.target.value)}
+                          placeholder="Описание урока"
+                          className="text-sm"
+                          rows={2}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+
+              {courseLessons.length === 0 && (
+                <div className="text-center py-8 w-full">
+                  <p className="text-slate-600 text-sm mb-3">Нет уроков</p>
                   <Button
-                    onClick={saveLaunchMode}
-                    disabled={launchMode === "stream" && !streamStartDate}
-                    className="w-full bg-[#659AB8] hover:bg-[#5589a7] text-white"
+                    onClick={addLesson}
+                    size="sm"
+                    variant="secondary"
+                    className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/10 bg-transparent transition-colors"
                   >
-                    Сохранить режим запуска
+                    Создать первый урок
                   </Button>
                 </div>
-              </div>
-
-              {/* Редактирование тарифов */}
-              <div>
-                <Label className="text-lg font-semibold text-[#5589a7] mb-4 block">
-                  Тарифы курса
-                </Label>
-                {loadingPricing ? (
-                  <div className="space-y-4 py-8">
-                    <Skeleton className="h-6 w-40 mx-auto" />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {[1, 2, 3].map((i) => (
-                        <Card key={i} className="p-6">
-                          <Skeleton className="h-6 w-32 mb-4" />
-                          <Skeleton className="h-4 w-full mb-2" />
-                          <Skeleton className="h-4 w-3/4" />
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                ) : coursePricing.length === 0 ? (
-                  <div className="text-center py-8 space-y-4">
-                    <p className="text-slate-600 mb-4">Тарифы для курса еще не созданы</p>
-                    <Button
-                      onClick={createDefaultPricingHandler}
-                      disabled={loadingPricing}
-                      className="bg-[#659AB8] hover:bg-[#5589a7] text-white"
-                    >
-                      {loadingPricing ? "Создание..." : "Создать тарифы по умолчанию"}
-                    </Button>
-                    <p className="text-xs text-slate-400 mt-2">
-                      После создания вы сможете настроить цены и описание тарифов
-                    </p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {coursePricing.map((pricing) => (
-                      <PricingEditor
-                        key={pricing.id}
-                        pricing={pricing}
-                        onUpdate={updatePricing}
-                        isUpdating={updatingPricingId === pricing.id}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column - Lessons and Blocks */}
+          {/* Left Column - Blocks */}
           <div className="lg:col-span-3">
-            <Card className="bg-white border-2 rounded-lg  mb-6">
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl lg:text-2xl font-bold text-[#5589a7]">Уроки курса</h2>
-                  <button onClick={addLesson} className="bg-[#659AB8] text-white w-8 h-8 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center justify-center">
-                    +
-                  </button>
-                </div>
-                <p className="text-lg text-slate-600">Управляйте структурой курса</p>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="space-y-2 p-6">
-                  {courseLessons.map((lesson) => (
-                    <Card
-                      key={lesson.id}
-                      className={`cursor-pointer transition-all ${
-                        activeLessonId === lesson.id
-                          ? "ring-2 ring-[#659AB8] bg-[#659AB8]/5 border-[#659AB8]/30"
-                          : "hover:bg-background-gray"
-                      }`}
-                      onClick={() => selectLesson(lesson.id)}
-                    >
-                      <CardContent className="p-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-medium text-[#111827] text-sm">{lesson.title}</h3>
-                              {activeLessonId === lesson.id && (
-                                <div className="w-2 h-2 bg-[#659AB8] rounded-full"></div>
-                              )}
-                            </div>
-                            <p className="text-xs text-slate-600">{lesson.blocks.length} блоков</p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                removeLesson(lesson.id)
-                              }}
-                              className="text-[#659AB8] hover:text-[#5589a7] h-6 w-6 p-0 flex items-center justify-center"
-                            >
-                              <TrashIcon className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-
-                        {activeLessonId === lesson.id && (
-                          <div className="mt-3 space-y-2">
-                            <Input
-                              value={lesson.title}
-                              onChange={(e) => updateLessonTitle(lesson.id, e.target.value)}
-                              placeholder="Название урока"
-                              className="h-8 text-sm"
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                            <Textarea
-                              value={lesson.description}
-                              onChange={(e) => updateLessonDescription(lesson.id, e.target.value)}
-                              placeholder="Описание урока"
-                              className="text-sm"
-                              rows={2}
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-
-                  {courseLessons.length === 0 && (
-                    <div className="text-center py-8">
-                      <p className="text-slate-600 text-sm mb-3">Нет уроков</p>
-                      <Button
-                        onClick={addLesson}
-                        size="sm"
-                        variant="secondary"
-                        className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/10 bg-transparent transition-colors"
-                      >
-                        Создать первый урок
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Блоки активного урока */}
             {activeLessonId && (
               <Card className="border-0">
@@ -3172,6 +3047,130 @@ export default function CourseConstructor() {
             </Card>
           </div>
         </div>
+
+        {/* Тарифы и оплата - At Bottom */}
+        {currentCourseId && (
+          <Card className="mt-8 bg-white border-2 rounded-lg">
+            <CardContent className="p-6 sm:p-8 lg:p-10">
+              <div className="text-center mb-6">
+                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Тарифы и оплата</h3>
+                <p className="text-lg text-slate-600">
+                  Настройте тарифы курса и режим запуска
+                </p>
+              </div>
+
+              {/* Режим запуска курса */}
+              <div className="mb-8 p-6 bg-light-blue/30 border border-[#659AB8]/20 rounded-lg">
+                <Label className="text-lg font-semibold text-[#5589a7] mb-4 block">
+                  Режим запуска курса
+                </Label>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <Button
+                      variant={launchMode === "permanent" ? "default" : "secondary"}
+                      onClick={() => {
+                        setLaunchMode("permanent")
+                        setStreamStartDate("")
+                      }}
+                      className={`flex-1 h-12 ${
+                        launchMode === "permanent"
+                          ? "bg-[#659AB8] text-white"
+                          : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue"
+                      }`}
+                    >
+                      Постоянный (доступ сразу после оплаты)
+                    </Button>
+                    <Button
+                      variant={launchMode === "stream" ? "default" : "secondary"}
+                      onClick={() => setLaunchMode("stream")}
+                      className={`flex-1 h-12 ${
+                        launchMode === "stream"
+                          ? "bg-[#659AB8] text-white"
+                          : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue"
+                      }`}
+                    >
+                      Потоковый (запуск по дате)
+                    </Button>
+                  </div>
+
+                  {launchMode === "stream" && (
+                    <div>
+                      <Label htmlFor="stream-start-date" className="text-sm font-medium text-[#111827] mb-2 block">
+                        Дата старта потока *
+                      </Label>
+                      <Input
+                        id="stream-start-date"
+                        type="date"
+                        value={streamStartDate}
+                        onChange={(e) => setStreamStartDate(e.target.value)}
+                        className="h-12"
+                        min={new Date().toISOString().split('T')[0]}
+                        required
+                      />
+                      <p className="text-xs text-slate-600 mt-1">
+                        Ученики смогут оплатить курс заранее, но доступ откроется только в указанную дату
+                      </p>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={saveLaunchMode}
+                    disabled={launchMode === "stream" && !streamStartDate}
+                    className="w-full bg-[#659AB8] hover:bg-[#5589a7] text-white"
+                  >
+                    Сохранить режим запуска
+                  </Button>
+                </div>
+              </div>
+
+              {/* Редактирование тарифов */}
+              <div>
+                <Label className="text-lg font-semibold text-[#5589a7] mb-4 block">
+                  Тарифы курса
+                </Label>
+                {loadingPricing ? (
+                  <div className="space-y-4 py-8">
+                    <Skeleton className="h-6 w-40 mx-auto" />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {[1, 2, 3].map((i) => (
+                        <Card key={i} className="p-6">
+                          <Skeleton className="h-6 w-32 mb-4" />
+                          <Skeleton className="h-4 w-full mb-2" />
+                          <Skeleton className="h-4 w-3/4" />
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : coursePricing.length === 0 ? (
+                  <div className="text-center py-8 space-y-4">
+                    <p className="text-slate-600 mb-4">Тарифы для курса еще не созданы</p>
+                    <Button
+                      onClick={createDefaultPricingHandler}
+                      disabled={loadingPricing}
+                      className="bg-[#659AB8] hover:bg-[#5589a7] text-white"
+                    >
+                      {loadingPricing ? "Создание..." : "Создать тарифы по умолчанию"}
+                    </Button>
+                    <p className="text-xs text-slate-400 mt-2">
+                      После создания вы сможете настроить цены и описание тарифов
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {coursePricing.map((pricing) => (
+                      <PricingEditor
+                        key={pricing.id}
+                        pricing={pricing}
+                        onUpdate={updatePricing}
+                        isUpdating={updatingPricingId === pricing.id}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
       <CourseActionModal
         isOpen={modalState.isOpen}
