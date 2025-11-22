@@ -105,7 +105,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-              <span className="text-primary">Принцип</span> двойной персонализации
+              <span className="text-[#5589a7]">Принцип</span> двойной персонализации
             </h2>
             <p className="text-lg text-slate-600 max-w-3xl mx-auto">
               Платформа определяет тип автора и локализует коммуникацию для каждого участника процесса.
@@ -119,7 +119,7 @@ export default function HomePage() {
               <button
                 onClick={() => setActiveTab("teachers")}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === "teachers" ? "bg-white text-primary" : "text-slate-600 hover:text-slate-900"
+                  activeTab === "teachers" ? "bg-white text-[#5589a7]" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Для преподавателей
@@ -127,7 +127,7 @@ export default function HomePage() {
               <button
                 onClick={() => setActiveTab("students")}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === "students" ? "bg-white text-primary" : "text-slate-600 hover:text-slate-900"
+                  activeTab === "students" ? "bg-white text-[#5589a7]" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Для студентов
@@ -267,21 +267,21 @@ export default function HomePage() {
                 <TrendingUpIcon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl font-bold text-[#5589a7] mb-2">8 типов</div>
-              <p className="text-slate-600">авторов с персонализированными конструкторами</p>
+              <p className="text-sm text-slate-600">авторов с персонализированными конструкторами</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <UserIcon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl font-bold text-[#5589a7] mb-2">9 типов</div>
-              <p className="text-slate-600">учеников с адаптивным контентом</p>
+              <p className="text-sm text-slate-600">учеников с адаптивным контентом</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookIcon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl font-bold text-[#5589a7] mb-2">72 подхода</div>
-              <p className="text-slate-600">к обучению и прохождению курсов</p>
+              <p className="text-sm text-slate-600">к обучению и прохождению курсов</p>
             </div>
           </div>
         </div>
@@ -294,7 +294,7 @@ export default function HomePage() {
             <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-4">
               <span className="text-primary">Создайте</span> свой первый курс за 15 минут
             </h2>
-            <p className="text-slate-600 mb-6">
+            <p className="text-sm text-slate-600 mb-6">
               Пройдите тест, выберите шаблон и наполните курс контентом. Система сама адаптирует материал
               под разные типы восприятия студентов
             </p>
@@ -309,18 +309,16 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-light-gray py-6">
+      <footer className="bg-light-gray py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-2">
-              <Image
-                src="/images/ruta-logo-compact.png"
-                alt="Ruta.education"
-                width={360}
-                height={144}
-                className="h-36 w-auto"
-              />
-            </div>
+          <div className="flex items-center justify-center gap-4">
+            <Image
+              src="/images/ruta-logo-compact.png"
+              alt="Ruta.education"
+              width={120}
+              height={48}
+              className="h-12 w-auto"
+            />
             <p className="text-sm text-slate-600">Платформа персонализированного обучения</p>
           </div>
         </div>

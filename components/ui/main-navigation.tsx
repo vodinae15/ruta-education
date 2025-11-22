@@ -93,9 +93,12 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
                 </Button>
               </div>
             ) : (
-              <Button asChild className="bg-primary hover:bg-primary-hover text-white">
-                <Link href="/auth">Войти</Link>
-              </Button>
+              <Link
+                href="/auth"
+                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+              >
+                Войти
+              </Link>
             )}
           </div>
         </div>
