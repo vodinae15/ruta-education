@@ -17,20 +17,16 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
         {/* Main card with type and description */}
         <Card className="bg-light-blue border rounded-2xl">
           <CardContent className="p-6 sm:p-8 lg:p-10">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-6">
-              <div className="flex-1">
-                <span className="inline-block bg-[#659AB8] text-white px-6 py-3 text-xl font-semibold mb-4 rounded-lg">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="inline-block bg-[#659AB8] text-white px-4 py-2 text-sm font-semibold rounded-lg">
                   {authorTypeResult.title}
                 </span>
-                <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{authorTypeResult.description}</p>
-              </div>
-
-              {/* Superpower as status badge */}
-              <div className="lg:w-80">
-                <span className="inline-block bg-[#FDF8F3] text-slate-700 px-4 py-3 text-base font-semibold rounded-full border border-[#E5E7EB] leading-tight">
+                <span className="inline-block bg-[#FDF8F3] text-slate-600 px-3 py-1.5 text-xs font-semibold rounded-full border border-[#E5E7EB]">
                   {authorTypeResult.superpower}
                 </span>
               </div>
+              <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{authorTypeResult.description}</p>
             </div>
           </CardContent>
         </Card>

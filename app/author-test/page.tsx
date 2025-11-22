@@ -273,11 +273,11 @@ export default function AuthorTestPage() {
           {/* Question Card */}
           <Card className="mb-8 border">
             <CardHeader className="pb-6">
-              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed">
+              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed min-h-[3.5rem]">
                 <span dangerouslySetInnerHTML={{ __html: authorTestQuestions[currentQuestion].question }} />
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-0">
+            <CardContent className="pt-0 min-h-[280px]">
               <RadioGroup
                 value={answers[currentQuestionId] || ""}
                 onValueChange={handleAnswerChange}
