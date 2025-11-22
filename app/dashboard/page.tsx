@@ -875,7 +875,7 @@ export default function DashboardPage() {
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-sm text-slate-600 mb-2">Всего учеников</p>
+                        <p className="text-sm text-slate-600 mb-2">Всего<br />учеников</p>
                         <p className="text-3xl font-bold text-[#5589a7]">{stats.totalStudents}</p>
                       </div>
                       <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
@@ -890,7 +890,7 @@ export default function DashboardPage() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm text-slate-600 mb-2">Курсов создано</p>
+                      <p className="text-sm text-slate-600 mb-2">Курсов<br />создано</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.totalCourses}</p>
                     </div>
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
@@ -918,7 +918,7 @@ export default function DashboardPage() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm text-slate-600 mb-2">Средний прогресс</p>
+                      <p className="text-sm text-slate-600 mb-2">Средний<br />прогресс</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.averageProgress}%</p>
                     </div>
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
