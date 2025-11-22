@@ -2575,9 +2575,9 @@ export default function CourseConstructor() {
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl lg:text-2xl font-bold text-[#5589a7]">Уроки курса</h2>
-                  <Button onClick={addLesson} size="sm" className="bg-[#659AB8] hover:bg-[#5589a7] text-white transition-colors">
-                    + Урок
-                  </Button>
+                  <button onClick={addLesson} className="bg-[#659AB8] text-white w-8 h-8 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center justify-center">
+                    +
+                  </button>
                 </div>
                 <p className="text-lg text-slate-600">Управляйте структурой курса</p>
               </CardHeader>
@@ -2605,17 +2605,15 @@ export default function CourseConstructor() {
                             <p className="text-xs text-slate-600">{lesson.blocks.length} блоков</p>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Button
-                              variant="text"
-                              size="sm"
+                            <button
                               onClick={(e) => {
                                 e.stopPropagation()
                                 removeLesson(lesson.id)
                               }}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 h-6 w-6 p-0"
+                              className="text-[#659AB8] hover:text-[#5589a7] h-6 w-6 p-0 flex items-center justify-center"
                             >
                               <TrashIcon className="w-3 h-3" />
-                            </Button>
+                            </button>
                           </div>
                         </div>
 
@@ -2722,17 +2720,15 @@ export default function CourseConstructor() {
                                 )}
                               </div>
                               <div className="flex items-center gap-1">
-                                <Button
-                                  variant="text"
-                                  size="sm"
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     removeBlock(block.id)
                                   }}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-50 h-6 w-6 p-0"
+                                  className="text-[#659AB8] hover:text-[#5589a7] h-6 w-6 p-0 flex items-center justify-center"
                                 >
                                   <TrashIcon className="w-3 h-3" />
-                                </Button>
+                                </button>
                                 <div className="cursor-move text-slate-400">
                                   <GripVerticalIcon className="w-3 h-3" />
                                 </div>
@@ -2846,14 +2842,12 @@ export default function CourseConstructor() {
                                   >
                                     {element.mode === "lesson" ? "Для урока" : "Заметки"}
                                   </Button>
-                                  <Button
-                                    variant="text"
-                                    size="sm"
+                                  <button
                                     onClick={() => removeElement(activeBlockId, element.id)}
-                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    className="text-[#659AB8] hover:text-[#5589a7] h-6 w-6 p-0 flex items-center justify-center"
                                   >
                                     <TrashIcon className="w-4 h-4" />
-                                  </Button>
+                                  </button>
                                 </div>
                               </div>
                             </CardHeader>
@@ -2994,38 +2988,30 @@ export default function CourseConstructor() {
                           <div>
                             <h4 className="text-sm font-medium text-[#111827] mb-3">Образовательные блоки</h4>
                             <div className="grid grid-cols-2 gap-2">
-                              <Button
-                                variant="secondary"
+                              <button
                                 onClick={() => addElement(activeBlockId, "text", "theory")}
-                                className="h-10 text-sm justify-start flex items-center"
+                                className="h-10 text-sm bg-white text-[#659AB8] px-4 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                               >
-                                <BookOpenIcon className="w-4 h-4 mr-2 flex-shrink-0" />
-                                <span className="truncate">Теория</span>
-                              </Button>
-                              <Button
-                                variant="secondary"
+                                Теория
+                              </button>
+                              <button
                                 onClick={() => addElement(activeBlockId, "text", "example")}
-                                className="h-10 text-sm justify-start flex items-center"
+                                className="h-10 text-sm bg-white text-[#659AB8] px-4 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                               >
-                                <TargetIcon className="w-4 h-4 mr-2 flex-shrink-0" />
-                                <span className="truncate">Пример</span>
-                              </Button>
-                              <Button
-                                variant="secondary"
+                                Пример
+                              </button>
+                              <button
                                 onClick={() => addElement(activeBlockId, "task", "practice")}
-                                className="h-10 text-sm justify-start flex items-center"
+                                className="h-10 text-sm bg-white text-[#659AB8] px-4 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                               >
-                                <ClipboardListIcon className="w-4 h-4 mr-2 flex-shrink-0" />
-                                <span className="truncate">Практика</span>
-                              </Button>
-                              <Button
-                                variant="secondary"
+                                Практика
+                              </button>
+                              <button
                                 onClick={() => addElement(activeBlockId, "test", "knowledge_check")}
-                                className="h-10 text-sm justify-start flex items-center"
+                                className="h-10 text-sm bg-white text-[#659AB8] px-4 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                               >
-                                <HelpCircleIcon className="w-4 h-4 mr-2 flex-shrink-0" />
-                                <span className="truncate">Проверка знаний</span>
-                              </Button>
+                                Проверка знаний
+                              </button>
                             </div>
                           </div>
 
@@ -3037,23 +3023,16 @@ export default function CourseConstructor() {
                             </h4>
                             <div className="grid grid-cols-2 gap-2">
                               {getRecommendedElements().map((elementType) => {
-                                const Icon = getElementIcon(elementType)
                                 const label = getElementLabel(elementType)
 
                                 return (
-                                  <Button
+                                  <button
                                     key={elementType}
-                                    variant="secondary"
                                     onClick={() => addElement(activeBlockId, elementType)}
-                                    className={`h-10 text-sm justify-start ${
-                                      constructorMode === "personalized"
-                                        ? "border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
-                                        : ""
-                                    }`}
+                                    className="h-10 text-sm bg-white text-[#659AB8] px-4 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                                   >
-                                    <Icon className="w-4 h-4 mr-2" />
                                     {label}
-                                  </Button>
+                                  </button>
                                 )
                               })}
                             </div>
@@ -3169,10 +3148,10 @@ export default function CourseConstructor() {
                       }`}>
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-start gap-2 flex-1">
-                            <LightbulbIcon className="w-5 h-5 text-[#659AB8] mt-0.5 flex-shrink-0" />
+                            <LightbulbIcon className="w-5 h-5 text-[#5589a7] mt-0.5 flex-shrink-0" />
                             <div className="flex-1">
-                              <h4 className="font-semibold text-[#659AB8] mb-1 text-sm">Рекомендация</h4>
-                              <p className="text-sm text-[#111827]">{activeHint.message}</p>
+                              <h4 className="font-semibold text-[#5589a7] mb-1 text-sm">Рекомендация</h4>
+                              <p className="text-sm text-slate-600">{activeHint.message}</p>
                             </div>
                           </div>
                           <Button
