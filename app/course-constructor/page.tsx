@@ -2944,18 +2944,10 @@ export default function CourseConstructor() {
                 <div className="space-y-4">
                   {authorProfile && constructorMode === "personalized" && (
                     <div className="space-y-4">
-                      {/* Акцентная кнопка */}
-                      <div className={`p-4 rounded-lg border-2 ${getAccentElement(authorProfile.author_type).color}`}>
-                        <Button
-                          variant="secondary"
-                          onClick={() => {
-                            // Пока без функциональности
-                          }}
-                          className="w-full mb-3 bg-white/50 hover:bg-white/80"
-                        >
-                          {getAccentElement(authorProfile.author_type).buttonText}
-                        </Button>
-                        <p className="text-sm font-medium">{getAccentElement(authorProfile.author_type).visibleHint}</p>
+                      {/* Акцентная подсказка */}
+                      <div className={`p-4 rounded-lg border ${getAccentElement(authorProfile.author_type).color}`}>
+                        <h4 className="font-semibold text-[#5589a7] mb-2 text-sm">Рекомендация для вашего типа:</h4>
+                        <p className="text-sm text-slate-600 leading-relaxed">{getAccentElement(authorProfile.author_type).visibleHint}</p>
                       </div>
 
                       {/* Основная подсказка */}
@@ -3013,26 +3005,21 @@ export default function CourseConstructor() {
                   {/* Динамические подсказки */}
                   {activeHint && (
                     <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
-                      <div className={`p-4 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg transition-all duration-300 ${
-                        isHintTransitioning ? "opacity-0 transform translate-y-2" : "opacity-100 transform translate-y-0"
+                      <div className={`p-4 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg transition-all duration-500 ease-out ${
+                        isHintTransitioning
+                          ? "opacity-0 transform -translate-x-full scale-95"
+                          : "opacity-100 transform translate-x-0 scale-100"
                       }`}>
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-start gap-2 flex-1">
-                            <LightbulbIcon className="w-5 h-5 text-[#5589a7] mt-0.5 flex-shrink-0" />
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-[#5589a7] mb-1 text-sm">Рекомендация</h4>
-                              <p className="text-sm text-slate-600">{activeHint.message}</p>
-                            </div>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
+                        <h4 className="font-semibold text-[#5589a7] mb-2 text-sm">Рекомендация</h4>
+                        <p className="text-sm text-slate-600 leading-relaxed mb-3">{activeHint.message}</p>
+                        <div className="flex justify-end">
+                          <button
                             onClick={() => dismissHint(activeHint.id)}
                             disabled={isHintTransitioning}
-                            className="text-slate-600 text-sm font-semibold hover:underline flex-shrink-0 disabled:opacity-50"
+                            className="text-slate-500 text-sm hover:text-[#5589a7] transition-colors disabled:opacity-50"
                           >
                             Позже
-                          </Button>
+                          </button>
                         </div>
                       </div>
                     </div>
