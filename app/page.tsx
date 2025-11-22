@@ -309,15 +309,15 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-light-gray py-6">
+      <footer className="bg-light-gray py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <div className="flex items-center justify-center gap-4">
             <Image
               src="/images/ruta-logo-compact.png"
               alt="Ruta.education"
-              width={360}
-              height={144}
-              className="h-36 w-auto mx-auto mb-2"
+              width={120}
+              height={48}
+              className="h-12 w-auto"
             />
             <p className="text-sm text-slate-600">Платформа персонализированного обучения</p>
           </div>
