@@ -1151,18 +1151,31 @@ export default function CourseConstructor() {
     localStorage.removeItem("currentCourseId")
     setCourseTitle("")
     setCourseDescription("")
+
+    // Создаём первый блок по умолчанию
+    const defaultBlock: CourseBlock = {
+      id: "default-block-1",
+      type: "main_block_1",
+      title: "Основной блок",
+      description: "Первая ключевая тема урока",
+      purpose: "Дать основные знания по первой важной теме",
+      elements: [],
+      required: true,
+      completed: false,
+    }
+
     const firstLesson: CourseLesson = {
       id: "first-lesson",
       title: "Урок 1",
       description: "",
       order: 1,
-      blocks: [],
+      blocks: [defaultBlock],
       completed: false,
     }
     setCourseLessons([firstLesson])
     setActiveLessonId(firstLesson.id)
-    setCourseBlocks([])
-    setActiveBlockId("")
+    setCourseBlocks([defaultBlock])
+    setActiveBlockId(defaultBlock.id)
   }
 
   const loadExistingCourse = async (courseId: string) => {
