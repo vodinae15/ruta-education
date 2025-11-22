@@ -1198,11 +1198,7 @@ export default function DashboardPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          course.is_published
-                            ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}>
+                        <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600">
                           {course.is_published ? "Опубликован" : "Черновик"}
                         </span>
                       </div>
