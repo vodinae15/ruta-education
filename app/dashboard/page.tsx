@@ -778,35 +778,44 @@ export default function DashboardPage() {
       <MainNavigation user={user} />
 
       <PageHeader
-        title="Ваш личный кабинет"
+        title="Личный кабинет"
         description="Управляйте своими курсами и отслеживайте прогресс учеников"
         breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Личный кабинет" }]}
         actions={
           <div className="flex items-center gap-3">
-            <Button asChild variant="secondary" className="flex items-center gap-2 h-12 px-6">
-              <Link href="/students">
-                <UsersIcon className="w-4 h-4" />
-                Управление учениками
-              </Link>
-            </Button>
-            <Button asChild variant="secondary" className="flex items-center gap-2 h-12 px-6">
-              <Link href="/author-test">{profile ? "Результаты теста" : "Пройти тест автора"}</Link>
-            </Button>
-            <Button onClick={handleCreateCourse} className="flex items-center gap-2 h-12 px-6">
+            <Link
+              href="/students"
+              className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+            >
+              Управление учениками
+            </Link>
+            <Link
+              href="/author-test"
+              className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+            >
+              {profile ? "Результаты теста" : "Пройти тест автора"}
+            </Link>
+            <Link
+              href="/course-constructor?mode=new"
+              className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+            >
               Новый курс
-            </Button>
+            </Link>
           </div>
         }
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         {/* Error Message */}
         {error && (
-          <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm" dangerouslySetInnerHTML={{ __html: error }} />
-            <Button variant="ghost" onClick={handleRetry} className="mt-2 text-red-600">
+          <div className="mb-8 p-6 sm:p-8 bg-red-50 border border-red-200 rounded-2xl">
+            <p className="text-red-600 text-sm mb-4" dangerouslySetInnerHTML={{ __html: error }} />
+            <button
+              onClick={handleRetry}
+              className="text-red-600 text-sm font-semibold transition-colors duration-200 hover:text-red-800"
+            >
               Попробовать снова
-            </Button>
+            </button>
           </div>
         )}
 
@@ -817,24 +826,30 @@ export default function DashboardPage() {
           </div>
         ) : profile ? (
           <div className="mb-8">
-            <div className="bg-light-blue rounded-2xl p-6 sm:p-8 lg:p-10">
-              <p className="text-xl lg:text-2xl text-[#111827] font-medium">
+            <div className="bg-light-blue rounded-2xl p-6 sm:p-8">
+              <p className="text-xl lg:text-2xl text-slate-900 font-medium">
                 <span className="font-semibold">Ваш тип:</span>{" "}
-                <span className="text-primary font-bold">{profile.author_type}</span>
+                <span className="text-[#5589a7] font-bold">{profile.author_type}</span>
               </p>
-              <Button asChild variant="text" className="text-primary p-0 h-auto font-semibold mt-2">
-                <Link href="/author-test">Посмотрите рекомендации для своего типа автора</Link>
-              </Button>
+              <Link
+                href="/author-test"
+                className="text-[#5589a7] font-semibold mt-2 inline-block transition-colors duration-200 hover:text-[#659AB8]"
+              >
+                Посмотрите рекомендации для своего типа автора
+              </Link>
             </div>
           </div>
         ) : (
           <div className="mb-8">
-            <div className="bg-light-blue rounded-2xl p-6 sm:p-8 lg:p-10">
-              <p className="text-xl lg:text-2xl text-[#111827] font-semibold">
+            <div className="bg-light-blue rounded-2xl p-6 sm:p-8">
+              <p className="text-xl lg:text-2xl text-slate-900 font-semibold">
                 Пройдите тест, чтобы определить{" "}
-                <Button asChild variant="text" className="text-primary p-0 h-auto font-semibold">
-                  <Link href="/author-test">свой тип автора</Link>
-                </Button>
+                <Link
+                  href="/author-test"
+                  className="text-[#5589a7] font-semibold transition-colors duration-200 hover:text-[#659AB8]"
+                >
+                  свой тип автора
+                </Link>
               </p>
             </div>
           </div>
@@ -1011,26 +1026,15 @@ export default function DashboardPage() {
                     {/* Кнопка запуска потока для потоковых курсов */}
                     {course.launch_mode === "stream" && course.is_published && streamLaunchStatus[course.id]?.canLaunch && (
                       <div className="mb-4">
-                        <Button
+                        <button
                           onClick={() => handleLaunchStream(course.id)}
                           disabled={launchingStreams[course.id]}
-                          className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
-                          size="sm"
+                          className="w-full bg-green-600 text-white px-6 py-2 border-2 border-green-600 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-green-700 hover:border-green-700 disabled:opacity-50"
                         >
-                          {launchingStreams[course.id] ? (
-                            <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                              Запуск...
-                            </>
-                          ) : (
-                            <>
-                              <PlayIcon className="w-4 h-4" />
-                              Запустить поток
-                            </>
-                          )}
-                        </Button>
+                          {launchingStreams[course.id] ? "Запуск..." : "Запустить поток"}
+                        </button>
                         {streamLaunchStatus[course.id]?.message && (
-                          <p className="text-xs text-[#6B7280] mt-1">{streamLaunchStatus[course.id].message}</p>
+                          <p className="text-xs text-slate-600 mt-1">{streamLaunchStatus[course.id].message}</p>
                         )}
                       </div>
                     )}
@@ -1157,25 +1161,13 @@ export default function DashboardPage() {
                           </div>
                         ) : (
                           <div className="text-center py-2">
-                            <Button
+                            <button
                               onClick={() => loadCourseAnalytics(course.id)}
-                              variant="outline"
-                              size="sm"
-                              className="text-xs"
                               disabled={analyticsLoading[course.id]}
+                              className="text-[#5589a7] text-xs font-semibold transition-colors duration-200 hover:text-[#659AB8] disabled:opacity-50"
                             >
-                              {analyticsLoading[course.id] ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary mr-1 inline-block"></div>
-                                  Загрузка...
-                                </>
-                              ) : (
-                                <>
-                                  <BarChartIcon className="w-3 h-3 mr-1 inline-block" />
-                                  Загрузить аналитику
-                                </>
-                              )}
-                            </Button>
+                              {analyticsLoading[course.id] ? "Загрузка..." : "Загрузить аналитику"}
+                            </button>
                           </div>
                           )
                         })()}
@@ -1184,28 +1176,31 @@ export default function DashboardPage() {
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Button variant="secondary" size="sm" asChild>
-                          <Link href={`/course-constructor?courseId=${course.id}`}>Редактировать</Link>
-                        </Button>
-                        <Button variant="outline" size="sm" asChild className="flex items-center gap-1">
-                          <Link href={`/course/${course.id}/adaptation`}>
-                            <EditIcon className="w-3 h-3" />
-                            Адаптация
-                          </Link>
-                        </Button>
+                        <Link
+                          href={`/course-constructor?courseId=${course.id}`}
+                          className="bg-white text-[#659AB8] px-4 py-1.5 border-2 border-[#659AB8] rounded-lg text-xs font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                        >
+                          Редактировать
+                        </Link>
+                        <Link
+                          href={`/course/${course.id}/adaptation`}
+                          className="bg-white text-[#659AB8] px-4 py-1.5 border-2 border-[#659AB8] rounded-lg text-xs font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                        >
+                          Адаптация
+                        </Link>
                         {course.is_published && (
-                          <Button variant="outline" size="sm" asChild className="flex items-center gap-1">
-                            <Link href="/students">
-                              <UsersIcon className="w-3 h-3" />
-                              Ученики
-                            </Link>
-                          </Button>
+                          <Link
+                            href="/students"
+                            className="bg-white text-[#659AB8] px-4 py-1.5 border-2 border-[#659AB8] rounded-lg text-xs font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                          >
+                            Ученики
+                          </Link>
                         )}
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-xs px-2 py-1 rounded-full ${
-                          course.is_published 
-                            ? "bg-green-100 text-green-800" 
+                          course.is_published
+                            ? "bg-green-100 text-green-800"
                             : "bg-yellow-100 text-yellow-800"
                         }`}>
                           {course.is_published ? "Опубликован" : "Черновик"}
