@@ -324,8 +324,8 @@ export default function StudentsPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Выбор курса */}
-              <div className="space-y-4">
-                <Label className="text-sm font-medium text-slate-900">
+              <div>
+                <Label className="text-sm font-medium text-slate-900 mb-4 block">
                   Выберите курс
                 </Label>
                 {loading ? (

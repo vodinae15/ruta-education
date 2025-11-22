@@ -187,8 +187,7 @@ export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: St
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-xl text-primary font-bold flex items-center gap-2">
-            <MessageCircleIcon className="w-5 h-5" />
+          <DialogTitle className="text-xl text-[#5589a7] font-bold">
             Заметки
           </DialogTitle>
           <DialogDescription>
@@ -204,22 +203,21 @@ export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: St
           )}
 
           {/* Форма создания новой заметки */}
-          <div className="bg-light-blue/30 p-4 rounded-lg border-2 border-primary/20">
+          <div className="bg-light-blue p-4 rounded-lg">
             <Textarea
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Напишите заметку..."
-              className="min-h-[100px] mb-3"
+              className="min-h-[100px] mb-4"
               disabled={loading}
             />
-            <Button
+            <button
               onClick={handleCreateNote}
               disabled={!newNote.trim() || loading}
-              className="w-full"
+              className="w-full bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <SendIcon className="w-4 h-4 mr-2" />
               Добавить заметку
-            </Button>
+            </button>
           </div>
 
           {/* Список заметок */}
@@ -243,10 +241,10 @@ export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: St
                 <div
                   key={note.id}
                   className={cn(
-                    "p-4 rounded-lg border-2",
+                    "p-4 rounded-lg border",
                     note.created_by_type === "author"
-                      ? "bg-primary/5 border-primary/20"
-                      : "bg-slate-50 border-slate-200"
+                      ? "bg-light-blue"
+                      : "bg-slate-50"
                   )}
                 >
                   {editingNoteId === note.id ? (
@@ -306,7 +304,7 @@ export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: St
                             variant="text"
                             size="sm"
                             onClick={() => handleDeleteNote(note.id)}
-                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="h-8 w-8 p-0 text-slate-600 hover:text-[#5589a7] hover:bg-[#659AB8]/10"
                             title="Удалить"
                             disabled={loading}
                           >
@@ -327,9 +325,12 @@ export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: St
         </div>
 
         <DialogFooter>
-          <Button variant="secondary" onClick={onClose}>
+          <button
+            onClick={onClose}
+            className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+          >
             Закрыть
-          </Button>
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
