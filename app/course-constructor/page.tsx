@@ -127,55 +127,55 @@ const getAccentElement = (authorType: string): AccentElement => {
       return {
         buttonText: "Добавить голосовую заметку",
         visibleHint: "Проще всего начать вслух — мы переведём это в черновик, с которым ты сможешь дальше работать",
-        color: "bg-blue-100 border-blue-300 text-blue-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Методист":
       return {
         buttonText: "Добавить план / схему",
         visibleHint: "Начни с плана: 3–5 пунктов — потом легко развернуть в содержание",
-        color: "bg-cream border-[#659AB8] text-[#5589a7]",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Автор на вдохновении":
       return {
         buttonText: "Записать идею в потоке",
         visibleHint: "Не думай о форме — зафиксируй первую идею, а дальше мы поможем её оформить",
-        color: "bg-purple-100 border-purple-300 text-purple-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Первопроходец":
       return {
         buttonText: "Написать приветствие",
         visibleHint: "Твоя история — лучший старт. Скажи пару предложений о себе и о пользе курса",
-        color: "bg-orange-100 border-orange-300 text-orange-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Загруженный эксперт":
       return {
         buttonText: "Загрузить материалы",
         visibleHint: "Кидай как есть или наговори три идеи — мы сами разложим по шагам",
-        color: "bg-red-100 border-red-300 text-red-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Педагог с эмпатией":
       return {
         buttonText: "Добавить объяснение простыми словами",
         visibleHint: "Скажи так, чтобы понял человек, который сталкивается с этим впервые",
-        color: "bg-teal-100 border-teal-300 text-teal-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Практик-рационал":
       return {
         buttonText: "Добавить шаг",
         visibleHint: "Каждый шаг = действие ученика. Два–четыре шага дадут понятный результат",
-        color: "bg-indigo-100 border-indigo-300 text-indigo-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     case "Интуитивный автор":
       return {
         buttonText: "Добавить что угодно",
         visibleHint: "Выбери любимый формат и начни — мы поможем собрать это в целостный урок",
-        color: "bg-pink-100 border-pink-300 text-pink-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
     default:
       return {
         buttonText: "Добавить контент",
         visibleHint: "Начните с любого удобного формата",
-        color: "bg-gray-100 border-gray-300 text-gray-800",
+        color: "bg-[#E8F4FA] border-[#CDE6F9] text-[#5589a7]",
       }
   }
 }
@@ -3116,16 +3116,16 @@ export default function CourseConstructor() {
                       </div>
 
                       {/* Основная подсказка */}
-                      <div className="p-4 bg-[#FEFDF2] border border-[#659AB8]/20 rounded-lg">
-                        <h4 className="font-semibold text-[#659AB8] mb-2">Основная подсказка:</h4>
-                        <p className="text-sm text-[#111827] leading-relaxed">
+                      <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                        <h4 className="font-semibold text-[#5589a7] mb-2 text-sm">Основная подсказка:</h4>
+                        <p className="text-sm text-slate-600 leading-relaxed">
                           {getPedagogicalHints(authorProfile.author_type).main}
                         </p>
                       </div>
 
                       {/* Структурная подсказка (скрытая) */}
-                      <div className="p-4 bg-background-gray border border-[#E5E7EB] rounded-lg">
-                        <h4 className="font-semibold text-[#111827] mb-3">Структурная подсказка:</h4>
+                      <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                        <h4 className="font-semibold text-[#5589a7] mb-3 text-sm">Структурная подсказка:</h4>
                         <div className="flex justify-start mb-3">
                           <Button
                             variant="text"
@@ -3137,7 +3137,7 @@ export default function CourseConstructor() {
                           </Button>
                         </div>
                         {showStructuralHint && (
-                          <div className="text-sm text-[#111827] leading-relaxed whitespace-pre-line">
+                          <div className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
                             {getPedagogicalHints(authorProfile.author_type).structural}
                           </div>
                         )}
@@ -3147,12 +3147,12 @@ export default function CourseConstructor() {
 
                   {constructorMode === "standard" && (
                     <div className="space-y-4">
-                      <div className="p-4 bg-[#FEFDF2] border border-[#659AB8]/20 rounded-lg">
-                        <h4 className="font-semibold text-[#659AB8] mb-2">Универсальные подсказки:</h4>
+                      <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                        <h4 className="font-semibold text-[#5589a7] mb-2 text-sm">Универсальные подсказки:</h4>
                         <div className="space-y-2">
-                          <p className="text-sm text-[#111827]">• Правило: 1 блок = 1 ключевая мысль</p>
-                          <p className="text-sm text-[#111827]">• Структура: теория → пример → практика</p>
-                          <p className="text-sm text-[#111827]">• Добавляйте переходы между темами</p>
+                          <p className="text-sm text-slate-600">• Правило: 1 блок = 1 ключевая мысль</p>
+                          <p className="text-sm text-slate-600">• Структура: теория → пример → практика</p>
+                          <p className="text-sm text-slate-600">• Добавляйте переходы между темами</p>
                         </div>
                       </div>
                     </div>
