@@ -922,7 +922,7 @@ export default function DashboardPage() {
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.averageProgress}%</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
-                      <TrendingUpIcon className="w-7 h-7 text-white" />
+                      <TrendingUpIcon className="w-6 h-6 text-white" />
                     </div>
                   </div>
                 </CardContent>
