@@ -2317,9 +2317,8 @@ export default function CourseConstructor() {
                 <Button
                   onClick={() => setShowCollaboratorsModal(true)}
                   variant="outline"
-                  className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent transition-colors flex items-center gap-2"
+                  className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent transition-colors"
                 >
-                  <UsersIcon className="w-4 h-4" />
                   Управление соавторами
                 </Button>
               )}
