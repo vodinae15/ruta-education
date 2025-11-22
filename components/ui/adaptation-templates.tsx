@@ -133,7 +133,7 @@ export function VisualAdaptationTemplate({ lessonTitle, content }: AdaptationTem
     <div className="space-y-6">
       {/* Заголовок урока */}
       <div className="text-center py-4">
-        <h1 className="text-3xl font-bold text-primary mb-2">{lessonTitle}</h1>
+        <h1 className="text-3xl font-bold text-[#5589a7] mb-2">{lessonTitle}</h1>
         <Badge className="bg-blue-100 text-blue-800">
           <EyeIcon className="w-4 h-4 mr-1" />
           Адаптация для визуалов
@@ -496,7 +496,7 @@ export function AuditoryAdaptationTemplate({ lessonTitle, content }: AdaptationT
     <div className="space-y-6">
       {/* Заголовок урока */}
       <div className="text-center py-4">
-        <h1 className="text-3xl font-bold text-primary mb-2">{lessonTitle}</h1>
+        <h1 className="text-3xl font-bold text-[#5589a7] mb-2">{lessonTitle}</h1>
         <Badge className="bg-green-100 text-green-800">
           <EarIcon className="w-4 h-4 mr-1" />
           Адаптация для аудиалов
@@ -860,7 +860,7 @@ export function KinestheticAdaptationTemplate({ lessonTitle, content }: Adaptati
     <div className="space-y-6">
       {/* Заголовок урока */}
       <div className="text-center py-4">
-        <h1 className="text-3xl font-bold text-primary mb-2">{lessonTitle}</h1>
+        <h1 className="text-3xl font-bold text-[#5589a7] mb-2">{lessonTitle}</h1>
         <Badge className="bg-purple-100 text-purple-800">
           <HandIcon className="w-4 h-4 mr-1" />
           Адаптация для кинестетиков

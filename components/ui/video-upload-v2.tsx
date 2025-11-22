@@ -200,7 +200,7 @@ export function VideoUploadV2({
               </div>
               <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
                 <div
-                  className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out"
+                  className="bg-[#659AB8] h-2.5 rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>

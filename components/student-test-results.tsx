@@ -17,11 +17,11 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="relative">
         {/* Main card with type and description */}
-        <Card className="bg-light-blue border-2 rounded-2xl shadow-ruta-sm">
+        <Card className="bg-light-blue border-2 rounded-2xl ">
           <CardContent className="p-6 sm:p-8 lg:p-10">
             <div className="flex flex-col lg:flex-row lg:items-center gap-6">
               <div className="flex-1">
-                <Badge className="bg-primary text-white px-6 py-3 text-xl font-semibold mb-4">
+                <Badge className="bg-[#659AB8] text-white px-6 py-3 text-xl font-semibold mb-4">
                   {studentTypeResult.title}
                 </Badge>
                 <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{studentTypeResult.description}</p>
@@ -29,12 +29,12 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
 
               {/* Learning style highlight as a prominent side element */}
               <div className="lg:w-80">
-                <div className="bg-white border-2 rounded-2xl p-6 shadow-ruta-sm">
+                <div className="bg-white border-2 rounded-2xl p-6 ">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-[#659AB8] rounded-full flex items-center justify-center">
                       <span className="text-white font-bold text-lg">🎯</span>
                     </div>
-                    <h3 className="font-bold text-primary text-lg">Ваш стиль обучения</h3>
+                    <h3 className="font-bold text-[#5589a7] text-lg">Ваш стиль обучения</h3>
                   </div>
                   <p className="text-slate-700 font-semibold text-lg leading-tight">
                     {studentTypeResult.perception === "visual-analytical" && "Визуально-аналитический"}
@@ -50,14 +50,14 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {/* Format Recommendations */}
-        <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+        <Card className="bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg ">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg text-primary font-bold">Рекомендуемые форматы</CardTitle>
+            <CardTitle className="text-lg text-[#5589a7] font-bold">Рекомендуемые форматы</CardTitle>
           </CardHeader>
           <CardContent className="space-y-1">
             {studentTypeResult.recommendations.format.map((tip, index) => (
               <div key={index} className="flex items-start bg-light-blue/30 p-2 rounded-lg">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"></div>
+                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-2 flex-shrink-0"></div>
                 <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
               </div>
             ))}
@@ -65,14 +65,14 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
         </Card>
 
         {/* Communication Recommendations */}
-        <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+        <Card className="bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg ">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg text-primary font-bold">Стиль общения</CardTitle>
+            <CardTitle className="text-lg text-[#5589a7] font-bold">Стиль общения</CardTitle>
           </CardHeader>
           <CardContent className="space-y-1">
             {studentTypeResult.recommendations.communication.map((tip, index) => (
               <div key={index} className="flex items-start bg-light-blue/30 p-2 rounded-lg">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"></div>
+                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-2 flex-shrink-0"></div>
                 <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
               </div>
             ))}
@@ -80,14 +80,14 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
         </Card>
 
         {/* Adaptation Recommendations */}
-        <Card className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+        <Card className="bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg ">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg text-primary font-bold">Адаптация курса</CardTitle>
+            <CardTitle className="text-lg text-[#5589a7] font-bold">Адаптация курса</CardTitle>
           </CardHeader>
           <CardContent className="space-y-1">
             {studentTypeResult.recommendations.adaptation.map((tip, index) => (
               <div key={index} className="flex items-start bg-light-blue/30 p-2 rounded-lg">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"></div>
+                <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-2 flex-shrink-0"></div>
                 <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
               </div>
             ))}
@@ -96,9 +96,9 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
       </div>
 
       {/* Personal Tips */}
-      <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+      <Card className="bg-white border-2 rounded-lg ">
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl text-primary font-bold">Ваши персональные советы</CardTitle>
+          <CardTitle className="text-xl text-[#5589a7] font-bold">Ваши персональные советы</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-2">
@@ -107,7 +107,7 @@ export function StudentTestResults({ studentTypeResult }: StudentTestResultsProp
                 key={index}
                 className="flex items-start p-2 bg-light-blue/30 rounded-lg"
               >
-                <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold mr-2 flex-shrink-0 mt-0.5">
+                <div className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm font-bold mr-2 flex-shrink-0 mt-0.5">
                   {index + 1}
                 </div>
                 <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>

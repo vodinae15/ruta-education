@@ -258,10 +258,10 @@ export default function StudentDashboardPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white border-2 rounded-lg shadow-ruta-sm">
+        <Card className="w-full max-w-md bg-white border-2 rounded-lg ">
           <CardContent className="text-center py-8">
             <p className="text-red-600 mb-4">{error}</p>
-            <Button onClick={() => router.push("/auth")} className="bg-primary hover:bg-primary/90 text-white">
+            <Button onClick={() => router.push("/auth")} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
               Вернуться к входу
             </Button>
           </CardContent>
@@ -283,35 +283,35 @@ export default function StudentDashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         {/* Student Profile Section */}
         <div className="mb-8 sm:mb-10 lg:mb-12">
-          <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+          <Card className="bg-white border-2 rounded-lg ">
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center flex-shrink-0">
                   <UserIcon className="w-8 h-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-xl lg:text-2xl font-bold text-primary mb-2">
+                  <h2 className="text-xl lg:text-2xl font-bold text-[#5589a7] mb-2">
                     {student?.email}
                   </h2>
-                  <p className="text-[#6B7280] mb-4">Ученик Ruta.Education</p>
+                  <p className="text-slate-600 mb-4">Ученик Ruta.Education</p>
                   
                   {student?.test_results && student.test_results.test_version === "3.0" ? (
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                       <Button 
                         onClick={() => router.push("/student-test")}
                         variant="secondary"
-                        className="border-primary text-primary hover:bg-primary/5 w-fit"
+                        className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 w-fit"
                       >
                         Пройти тест повторно
                       </Button>
                     </div>
                   ) : (
-                    <div className="p-4 bg-light-blue/30 border border-primary/20 rounded-lg">
+                    <div className="p-4 bg-light-blue/30 border border-[#659AB8]/20 rounded-lg">
                       <p className="text-[#111827] mb-3">
                         <span className="font-semibold">Пройдите тест, чтобы настроить профиль</span>
                       </p>
                       <Button 
-                        className="bg-primary hover:bg-primary/90 text-white"
+                        className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
                         onClick={() => router.push("/student-test")}
                       >
                         Пройти тест
@@ -326,23 +326,23 @@ export default function StudentDashboardPage() {
 
         {/* Courses Section */}
         <div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-6 sm:mb-8">Ваши курсы</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7] mb-6 sm:mb-8">Ваши курсы</h2>
 
           {courses.length === 0 ? (
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+            <Card className="bg-white border-2 rounded-lg ">
               <CardContent className="text-center py-12 sm:py-16">
                 <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-6">
-                  <BookOpenIcon className="w-10 h-10 text-primary" />
+                  <BookOpenIcon className="w-10 h-10 text-[#5589a7]" />
                 </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3">
+                <h3 className="text-xl lg:text-2xl font-bold text-[#5589a7] mb-3">
                   У вас пока нет доступных курсов
                 </h3>
-                <p className="text-[#6B7280] mb-6 max-w-md mx-auto">
+                <p className="text-slate-600 mb-6 max-w-md mx-auto">
                   Получите ссылку на курс от автора, чтобы начать обучение
                 </p>
                 <Button 
                   variant="secondary" 
-                  className="border-primary text-primary hover:bg-primary/5"
+                  className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"
                   onClick={() => router.push("/")}
                 >
                   Вернуться на главную
@@ -354,15 +354,15 @@ export default function StudentDashboardPage() {
               {courses.map((courseAccess) => (
                 <Card 
                   key={courseAccess.course_id} 
-                  className="bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm"
+                  className="bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg "
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-lg font-bold text-primary mb-2 leading-tight">
+                        <CardTitle className="text-lg font-bold text-[#5589a7] mb-2 leading-tight">
                           {courseAccess.courses.title || "Без названия"}
                         </CardTitle>
-                        <CardDescription className="text-[#6B7280] leading-relaxed">
+                        <CardDescription className="text-slate-600 leading-relaxed">
                           {courseAccess.courses.description || "Описание курса не добавлено"}
                         </CardDescription>
                       </div>
@@ -379,11 +379,11 @@ export default function StudentDashboardPage() {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="space-y-3 mb-6">
-                      <div className="text-sm text-[#6B7280]">
+                      <div className="text-sm text-slate-600">
                         <span className="font-medium">Добавлен:</span>{" "}
                         {new Date(courseAccess.first_accessed_at).toLocaleDateString("ru-RU")}
                       </div>
-                      <div className="text-sm text-[#6B7280]">
+                      <div className="text-sm text-slate-600">
                         <span className="font-medium">Последний доступ:</span>{" "}
                         {new Date(courseAccess.last_accessed_at).toLocaleDateString("ru-RU")}
                       </div>
@@ -419,7 +419,7 @@ export default function StudentDashboardPage() {
                           {courseAccessInfo[courseAccess.course_id]?.hasAccess ? (
                             <>
                               <Button
-                                className="w-full bg-primary hover:bg-primary/90 text-white flex items-center gap-2 h-12"
+                                className="w-full bg-[#659AB8] hover:bg-[#659AB8]/90 text-white flex items-center gap-2 h-12"
                                 onClick={() => handleStartLearning(courseAccess.course_id)}
                               >
                                 <PlayIcon className="w-4 h-4" />
@@ -427,7 +427,7 @@ export default function StudentDashboardPage() {
                               </Button>
                               <Button
                                 variant="secondary"
-                                className="w-full border-primary text-primary hover:bg-primary/5 flex items-center gap-2 h-10"
+                                className="w-full border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 flex items-center gap-2 h-10"
                                 onClick={() => router.push(`/course/${courseAccess.course_id}/pricing`)}
                               >
                                 <ArrowRightIcon className="w-4 h-4" />
@@ -435,7 +435,7 @@ export default function StudentDashboardPage() {
                               </Button>
                               <Button
                                 variant="secondary"
-                                className="w-full border-primary text-primary hover:bg-primary/5 flex items-center gap-2 h-10"
+                                className="w-full border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 flex items-center gap-2 h-10"
                                 onClick={() => handleOpenNotes(courseAccess.course_id)}
                               >
                                 <MessageCircleIcon className="w-4 h-4" />
@@ -444,7 +444,7 @@ export default function StudentDashboardPage() {
                             </>
                           ) : (
                             <Button
-                              className="w-full bg-primary hover:bg-primary/90 text-white flex items-center gap-2 h-12"
+                              className="w-full bg-[#659AB8] hover:bg-[#659AB8]/90 text-white flex items-center gap-2 h-12"
                               onClick={() => router.push(`/course/${courseAccess.course_id}/pricing`)}
                             >
                               <ArrowRightIcon className="w-4 h-4" />

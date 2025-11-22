@@ -200,7 +200,7 @@ export default function StudentTestPage() {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#6B7280]">Необходима авторизация</p>
+          <p className="text-slate-600">Необходима авторизация</p>
           <Button onClick={() => router.push("/auth")} className="mt-4">
             Войти
           </Button>
@@ -224,13 +224,13 @@ export default function StudentTestPage() {
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="max-w-2xl mx-auto">
-            <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+            <Card className="bg-white border-2 rounded-lg ">
               <CardContent className="p-8 sm:p-10">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircleIcon className="w-10 h-10 text-green-600" />
                   </div>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-6">
+                  <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7] mb-6">
                     Профиль настроен
                   </h2>
                   <p className="text-lg text-[#111827] mb-8 leading-relaxed">
@@ -239,14 +239,14 @@ export default function StudentTestPage() {
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button 
                       onClick={() => router.push("/student-dashboard")} 
-                      className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white h-12 px-8"
+                      className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#659AB8]/90 text-white h-12 px-8"
                     >
                       В личный кабинет
                     </Button>
                     <Button 
                       onClick={handleRetakeTest} 
                       variant="secondary" 
-                      className="flex items-center gap-2 border-primary text-primary hover:bg-primary/5 h-12 px-8"
+                      className="flex items-center gap-2 border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 h-12 px-8"
                     >
                       Пройти тест повторно
                     </Button>
@@ -279,18 +279,18 @@ export default function StudentTestPage() {
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-primary">
+              <span className="text-lg font-semibold text-[#5589a7]">
                 Вопрос {currentQuestion + 1} из {studentTestQuestions.length}
               </span>
-              <span className="text-lg font-semibold text-primary">{Math.round(progress)}% завершено</span>
+              <span className="text-lg font-semibold text-[#5589a7]">{Math.round(progress)}% завершено</span>
             </div>
             <Progress value={progress} className="h-3" />
           </div>
 
           {/* Question Card */}
-          <Card className="mb-8 bg-white border-2 hover:border-primary/20 transition-colors rounded-lg shadow-ruta-sm">
+          <Card className="mb-8 bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg ">
             <CardHeader className="pb-6">
-              <CardTitle className="text-xl lg:text-2xl text-primary font-bold leading-relaxed">
+              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed">
                 {studentTestQuestions[currentQuestion].question}
               </CardTitle>
             </CardHeader>
@@ -305,7 +305,7 @@ export default function StudentTestPage() {
                     <RadioGroupItem
                       value={option.value}
                       id={option.id}
-                      className="mt-1 border-primary text-primary"
+                      className="mt-1 border-[#659AB8] text-[#5589a7]"
                     />
                     <Label
                       htmlFor={option.id}
@@ -366,7 +366,7 @@ export default function StudentTestPage() {
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-[#6B7280]">
+            <p className="text-sm text-slate-600">
               {!canProceed && "Выберите один из вариантов ответа для продолжения"}
             </p>
           </div>

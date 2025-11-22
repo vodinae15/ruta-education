@@ -89,7 +89,7 @@ export function CourseAccessStatus({
           </div>
           <Button
             onClick={() => router.push(`/course/${courseId}/pricing`)}
-            className="bg-primary hover:bg-primary-hover text-white flex items-center gap-2"
+            className="bg-[#659AB8] hover:bg-[#659AB8]-hover text-white flex items-center gap-2"
           >
             Купить тариф
             <ArrowRightIcon className="w-4 h-4" />

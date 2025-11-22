@@ -39,7 +39,7 @@ export function InteractiveDiagram({ title, nodes, connections, studentType }: I
     const baseStyle = "p-3 rounded-lg border-2 cursor-pointer transition-all duration-200"
     
     if (activeNode === node.id) {
-      return `${baseStyle} border-primary bg-primary/10`
+      return `${baseStyle} border-[#659AB8] bg-[#659AB8]/10`
     }
     
     if (visitedNodes.has(node.id)) {
@@ -153,7 +153,7 @@ export function InteractiveDiagram({ title, nodes, connections, studentType }: I
             </div>
             <div className="w-full bg-slate-200 rounded-full h-2">
               <div 
-                className="bg-primary h-2 rounded-full transition-all duration-300"
+                className="bg-[#659AB8] h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(visitedNodes.size / nodes.length) * 100}%` }}
               />
             </div>

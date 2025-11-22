@@ -76,8 +76,8 @@ export default function HomePage() {
             <div className="bg-light-blue rounded-2xl p-6 sm:p-8 mb-8 max-w-4xl mx-auto">
               <p className="text-xl lg:text-2xl text-slate-900 font-medium">
                 Ruta.education адаптирует коммуникацию{" "}
-                <span className="text-primary">под стиль преподавателя</span> и тип восприятия каждого
-                ученика — один курс дает <span className="text-primary">72 варианта подачи материала</span>{" "}
+                <span className="text-[#5589a7]">под стиль преподавателя</span> и тип восприятия каждого
+                ученика — один курс дает <span className="text-[#5589a7]">72 варианта подачи материала</span>{" "}
                 для максимальной эффективности обучения
               </p>
             </div>
@@ -140,7 +140,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Пройдите тест на тип автора</CardTitle>
@@ -152,7 +152,7 @@ export default function HomePage() {
 
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <BookIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Создавайте курс в конструкторе</CardTitle>
@@ -167,7 +167,7 @@ export default function HomePage() {
 
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <PlayIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Добавьте почту ученика</CardTitle>
@@ -181,7 +181,7 @@ export default function HomePage() {
 
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <BarChartIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Получайте обратную связь</CardTitle>
@@ -197,7 +197,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <PlayIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Откройте доступ</CardTitle>
@@ -211,7 +211,7 @@ export default function HomePage() {
 
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Пройдите тест на тип восприятия</CardTitle>
@@ -223,7 +223,7 @@ export default function HomePage() {
 
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <EyeIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Приступите к обучению</CardTitle>
@@ -235,7 +235,7 @@ export default function HomePage() {
 
               <Card className="text-center border h-full">
                 <CardHeader className="pb-4">
-                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUpIcon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-lg text-[#5589a7]">Отслеживайте свой прогресс</CardTitle>
@@ -263,21 +263,21 @@ export default function HomePage() {
           {/* Stats Section */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUpIcon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl font-bold text-[#5589a7] mb-2">8 типов</div>
               <p className="text-sm text-slate-600">авторов с персонализированными конструкторами</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                 <UserIcon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl font-bold text-[#5589a7] mb-2">9 типов</div>
               <p className="text-sm text-slate-600">учеников с адаптивным контентом</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookIcon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl font-bold text-[#5589a7] mb-2">72 подхода</div>
@@ -292,7 +292,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-light-blue rounded-2xl p-6 sm:p-8 max-w-3xl mx-auto text-center">
             <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-4">
-              <span className="text-primary">Создайте</span> свой первый курс за 15 минут
+              <span className="text-[#5589a7]">Создайте</span> свой первый курс за 15 минут
             </h2>
             <p className="text-sm text-slate-600 mb-6">
               Пройдите тест, выберите шаблон и наполните курс контентом. Система сама адаптирует материал

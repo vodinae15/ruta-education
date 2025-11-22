@@ -627,7 +627,7 @@ export function InteractiveSimulation({ data, description, onInteraction }: Inte
                     }}
                     variant="outline"
                     size="sm"
-                    className="border-primary text-primary hover:bg-primary/5"
+                    className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"
                   >
                     Сохранить результаты
                   </Button>

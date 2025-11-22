@@ -878,7 +878,7 @@ export default function DashboardPage() {
                         <p className="text-sm text-slate-600 mb-2">Всего<br />учеников</p>
                         <p className="text-3xl font-bold text-[#5589a7]">{stats.totalStudents}</p>
                       </div>
-                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center shrink-0">
                         <UserIcon className="w-6 h-6 text-white" />
                       </div>
                     </div>
@@ -893,7 +893,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Курсов<br />создано</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.totalCourses}</p>
                     </div>
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center shrink-0">
                       <BookOpenIcon className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -907,7 +907,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Опубликовано</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.publishedCourses}</p>
                     </div>
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center shrink-0">
                       <EyeIcon className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -921,7 +921,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Средний<br />прогресс</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.averageProgress}%</p>
                     </div>
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center shrink-0">
                       <TrendingUpIcon className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -935,7 +935,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mb-2">Доход</p>
                       <p className="text-3xl font-bold text-[#5589a7]">{stats.totalRevenueFormatted || "0 ₽"}</p>
                     </div>
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center shrink-0">
                       <BarChartIcon className="w-6 h-6 text-white" />
                     </div>
                   </div>
@@ -980,7 +980,7 @@ export default function DashboardPage() {
           ) : courses.length === 0 ? (
             <Card className="text-center py-12 border">
               <CardContent>
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                   <BookOpenIcon className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-lg text-[#5589a7] font-semibold mb-4">У вас пока нет созданных курсов</h4>
@@ -1069,12 +1069,12 @@ export default function DashboardPage() {
                                 <BarChartIcon className="w-4 h-4" />
                                 Аналитика курса
                                 {analytics.course?.title && (
-                                  <span className="text-xs font-normal text-[#6B7280] ml-1">
+                                  <span className="text-xs font-normal text-slate-600 ml-1">
                                     ({analytics.course.title})
                                   </span>
                                 )}
                               </h4>
-                              <span className="text-xs text-[#6B7280]">
+                              <span className="text-xs text-slate-600">
                                 {analytics.summary?.totalLessons ?? 0} уроков
                               </span>
                             </div>
@@ -1084,8 +1084,8 @@ export default function DashboardPage() {
                               {/* Среднее количество просмотров */}
                               <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <EyeIcon className="w-3 h-3 text-[#6B7280]" />
-                                  <span className="text-xs text-[#6B7280]">Просмотры</span>
+                                  <EyeIcon className="w-3 h-3 text-slate-600" />
+                                  <span className="text-xs text-slate-600">Просмотры</span>
                                 </div>
                                 <p className="text-lg font-bold text-[#5589a7]">
                                   {analytics.summary?.averageViews ?? 0}
@@ -1102,7 +1102,7 @@ export default function DashboardPage() {
                                 <p className="text-lg font-bold text-[#5589a7]">
                                   {analytics.summary?.averageTimeSpentFormatted ?? '0с'}
                                 </p>
-                                <p className="text-xs text-[#6B7280]">среднее изучение</p>
+                                <p className="text-xs text-slate-600">среднее изучение</p>
                               </div>
                             </div>
 
@@ -1123,8 +1123,8 @@ export default function DashboardPage() {
                             {analytics.lessons && analytics.lessons.length > 0 && (
                               <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                                 <div className="flex items-center gap-1 mb-2">
-                                  <TrendingUpIcon className="w-3 h-3 text-[#6B7280]" />
-                                  <span className="text-xs text-[#6B7280] font-semibold">Прогресс по блокам</span>
+                                  <TrendingUpIcon className="w-3 h-3 text-slate-600" />
+                                  <span className="text-xs text-slate-600 font-semibold">Прогресс по блокам</span>
                                 </div>
                                 <div className="space-y-1">
                                   {analytics.lessons.slice(0, 3).map((lesson: any, idx: number) => (
@@ -1133,7 +1133,7 @@ export default function DashboardPage() {
                                         <span className="text-slate-700 truncate flex-1" title={lesson.lesson_title}>
                                           {lesson.lesson_title || `Урок ${idx + 1}`}
                                         </span>
-                                        <span className="text-[#6B7280] ml-2">
+                                        <span className="text-slate-600 ml-2">
                                           {lesson.unique_students ?? 0} учеников
                                         </span>
                                       </div>

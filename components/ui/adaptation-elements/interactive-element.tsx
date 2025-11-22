@@ -2935,7 +2935,7 @@ export function InteractiveElement({ data, description, onInteraction }: Interac
                         onClick={handleResetProduct}
                         size="sm"
                         variant="outline"
-                        className="border-primary text-primary hover:bg-primary/5"
+                        className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"
                       >
                         Очистить
                       </Button>

@@ -117,7 +117,7 @@ export function StructuredContentRenderer({ content, studentType, title }: Struc
       {/* Навигация по разделам */}
       <Card className="bg-white border-2">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg text-primary font-bold">
+          <CardTitle className="text-lg text-[#5589a7] font-bold">
             Структура урока
           </CardTitle>
         </CardHeader>
@@ -128,7 +128,7 @@ export function StructuredContentRenderer({ content, studentType, title }: Struc
                 key={section.id}
                 variant="outline"
                 className={`h-auto p-4 text-left justify-start ${
-                  activeSection === section.id ? 'border-primary bg-primary/5' : ''
+                  activeSection === section.id ? 'border-[#659AB8] bg-[#659AB8]/5' : ''
                 } ${completedSections.has(section.id) ? 'border-green-300 bg-green-50' : ''}`}
                 onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
               >
@@ -191,7 +191,7 @@ export function StructuredContentRenderer({ content, studentType, title }: Struc
           </div>
           <div className="w-full bg-slate-200 rounded-full h-3">
             <div 
-              className="bg-primary h-3 rounded-full transition-all duration-300"
+              className="bg-[#659AB8] h-3 rounded-full transition-all duration-300"
               style={{ width: `${(completedSections.size / sections.length) * 100}%` }}
             />
           </div>

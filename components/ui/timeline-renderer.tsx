@@ -87,7 +87,7 @@ export function TimelineRenderer({ content, title = "Хронология соб
   return (
     <Card className="bg-white border-2">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl text-primary font-bold flex items-center gap-2">
+        <CardTitle className="text-xl text-[#5589a7] font-bold flex items-center gap-2">
           <CalendarIcon className="w-6 h-6" />
           {title}
         </CardTitle>
@@ -109,7 +109,7 @@ export function TimelineRenderer({ content, title = "Хронология соб
                   completedEvents.has(event.id) 
                     ? 'bg-green-500 border-green-500' 
                     : activeEvent === event.id 
-                      ? 'bg-primary border-primary' 
+                      ? 'bg-[#659AB8] border-[#659AB8]' 
                       : getEventColor(event.type, event.importance)
                 }`}>
                   {completedEvents.has(event.id) ? (
@@ -174,7 +174,7 @@ export function TimelineRenderer({ content, title = "Хронология соб
             </div>
             <div className="w-full bg-slate-200 rounded-full h-2">
               <div 
-                className="bg-primary h-2 rounded-full transition-all duration-300"
+                className="bg-[#659AB8] h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(completedEvents.size / events.length) * 100}%` }}
               />
             </div>
