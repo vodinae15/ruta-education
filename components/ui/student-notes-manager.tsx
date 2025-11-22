@@ -4,10 +4,10 @@ import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { MessageCircleIcon, UserIcon, TrashIcon, EditIcon, SendIcon } from "@/components/ui/icons"
-import { Badge } from "@/components/ui/badge"
+import { TrashIcon, EditIcon } from "@/components/ui/icons"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/lib/auth"
 
 interface StudentNote {
   id: string
@@ -27,12 +27,17 @@ interface StudentNotesManagerProps {
 }
 
 export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: StudentNotesManagerProps) {
+  const { user } = useAuth()
   const [notes, setNotes] = useState<StudentNote[]>([])
   const [newNote, setNewNote] = useState("")
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
   const [editingNoteText, setEditingNoteText] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const isOwnNote = (note: StudentNote) => {
+    return user?.id === note.created_by
+  }
 
   // Загрузка заметок только при открытии окна
   useEffect(() => {
@@ -278,39 +283,38 @@ export function StudentNotesManager({ studentId, courseId, isOpen, onClose }: St
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <Badge
-                              variant={note.created_by_type === "author" ? "info" : "default"}
-                              className="text-xs"
-                            >
+                            <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB]">
                               {note.created_by_type === "author" ? "Автор" : "Ученик"}
-                            </Badge>
+                            </span>
                             <span className="text-xs text-slate-500">
                               {note.created_by_email}
                             </span>
                           </div>
-                          <p className="text-slate-900 whitespace-pre-wrap">{note.note}</p>
+                          <p className="text-sm text-slate-900 whitespace-pre-wrap">{note.note}</p>
                         </div>
-                        <div className="flex gap-1 flex-shrink-0">
-                          <Button
-                            variant="text"
-                            size="sm"
-                            onClick={() => startEditing(note)}
-                            className="h-8 w-8 p-0"
-                            title="Редактировать"
-                          >
-                            <EditIcon className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="text"
-                            size="sm"
-                            onClick={() => handleDeleteNote(note.id)}
-                            className="h-8 w-8 p-0 text-slate-600 hover:text-[#5589a7] hover:bg-[#659AB8]/10"
-                            title="Удалить"
-                            disabled={loading}
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                          </Button>
-                        </div>
+                        {isOwnNote(note) && (
+                          <div className="flex gap-1 flex-shrink-0">
+                            <Button
+                              variant="text"
+                              size="sm"
+                              onClick={() => startEditing(note)}
+                              className="h-8 w-8 p-0 text-[#5589a7] hover:bg-[#659AB8]/10"
+                              title="Редактировать"
+                            >
+                              <EditIcon className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="text"
+                              size="sm"
+                              onClick={() => handleDeleteNote(note.id)}
+                              className="h-8 w-8 p-0 text-[#5589a7] hover:bg-[#659AB8]/10"
+                              title="Удалить"
+                              disabled={loading}
+                            >
+                              <TrashIcon className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
                       </div>
                       <div className="text-xs text-slate-400 mt-2">
                         {formatDateTime(note.created_at)}
