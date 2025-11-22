@@ -25,9 +25,9 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
                 <p className="text-xl lg:text-2xl text-slate-900 font-medium leading-relaxed">{authorTypeResult.description}</p>
               </div>
 
-              {/* Superpower as simple badge */}
+              {/* Superpower as status badge */}
               <div className="lg:w-80">
-                <span className="inline-block bg-[#659AB8] text-white px-6 py-4 text-lg font-semibold rounded-lg leading-tight">
+                <span className="inline-block bg-[#FDF8F3] text-slate-700 px-4 py-3 text-base font-semibold rounded-full border border-[#E5E7EB] leading-tight">
                   {authorTypeResult.superpower}
                 </span>
               </div>
