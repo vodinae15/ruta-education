@@ -87,7 +87,7 @@ export function PricingEditor({ pricing, onUpdate, isUpdating }: PricingEditorPr
             <div>
               <CardTitle className="text-lg font-bold text-[#1E293B]">{pricing.name}</CardTitle>
               {pricing.has_feedback && (
-                <Badge className="mt-1 bg-green-100 text-green-800 border-green-200 text-xs">
+                <Badge className="mt-1 bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB] text-xs">
                   С обратной связью
                 </Badge>
               )}
@@ -181,13 +181,13 @@ export function PricingEditor({ pricing, onUpdate, isUpdating }: PricingEditorPr
           </div>
         )}
 
-        <Button
+        <button
           onClick={handleSave}
           disabled={isUpdating || !name.trim()}
-          className="w-full bg-[#659AB8] hover:bg-[#5a8ba8] text-white"
+          className="w-full bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50"
         >
           {isUpdating ? "Сохранение..." : "Сохранить изменения"}
-        </Button>
+        </button>
       </CardContent>
     </Card>
   )
