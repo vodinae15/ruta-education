@@ -46,12 +46,11 @@ export function CourseCollaboratorsManager({
     }
   }, [isOpen, courseId, initialLoaded])
 
-  // Сброс состояния при закрытии
+  // Сброс при смене курса
   useEffect(() => {
-    if (!isOpen) {
-      setInitialLoaded(false)
-    }
-  }, [isOpen])
+    setInitialLoaded(false)
+    setCollaborators([])
+  }, [courseId])
 
   const fetchCollaborators = async () => {
     try {
@@ -276,7 +275,7 @@ export function CourseCollaboratorsManager({
                         size="sm"
                         onClick={() => handleRemoveCollaborator(collaborator.id, collaborator.collaborator_email)}
                         disabled={loading}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 ml-2"
+                        className="text-[#659AB8] hover:text-[#5589a7] hover:bg-[#E8F4FA] ml-2"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </Button>
@@ -287,13 +286,15 @@ export function CourseCollaboratorsManager({
             )}
           </div>
 
-          {/* Информация о правах */}
-          <div className="p-4 bg-light-blue/20 rounded-lg border border-[#659AB8]/10">
-            <p className="text-sm text-slate-700">
-              <strong>Важно:</strong> Соавторы имеют те же права редактирования, что и автор курса. 
-              Они могут создавать и редактировать уроки, блоки и весь контент курса.
-            </p>
-          </div>
+          {/* Информация о правах - только после загрузки */}
+          {initialLoaded && (
+            <div className="p-4 bg-light-blue/20 rounded-lg border border-[#659AB8]/10">
+              <p className="text-sm text-slate-700">
+                <strong>Важно:</strong> Соавторы имеют те же права редактирования, что и автор курса.
+                Они могут создавать и редактировать уроки, блоки и весь контент курса.
+              </p>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -95,7 +95,7 @@ export function ModeSwitchWarning({
               </button>
               <button
                 onClick={onClose}
-                className="w-full bg-white text-slate-600 px-6 py-3 border-2 border-slate-300 rounded-lg font-semibold transition-colors duration-200 hover:border-slate-400 hover:text-slate-700"
+                className="w-full bg-white text-[#659AB8] px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
               >
                 Отменить
               </button>
@@ -104,7 +104,7 @@ export function ModeSwitchWarning({
             <div className="flex gap-3">
               <button
                 onClick={onClose}
-                className="flex-1 bg-white text-slate-600 px-6 py-3 border-2 border-slate-300 rounded-lg font-semibold transition-colors duration-200 hover:border-slate-400 hover:text-slate-700"
+                className="flex-1 bg-white text-[#659AB8] px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
               >
                 Отменить
               </button>

@@ -86,7 +86,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
                   variant="ghost"
                   size="sm"
                   onClick={handleSignOut}
-                  className="text-slate-600 hover:text-slate-900 transition-colors"
+                  className="text-slate-600 hover:text-[#5589a7] transition-colors"
                 >
                   <LogOutIcon className="w-4 h-4 mr-2" />
                   Выйти
