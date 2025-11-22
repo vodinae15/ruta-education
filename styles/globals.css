@@ -123,3 +123,121 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Ruta Education Brand Colors */
+@theme inline {
+  /* Primary brand color - голубой */
+  --color-primary: #659AB8;
+  --color-primary-foreground: #ffffff;
+
+  /* Background colors */
+  --color-cream: #FDF8F3;
+  --color-light-blue: #E8F4FA;
+  --color-light-gray: #F5F5F5;
+
+  /* Additional brand colors */
+  --color-brand-dark: #4A7A94;
+  --color-brand-light: #8BB8D0;
+}
+
+/* Landing page specific styles */
+@layer components {
+  /* Hero section gradient overlay */
+  .hero-gradient {
+    background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-light-blue) 100%);
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(101, 154, 184, 0.2);
+  }
+
+  /* Button primary style */
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+    transition: all 0.2s ease;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-brand-dark);
+    transform: translateY(-1px);
+  }
+
+  /* Tab switcher active state */
+  .tab-active {
+    background-color: white;
+    color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Stats counter animation */
+  .stat-number {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  /* Icon circle backgrounds */
+  .icon-circle {
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* CTA section background */
+  .cta-section {
+    background-color: var(--color-light-blue);
+    border-radius: 1rem;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Text selection color */
+  ::selection {
+    background-color: var(--color-light-blue);
+    color: var(--color-brand-dark);
+  }
+}
+
+/* Landing page animations */
+@layer utilities {
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Staggered animation delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+
+  /* Pulse animation for CTAs */
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseSoft {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+}
