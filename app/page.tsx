@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { MainNavigation } from "@/components/ui/main-navigation"
 import { UserIcon, BookIcon, TrendingUpIcon, PlayIcon, EyeIcon, BarChartIcon } from "@/components/ui/icons"
@@ -39,8 +39,8 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background-gray">
-        <div className="container-custom py-12">
+      <div className="min-h-screen bg-[#F8FAFB]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="space-y-6">
             <Skeleton className="h-16 w-96" />
             <Skeleton className="h-8 w-64" />
@@ -60,48 +60,48 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background-gray">
+    <div className="min-h-screen bg-[#F8FAFB]">
       <MainNavigation user={user} />
 
       {/* Hero Section */}
-      <section className="section-white section-spacing">
-        <div className="container-custom">
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
           <div className="text-center">
-            <h1 className="h1 mb-6">
-              Образовательная платформа
+            <h1 className="text-4xl lg:text-6xl font-bold text-[#111827] mb-6">
+              Образовательная платформа{" "}
               <br />
-              <span className="text-accent">с двойной персонализацией</span>
+              <span className="text-[#659AB8]">с двойной персонализацией</span>
             </h1>
 
-            <div className="bg-light-blue rounded-2xl p-8 lg:p-10 mb-12 max-w-4xl mx-auto">
-              <p className="body-large" style={{ color: 'var(--color-text-primary)' }}>
+            <div className="bg-[#E8F4FA] rounded-2xl p-6 sm:p-8 lg:p-10 mb-8 sm:mb-12 lg:mb-16 max-w-4xl mx-auto">
+              <p className="text-xl lg:text-2xl text-[#111827] font-medium">
                 Ruta.education адаптирует коммуникацию{" "}
-                <span className="text-accent">под стиль преподавателя</span> и тип восприятия каждого
-                ученика — один курс дает <span className="text-accent">72 варианта подачи материала</span>{" "}
+                <span className="text-[#659AB8]">под стиль преподавателя</span> и тип восприятия каждого
+                ученика — один курс дает <span className="text-[#659AB8]">72 варианта подачи материала</span>{" "}
                 для максимальной эффективности обучения
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Link href="/auth" className="btn-primary">
-                Начать использовать платформу
-              </Link>
-              <Link href="#why-it-works" className="btn-secondary">
-                Как это работает
-              </Link>
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+              <Button size="lg" asChild>
+                <Link href="/auth">Начать использовать платформу</Link>
+              </Button>
+              <Button variant="secondary" size="lg" asChild>
+                <Link href="#why-it-works">Как это работает</Link>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="section-spacing">
-        <div className="container-custom">
-          <div className="text-center section-header">
-            <h2 className="h2 mb-4">
-              <span className="text-accent">Принцип</span> двойной персонализации
+      <section id="how-it-works" className="py-16 sm:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#111827] mb-4">
+              <span className="text-[#659AB8]">Принцип</span> двойной персонализации
             </h2>
-            <p className="body-large max-w-3xl mx-auto">
+            <p className="text-lg text-[#6B7280] max-w-3xl mx-auto">
               Платформа определяет тип автора и локализует коммуникацию для каждого участника процесса.
               Преподаватель и студенты получают то, что близко именно им
             </p>
@@ -109,11 +109,13 @@ export default function HomePage() {
 
           {/* Tab Switcher */}
           <div className="flex justify-center mb-10">
-            <div className="bg-light-gray rounded-lg p-1 flex">
+            <div className="bg-[#F5F5F5] rounded-lg p-1 flex">
               <button
                 onClick={() => setActiveTab("teachers")}
                 className={`px-6 py-3 rounded-md font-semibold transition-colors ${
-                  activeTab === "teachers" ? "tab-active" : "body hover:text-[#111827]"
+                  activeTab === "teachers"
+                    ? "bg-white text-[#659AB8] shadow-sm"
+                    : "text-[#6B7280] hover:text-[#111827]"
                 }`}
               >
                 Для преподавателей
@@ -121,7 +123,9 @@ export default function HomePage() {
               <button
                 onClick={() => setActiveTab("students")}
                 className={`px-6 py-3 rounded-md font-semibold transition-colors ${
-                  activeTab === "students" ? "tab-active" : "body hover:text-[#111827]"
+                  activeTab === "students"
+                    ? "bg-white text-[#659AB8] shadow-sm"
+                    : "text-[#6B7280] hover:text-[#111827]"
                 }`}
               >
                 Для студентов
@@ -132,60 +136,56 @@ export default function HomePage() {
           {/* Tabbed Content */}
           {activeTab === "teachers" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Пройдите тест на тип автора</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Пройдите тест на тип автора</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
-                    Определите свой стиль и начните работать с персонализированными рекомендациями
-                  </p>
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>Определите свой стиль и начните работать с персонализированными рекомендациями</p>
                 </CardContent>
               </Card>
 
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <BookIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Создавайте курс в конструкторе</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Создавайте курс в конструкторе</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>
                     Наполните 9 модулей контентом в удобном формате. Получите оптимальную структуру курса
                     для вашего стиля
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <PlayIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Добавьте почту ученика</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Добавьте почту ученика</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>
                     Укажите email учеников при публикации курса. Система автоматически откроет им доступ к обучению
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <BarChartIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Получайте обратную связь</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Получайте обратную связь</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
-                    Анализируйте статистику и применяйте конкретные рекомендации по улучшению курса
-                  </p>
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>Анализируйте статистику и применяйте конкретные рекомендации по улучшению курса</p>
                 </CardContent>
               </Card>
             </div>
@@ -193,59 +193,53 @@ export default function HomePage() {
 
           {activeTab === "students" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <PlayIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Откройте доступ</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Откройте доступ</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>
                     Получите приглашение от преподавателя и откройте доступ к обучению
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Пройдите тест на тип восприятия</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Пройдите тест на тип восприятия</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
-                    Определите свой способ восприятия информации и выберите подходящий формат обратной связи
-                  </p>
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>Определите свой способ восприятия информации и выберите подходящий формат обратной связи</p>
                 </CardContent>
               </Card>
 
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <EyeIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Приступите к обучению</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Приступите к обучению</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
-                    Получайте персонализированные рекомендации и адаптированную под ваш тип восприятия подачу
-                  </p>
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>Получайте персонализированные рекомендации и адаптированную под ваш тип восприятия подачу</p>
                 </CardContent>
               </Card>
 
-              <Card className="card-custom card-hover text-center h-full">
+              <Card className="text-center border hover:border-[#659AB8]/20 transition-all hover:-translate-y-1 hover:shadow-lg h-full">
                 <CardHeader className="pb-4">
-                  <div className="icon-container-md icon-circle mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUpIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="h3 text-accent" style={{ fontSize: '1.125rem' }}>Отслеживайте свой прогресс</h3>
+                  <CardTitle className="text-lg font-semibold text-[#659AB8]">Отслеживайте свой прогресс</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="small text-center">
-                    Получайте мотивирующую обратную связь и делитесь прогрессом с преподавателем автоматически
-                  </p>
+                <CardContent className="text-sm text-[#6B7280] text-center">
+                  <p>Получайте мотивирующую обратную связь и делитесь прогрессом с преподавателем автоматически</p>
                 </CardContent>
               </Card>
             </div>
@@ -254,39 +248,39 @@ export default function HomePage() {
       </section>
 
       {/* Value Proposition Section */}
-      <section id="why-it-works" className="section-white section-spacing">
-        <div className="container-custom text-center" style={{ maxWidth: '72rem' }}>
-          <h2 className="h2 mb-6">
-            <span className="text-accent">Почему</span> это работает
+      <section id="why-it-works" className="bg-white py-16 sm:py-20 lg:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold text-[#111827] mb-6">
+            <span className="text-[#659AB8]">Почему</span> это работает
           </h2>
-          <p className="body-large max-w-3xl mx-auto">
-            Ruta.education адаптирует один курс <span className="text-accent">под стиль автора</span> и{" "}
-            <span className="text-accent">тип восприятия учеников</span>
+          <p className="text-lg text-[#6B7280] max-w-3xl mx-auto">
+            Ruta.education адаптирует один курс <span className="text-[#659AB8]">под стиль автора</span> и{" "}
+            <span className="text-[#659AB8]">тип восприятия учеников</span>
           </p>
 
           {/* Stats Section */}
           <div className="mt-16">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
               <div className="text-center">
-                <div className="icon-container-lg icon-circle mx-auto mb-6">
+                <div className="w-20 h-20 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-6">
                   <TrendingUpIcon className="w-10 h-10 text-white" />
                 </div>
-                <div className="h2 text-accent mb-2">8 типов</div>
-                <p className="body">авторов с персонализированными конструкторами</p>
+                <div className="text-4xl font-bold text-[#659AB8] mb-2">8 типов</div>
+                <p className="text-[#6B7280] font-medium">авторов с персонализированными конструкторами</p>
               </div>
               <div className="text-center">
-                <div className="icon-container-lg icon-circle mx-auto mb-6">
+                <div className="w-20 h-20 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-6">
                   <UserIcon className="w-10 h-10 text-white" />
                 </div>
-                <div className="h2 text-accent mb-2">9 типов</div>
-                <p className="body">учеников с адаптивным контентом</p>
+                <div className="text-4xl font-bold text-[#659AB8] mb-2">9 типов</div>
+                <p className="text-[#6B7280] font-medium">учеников с адаптивным контентом</p>
               </div>
               <div className="text-center">
-                <div className="icon-container-lg icon-circle mx-auto mb-6">
+                <div className="w-20 h-20 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-6">
                   <BookIcon className="w-10 h-10 text-white" />
                 </div>
-                <div className="h2 text-accent mb-2">72 подхода</div>
-                <p className="body">к обучению и прохождению курсов</p>
+                <div className="text-4xl font-bold text-[#659AB8] mb-2">72 подхода</div>
+                <p className="text-[#6B7280] font-medium">к обучению и прохождению курсов</p>
               </div>
             </div>
           </div>
@@ -294,28 +288,28 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="section-spacing">
-        <div className="container-custom">
-          <div className="cta-section p-8 lg:p-12 max-w-4xl mx-auto text-center">
-            <h2 className="h2 mb-6" style={{ color: 'var(--color-text-primary)' }}>
-              <span className="text-accent">Создайте</span> свой первый курс
+      <section className="py-16 sm:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-[#E8F4FA] rounded-2xl p-6 sm:p-8 lg:p-12 max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#111827] mb-6">
+              <span className="text-[#659AB8]">Создайте</span> свой первый курс
               <br />
               за 15 минут
             </h2>
-            <p className="body-large mb-10">
+            <p className="text-lg text-[#6B7280] mb-10">
               Пройдите тест, выберите шаблон и наполните курс контентом. Система сама адаптирует материал
               под разные типы восприятия студентов
             </p>
-            <Link href="/auth" className="btn-primary">
-              Начать создание курса
-            </Link>
+            <Button size="lg" asChild>
+              <Link href="/auth">Начать создание курса</Link>
+            </Button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="section-gray py-8">
-        <div className="container-custom">
+      <footer className="bg-[#F8FAFB] py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Image
@@ -326,7 +320,7 @@ export default function HomePage() {
                 className="h-36 w-auto"
               />
             </div>
-            <p className="body">Платформа персонализированного обучения</p>
+            <p className="text-[#6B7280]">Платформа персонализированного обучения</p>
           </div>
         </div>
       </footer>
