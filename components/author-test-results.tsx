@@ -19,9 +19,9 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
           <CardContent className="p-6 sm:p-8 lg:p-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="inline-block bg-[#659AB8] text-white px-4 py-2 text-sm font-semibold rounded-lg">
+                <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7]">
                   {authorTypeResult.title}
-                </span>
+                </h2>
                 <span className="inline-block bg-[#FDF8F3] text-slate-600 px-3 py-1.5 text-xs font-semibold rounded-full border border-[#E5E7EB]">
                   {authorTypeResult.superpower}
                 </span>
