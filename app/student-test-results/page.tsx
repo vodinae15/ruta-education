@@ -272,7 +272,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
       <div className="min-h-screen bg-[#F3FAFE] flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="text-center py-8">
-            <p className="text-slate-600 mb-4">Результаты теста не найдены</p>
+            <p className="text-[#6B7280] mb-4">Результаты теста не найдены</p>
             <Button onClick={() => router.push("/student-dashboard")}>
               Вернуться к дашборду
             </Button>
@@ -304,7 +304,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
                 <Badge className="bg-[#659AB8] text-white px-6 py-3 text-xl font-semibold mb-4">
                   {studentResult.title}
                 </Badge>
-                <p className="text-lg text-slate-700 leading-relaxed">{studentResult.description}</p>
+                <p className="text-lg text-[#111827] leading-relaxed">{studentResult.description}</p>
               </div>
 
               {/* Strength highlight as a prominent side element */}
@@ -316,7 +316,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
                     </div>
                     <h3 className="font-bold text-[#659AB8] text-lg">Ваша суперсила</h3>
                   </div>
-                  <p className="text-slate-700 font-semibold text-lg leading-tight">
+                  <p className="text-[#111827] font-semibold text-lg leading-tight">
                     {studentResult.type === "visual-analytical" 
                       ? "Умение структурировать информацию"
                       : studentResult.type === "auditory-empathetic"
@@ -343,7 +343,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
                 {studentResult.recommendations.format.map((tip, index) => (
                   <div key={index} className="flex items-start bg-[#CDE6F9]/30 p-4 rounded-lg">
                     <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
+                    <p className="text-sm text-[#111827] leading-relaxed">{tip}</p>
                   </div>
                 ))}
               </CardContent>
@@ -358,7 +358,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
                 {studentResult.recommendations.communication.map((tip, index) => (
                   <div key={index} className="flex items-start bg-[#CDE6F9]/30 p-4 rounded-lg">
                     <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
+                    <p className="text-sm text-[#111827] leading-relaxed">{tip}</p>
                   </div>
                 ))}
               </CardContent>
@@ -373,7 +373,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
                 {studentResult.recommendations.adaptation.map((tip, index) => (
                   <div key={index} className="flex items-start bg-[#CDE6F9]/30 p-4 rounded-lg">
                     <div className="w-2 h-2 bg-[#659AB8] rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
+                    <p className="text-sm text-[#111827] leading-relaxed">{tip}</p>
                   </div>
                 ))}
               </CardContent>
@@ -395,7 +395,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
                     <div className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 flex-shrink-0 mt-0.5">
                       {index + 1}
                     </div>
-                    <p className="text-sm text-slate-700 leading-relaxed">{tip}</p>
+                    <p className="text-sm text-[#111827] leading-relaxed">{tip}</p>
                   </div>
                 ))}
               </div>
@@ -434,7 +434,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
               <h3 className="text-lg font-semibold text-[#659AB8] mb-3">
                 Курс будет адаптирован под ваш стиль обучения
               </h3>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-[#6B7280] leading-relaxed">
                 На основе вашего типа восприятия мы подберем оптимальные форматы подачи материала, 
                 стиль коммуникации и методы обратной связи для максимально эффективного обучения.
               </p>

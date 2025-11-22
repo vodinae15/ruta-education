@@ -215,7 +215,7 @@ export default function AuthorTestPage() {
                   <CardContent className="p-6">
                     <div className="text-center">
                       <h3 className="text-lg font-semibold text-primary mb-3">Хотите пройти тест заново?</h3>
-                      <p className="text-slate-600 mb-6">
+                      <p className="text-[#6B7280] mb-6">
                         Ваши взгляды могли измениться. Пройдите тест повторно, чтобы получить актуальные рекомендации.
                       </p>
                       <div className="flex gap-4 justify-center">
@@ -241,7 +241,7 @@ export default function AuthorTestPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <p className="text-slate-700">
+                    <p className="text-[#111827]">
                       Вы уже проходили тест определения типа автора. Ваш результат сохранен в профиле.
                     </p>
                     <div className="flex gap-4">
@@ -305,7 +305,7 @@ export default function AuthorTestPage() {
                     />
                     <Label
                       htmlFor={option.id}
-                      className="text-lg leading-relaxed cursor-pointer flex-1 text-slate-700"
+                      className="text-lg leading-relaxed cursor-pointer flex-1 text-[#111827]"
                     >
                       <span dangerouslySetInnerHTML={{ __html: option.text }} />
                     </Label>
@@ -362,7 +362,7 @@ export default function AuthorTestPage() {
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#6B7280]">
               {!canProceed && "Выберите один из вариантов ответа для продолжения"}
             </p>
           </div>

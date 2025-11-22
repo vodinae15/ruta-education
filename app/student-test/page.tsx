@@ -200,7 +200,7 @@ export default function StudentTestPage() {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600">Необходима авторизация</p>
+          <p className="text-[#6B7280]">Необходима авторизация</p>
           <Button onClick={() => router.push("/auth")} className="mt-4">
             Войти
           </Button>
@@ -233,7 +233,7 @@ export default function StudentTestPage() {
                   <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-6">
                     Профиль настроен
                   </h2>
-                  <p className="text-lg text-slate-700 mb-8 leading-relaxed">
+                  <p className="text-lg text-[#111827] mb-8 leading-relaxed">
                     {studentTypeResult.generalMessage}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -309,7 +309,7 @@ export default function StudentTestPage() {
                     />
                     <Label
                       htmlFor={option.id}
-                      className="text-lg leading-relaxed cursor-pointer flex-1 text-slate-700"
+                      className="text-lg leading-relaxed cursor-pointer flex-1 text-[#111827]"
                     >
                       {option.text}
                     </Label>
@@ -366,7 +366,7 @@ export default function StudentTestPage() {
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#6B7280]">
               {!canProceed && "Выберите один из вариантов ответа для продолжения"}
             </p>
           </div>

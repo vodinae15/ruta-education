@@ -3,75 +3,93 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ==============================================
+   RUTA EDUCATION DESIGN SYSTEM
+   Версия: 1.0
+   Откатить: git revert HEAD
+   ============================================== */
+
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Основные цвета дизайн-системы */
+  --color-white: #FFFFFF;
+  --color-primary-blue: #659AB8;
+  --color-background-gray: #F8FAFB;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+
+  /* Дополнительные цвета */
+  --color-border: #E5E7EB;
+  --color-border-input: #D1D5DB;
+  --color-hover-blue: #5589a7;
+
+  /* Совместимость с shadcn/ui */
+  --background: #FFFFFF;
+  --foreground: #111827;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --primary: #659AB8;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F8FAFB;
+  --secondary-foreground: #111827;
+  --muted: #F8FAFB;
+  --muted-foreground: #6B7280;
+  --accent: #F8FAFB;
+  --accent-foreground: #111827;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #D1D5DB;
+  --ring: #659AB8;
+  --radius: 0.5rem;
+
+  /* Chart colors */
+  --chart-1: #659AB8;
+  --chart-2: #5589a7;
+  --chart-3: #4A7A94;
+  --chart-4: #8BB8D0;
+  --chart-5: #A8D0E6;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #659AB8;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F8FAFB;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #659AB8;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  --background: #111827;
+  --foreground: #F9FAFB;
+  --card: #1F2937;
+  --card-foreground: #F9FAFB;
+  --popover: #1F2937;
+  --popover-foreground: #F9FAFB;
+  --primary: #659AB8;
+  --primary-foreground: #FFFFFF;
+  --secondary: #374151;
+  --secondary-foreground: #F9FAFB;
+  --muted: #374151;
+  --muted-foreground: #9CA3AF;
+  --accent: #374151;
+  --accent-foreground: #F9FAFB;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: #374151;
+  --input: #4B5563;
+  --ring: #659AB8;
+  --sidebar: #1F2937;
+  --sidebar-foreground: #F9FAFB;
+  --sidebar-primary: #659AB8;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #374151;
+  --sidebar-accent-foreground: #F9FAFB;
+  --sidebar-border: #374151;
+  --sidebar-ring: #659AB8;
 }
 
 @theme inline {
@@ -113,6 +131,14 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Кастомные цвета для Tailwind */
+  --color-cream: #FDF8F3;
+  --color-light-blue: #E8F4FA;
+  --color-light-gray: #F5F5F5;
+  --color-brand-dark: #5589a7;
+  --color-brand-light: #8BB8D0;
+  --color-background-gray: #F8FAFB;
 }
 
 @layer base {
@@ -121,5 +147,460 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Text selection */
+  ::selection {
+    background-color: rgba(101, 154, 184, 0.2);
+    color: var(--color-text-primary);
+  }
+}
+
+/* ==============================================
+   ТИПОГРАФИКА
+   ============================================== */
+
+@layer components {
+  /* H1 — Hero заголовок */
+  .h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1.2;
+  }
+
+  /* H2 — Заголовки секций */
+  .h2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1.2;
+  }
+
+  /* H3 — Подзаголовки, карточки */
+  .h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.2;
+  }
+
+  /* Body Large — Основной текст hero */
+  .body-large {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Body — Основной текст */
+  .body {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Small — Подписи, метки */
+  .small {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Акцентный текст */
+  .text-accent {
+    color: var(--color-primary-blue);
+  }
+}
+
+/* ==============================================
+   КНОПКИ
+   ============================================== */
+
+@layer components {
+  /* Primary Button */
+  .btn-primary {
+    background-color: var(--color-primary-blue);
+    color: var(--color-white);
+    padding: 12px 32px;
+    border: 2px solid var(--color-primary-blue);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-hover-blue);
+    border-color: var(--color-hover-blue);
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    background-color: var(--color-white);
+    color: var(--color-primary-blue);
+    padding: 12px 32px;
+    border: 2px solid var(--color-primary-blue);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-primary-blue);
+    color: var(--color-white);
+  }
+
+  /* Text Link Button */
+  .btn-text {
+    color: var(--color-primary-blue);
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .btn-text:hover {
+    color: var(--color-hover-blue);
+  }
+}
+
+/* ==============================================
+   КАРТОЧКИ
+   ============================================== */
+
+@layer components {
+  .card-custom {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  /* Карточка с hover эффектом */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(101, 154, 184, 0.2);
+  }
+
+  /* Иконка в карточке */
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: var(--color-primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+  }
+
+  .card-description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+}
+
+/* ==============================================
+   ИКОНКИ
+   ============================================== */
+
+@layer components {
+  /* Размеры контейнеров */
+  .icon-container-sm {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+  }
+
+  .icon-container-md {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+  }
+
+  .icon-container-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+  }
+
+  /* Основной (синий фон) */
+  .icon-primary {
+    background-color: var(--color-primary-blue);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* С обводкой */
+  .icon-outline {
+    background-color: var(--color-white);
+    border: 2px solid var(--color-primary-blue);
+    color: var(--color-primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Нейтральный */
+  .icon-neutral {
+    background-color: var(--color-background-gray);
+    color: var(--color-primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Круглая иконка */
+  .icon-circle {
+    background-color: var(--color-primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ==============================================
+   СЕКЦИИ И LAYOUT
+   ============================================== */
+
+@layer components {
+  /* Отступы между секциями */
+  .section-spacing {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  /* Заголовок секции */
+  .section-header {
+    margin-bottom: 48px;
+  }
+
+  /* Контейнер страницы */
+  .container-custom {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  /* Белый фон */
+  .section-white {
+    background-color: var(--color-white);
+  }
+
+  /* Серый фон */
+  .section-gray {
+    background-color: var(--color-background-gray);
+  }
+}
+
+/* ==============================================
+   GRID СИСТЕМА
+   ============================================== */
+
+@layer components {
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* ==============================================
+   ФОРМЫ И ИНПУТЫ
+   ============================================== */
+
+@layer components {
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border-input);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    transition: border-color 0.2s ease;
+  }
+
+  .form-input::placeholder {
+    color: #9CA3AF;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 2px rgba(101, 154, 184, 0.1);
+  }
+
+  textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+  }
+}
+
+/* ==============================================
+   CTA БЛОКИ
+   ============================================== */
+
+@layer components {
+  .cta-block {
+    background-color: var(--color-primary-blue);
+    color: var(--color-white);
+    padding: 48px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .cta-description {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 32px;
+  }
+
+  .cta-button {
+    background-color: var(--color-white);
+    color: var(--color-primary-blue);
+    padding: 12px 32px;
+    border: 2px solid var(--color-white);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cta-button:hover {
+    background-color: transparent;
+    color: var(--color-white);
+  }
+
+  /* CTA section с light-blue фоном */
+  .cta-section {
+    background-color: var(--color-light-blue);
+    border-radius: 1rem;
+  }
+}
+
+/* ==============================================
+   АНИМАЦИИ
+   ============================================== */
+
+@layer utilities {
+  /* Fade in */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Staggered delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+
+  /* Pulse soft */
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseSoft {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+}
+
+/* ==============================================
+   УТИЛИТЫ
+   ============================================== */
+
+@layer utilities {
+  /* Tab switcher */
+  .tab-active {
+    background-color: white;
+    color: var(--color-primary-blue);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Stats */
+  .stat-number {
+    color: var(--color-primary-blue);
+    font-weight: 700;
+  }
+
+  /* Hero gradient */
+  .hero-gradient {
+    background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-light-blue) 100%);
   }
 }

@@ -327,11 +327,11 @@ export default function StudentsPage() {
             <CardContent className="space-y-6">
               {/* Выбор курса */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">
+                <Label className="text-sm font-medium text-[#111827]">
                   Выберите курс
                 </Label>
                 {loading ? (
-                  <div className="flex items-center gap-2 text-slate-600">
+                  <div className="flex items-center gap-2 text-[#6B7280]">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                     <span>Загрузка курсов...</span>
                   </div>
@@ -346,9 +346,9 @@ export default function StudentsPage() {
 
               {/* Форма добавления ученика */}
               {selectedCourseId && (
-                <div className="space-y-4 pt-4 border-t border-slate-200">
+                <div className="space-y-4 pt-4 border-t border-[#E5E7EB]">
                   <div className="space-y-2">
-                    <Label htmlFor="student-email" className="text-sm font-medium text-slate-700">
+                    <Label htmlFor="student-email" className="text-sm font-medium text-[#111827]">
                       Добавить ученика к выбранному курсу
                     </Label>
                     <div className="flex items-end gap-4">
@@ -386,7 +386,7 @@ export default function StudentsPage() {
 
               {!selectedCourseId && (
                 <div className="p-4 bg-light-blue/30 border border-primary/20 rounded-lg">
-                  <p className="text-sm text-slate-700">
+                  <p className="text-sm text-[#111827]">
                     Выберите курс, чтобы добавить учеников или просмотреть статистику по конкретному курсу.
                     Или оставьте "Все курсы" для просмотра всех ваших учеников.
                   </p>

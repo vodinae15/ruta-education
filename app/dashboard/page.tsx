@@ -803,7 +803,7 @@ export default function DashboardPage() {
         ) : profile ? (
           <div className="mb-8">
             <div className="bg-light-blue rounded-2xl p-6 sm:p-8 lg:p-10">
-              <p className="text-xl lg:text-2xl text-slate-900 font-medium">
+              <p className="text-xl lg:text-2xl text-[#111827] font-medium">
                 <span className="font-semibold">Ваш тип:</span>{" "}
                 <span className="text-primary font-bold">{profile.author_type}</span>
               </p>
@@ -815,7 +815,7 @@ export default function DashboardPage() {
         ) : (
           <div className="mb-8">
             <div className="bg-light-blue rounded-2xl p-6 sm:p-8 lg:p-10">
-              <p className="text-xl lg:text-2xl text-slate-900 font-semibold">
+              <p className="text-xl lg:text-2xl text-[#111827] font-semibold">
                 Пройдите тест, чтобы определить{" "}
                 <Button asChild variant="text" className="text-primary p-0 h-auto font-semibold">
                   <Link href="/author-test">свой тип автора</Link>
@@ -846,7 +846,7 @@ export default function DashboardPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-semibold text-primary mb-2">Всего учеников</p>
-                        <p className="text-3xl font-bold text-slate-900 group-hover:text-primary transition-colors">{stats.totalStudents}</p>
+                        <p className="text-3xl font-bold text-[#111827] group-hover:text-primary transition-colors">{stats.totalStudents}</p>
                       </div>
                       <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center group-hover:bg-primary-hover transition-colors">
                         <UserIcon className="w-7 h-7 text-white" />
@@ -861,7 +861,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold text-primary mb-2">Курсов создано</p>
-                      <p className="text-3xl font-bold text-slate-900">{stats.totalCourses}</p>
+                      <p className="text-3xl font-bold text-[#111827]">{stats.totalCourses}</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <BookOpenIcon className="w-7 h-7 text-white" />
@@ -875,7 +875,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold text-primary mb-2">Опубликовано</p>
-                      <p className="text-3xl font-bold text-slate-900">{stats.publishedCourses}</p>
+                      <p className="text-3xl font-bold text-[#111827]">{stats.publishedCourses}</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <EyeIcon className="w-7 h-7 text-white" />
@@ -889,7 +889,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold text-primary mb-2">Средний прогресс</p>
-                      <p className="text-3xl font-bold text-slate-900">{stats.averageProgress}%</p>
+                      <p className="text-3xl font-bold text-[#111827]">{stats.averageProgress}%</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <TrendingUpIcon className="w-7 h-7 text-white" />
@@ -903,7 +903,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold text-primary mb-2">Доход</p>
-                      <p className="text-3xl font-bold text-slate-900">{stats.totalRevenueFormatted || "0 ₽"}</p>
+                      <p className="text-3xl font-bold text-[#111827]">{stats.totalRevenueFormatted || "0 ₽"}</p>
                     </div>
                     <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
                       <BarChartIcon className="w-7 h-7 text-white" />
@@ -949,7 +949,7 @@ export default function DashboardPage() {
                   <BookOpenIcon className="w-10 h-10 text-white" />
                 </div>
                 <h4 className="text-xl font-bold text-primary mb-3">У вас пока нет созданных курсов</h4>
-                <p className="text-slate-600 mb-8 text-base leading-relaxed max-w-md mx-auto">
+                <p className="text-[#6B7280] mb-8 text-base leading-relaxed max-w-md mx-auto">
                   Создайте первый курс с персонализированными подсказками под ваш стиль преподавания
                 </p>
                 <Button onClick={handleCreateCourse} className="flex items-center gap-2 mx-auto h-12 px-6">
@@ -972,7 +972,7 @@ export default function DashboardPage() {
                         </Badge>
                       )}
                     </div>
-                    <CardDescription className="text-sm leading-relaxed text-slate-600">
+                    <CardDescription className="text-sm leading-relaxed text-[#6B7280]">
                       {course.description || "Описание курса не добавлено"}
                     </CardDescription>
                     {course.launch_mode === "stream" && course.stream_start_date && (
@@ -1007,14 +1007,14 @@ export default function DashboardPage() {
                           )}
                         </Button>
                         {streamLaunchStatus[course.id]?.message && (
-                          <p className="text-xs text-slate-500 mt-1">{streamLaunchStatus[course.id].message}</p>
+                          <p className="text-xs text-[#6B7280] mt-1">{streamLaunchStatus[course.id].message}</p>
                         )}
                       </div>
                     )}
 
                     {/* Аналитика курса */}
                     {course.is_published && (
-                      <div className="mb-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                      <div className="mb-4 p-4 bg-background-gray rounded-lg border border-[#E5E7EB]">
                         {(() => {
                           const analytics = courseAnalytics[course.id]
                           const isLoading = analyticsLoading[course.id]
@@ -1042,12 +1042,12 @@ export default function DashboardPage() {
                                 <BarChartIcon className="w-4 h-4" />
                                 Аналитика курса
                                 {analytics.course?.title && (
-                                  <span className="text-xs font-normal text-slate-600 ml-1">
+                                  <span className="text-xs font-normal text-[#6B7280] ml-1">
                                     ({analytics.course.title})
                                   </span>
                                 )}
                               </h4>
-                              <span className="text-xs text-slate-500">
+                              <span className="text-xs text-[#6B7280]">
                                 {analytics.summary?.totalLessons ?? 0} уроков
                               </span>
                             </div>
@@ -1055,36 +1055,36 @@ export default function DashboardPage() {
                             {/* Основные метрики */}
                             <div className="grid grid-cols-2 gap-2">
                               {/* Среднее количество просмотров */}
-                              <div className="bg-white p-2 rounded border border-slate-200">
+                              <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <EyeIcon className="w-3 h-3 text-slate-500" />
-                                  <span className="text-xs text-slate-600">Просмотры</span>
+                                  <EyeIcon className="w-3 h-3 text-[#6B7280]" />
+                                  <span className="text-xs text-[#6B7280]">Просмотры</span>
                                 </div>
                                 <p className="text-lg font-bold text-primary">
                                   {analytics.summary?.averageViews ?? 0}
                                 </p>
-                                <p className="text-xs text-slate-500">среднее по урокам</p>
+                                <p className="text-xs text-[#6B7280]">среднее по урокам</p>
                               </div>
 
                               {/* Среднее время изучения */}
-                              <div className="bg-white p-2 rounded border border-slate-200">
+                              <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                                 <div className="flex items-center gap-1 mb-1">
-                                  <ClockIcon className="w-3 h-3 text-slate-500" />
-                                  <span className="text-xs text-slate-600">Время</span>
+                                  <ClockIcon className="w-3 h-3 text-[#6B7280]" />
+                                  <span className="text-xs text-[#6B7280]">Время</span>
                                 </div>
                                 <p className="text-lg font-bold text-primary">
                                   {analytics.summary?.averageTimeSpentFormatted ?? '0с'}
                                 </p>
-                                <p className="text-xs text-slate-500">среднее изучение</p>
+                                <p className="text-xs text-[#6B7280]">среднее изучение</p>
                               </div>
                             </div>
 
                             {/* Повторные просмотры */}
-                            <div className="bg-white p-2 rounded border border-slate-200">
+                            <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1">
-                                  <RepeatIcon className="w-3 h-3 text-slate-500" />
-                                  <span className="text-xs text-slate-600">Повторные просмотры</span>
+                                  <RepeatIcon className="w-3 h-3 text-[#6B7280]" />
+                                  <span className="text-xs text-[#6B7280]">Повторные просмотры</span>
                                 </div>
                                 <p className="text-sm font-bold text-primary">
                                   {analytics.summary?.totalRepeatViews ?? 0}
@@ -1094,10 +1094,10 @@ export default function DashboardPage() {
 
                             {/* Прогресс по блокам (визуализация) */}
                             {analytics.lessons && analytics.lessons.length > 0 && (
-                              <div className="bg-white p-2 rounded border border-slate-200">
+                              <div className="bg-white p-2 rounded border border-[#E5E7EB]">
                                 <div className="flex items-center gap-1 mb-2">
-                                  <TrendingUpIcon className="w-3 h-3 text-slate-500" />
-                                  <span className="text-xs text-slate-600 font-semibold">Прогресс по блокам</span>
+                                  <TrendingUpIcon className="w-3 h-3 text-[#6B7280]" />
+                                  <span className="text-xs text-[#6B7280] font-semibold">Прогресс по блокам</span>
                                 </div>
                                 <div className="space-y-1">
                                   {analytics.lessons.slice(0, 3).map((lesson: any, idx: number) => (
@@ -1106,7 +1106,7 @@ export default function DashboardPage() {
                                         <span className="text-slate-700 truncate flex-1" title={lesson.lesson_title}>
                                           {lesson.lesson_title || `Урок ${idx + 1}`}
                                         </span>
-                                        <span className="text-slate-500 ml-2">
+                                        <span className="text-[#6B7280] ml-2">
                                           {lesson.unique_students ?? 0} учеников
                                         </span>
                                       </div>

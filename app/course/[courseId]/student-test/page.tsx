@@ -210,7 +210,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
               <CardContent className="p-6">
                 <div className="text-center">
                   <h3 className="text-lg font-semibold text-primary mb-3">Готовы начать обучение?</h3>
-                  <p className="text-slate-600 mb-6">
+                  <p className="text-[#6B7280] mb-6">
                     Теперь курс будет адаптирован под ваш стиль обучения. Начните изучение материала.
                   </p>
                   <div className="flex gap-4 justify-center">
@@ -286,7 +286,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
                     />
                     <Label
                       htmlFor={option.id}
-                      className="text-lg leading-relaxed cursor-pointer flex-1 text-slate-700"
+                      className="text-lg leading-relaxed cursor-pointer flex-1 text-[#111827]"
                     >
                       {option.text}
                     </Label>
@@ -343,7 +343,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#6B7280]">
               {!canProceed && "Выберите один из вариантов ответа для продолжения"}
             </p>
           </div>
