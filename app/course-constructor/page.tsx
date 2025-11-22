@@ -2937,12 +2937,21 @@ export default function CourseConstructor() {
                   <div className="w-16 h-16 bg-[#659AB8]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <BookOpenIcon className="w-8 h-8 text-[#659AB8]" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#659AB8] mb-2">Выберите урок и блок для редактирования</h3>
-                  <p className="text-slate-600 mb-6">Создайте урок и выберите блок, чтобы начать добавлять контент</p>
-                  {courseLessons.length === 0 && (
-                    <Button onClick={addLesson} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
-                      Создать первый урок
-                    </Button>
+                  {activeLessonId && courseBlocks.length === 0 ? (
+                    <>
+                      <h3 className="text-lg font-semibold text-[#659AB8] mb-2">Создайте первый блок</h3>
+                      <p className="text-slate-600 mb-6">Добавьте блок слева, чтобы начать добавлять элементы курса</p>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="text-lg font-semibold text-[#659AB8] mb-2">Выберите урок и блок для редактирования</h3>
+                      <p className="text-slate-600 mb-6">Создайте урок и выберите блок, чтобы начать добавлять контент</p>
+                      {courseLessons.length === 0 && (
+                        <Button onClick={addLesson} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
+                          Создать первый урок
+                        </Button>
+                      )}
+                    </>
                   )}
                 </CardContent>
               </Card>
