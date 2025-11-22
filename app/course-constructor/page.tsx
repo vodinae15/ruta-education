@@ -2293,7 +2293,7 @@ export default function CourseConstructor() {
             {courseTitle.trim() && (
               <div className="flex items-center justify-end gap-2 text-sm">
                 {saveStatus === "saving" && (
-                  <span className="text-blue-600 flex items-center gap-1">
+                  <span className="text-[#5589a7] flex items-center gap-1">
                     <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -2302,7 +2302,7 @@ export default function CourseConstructor() {
                   </span>
                 )}
                 {saveStatus === "saved" && lastSavedAt && (
-                  <span className="text-green-600 flex items-center gap-1">
+                  <span className="text-[#5589a7] flex items-center gap-1">
                     <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -2310,7 +2310,7 @@ export default function CourseConstructor() {
                   </span>
                 )}
                 {saveStatus === "unsaved" && (
-                  <span className="text-amber-600 flex items-center gap-1">
+                  <span className="text-slate-600 flex items-center gap-1">
                     <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
@@ -2321,38 +2321,35 @@ export default function CourseConstructor() {
             )}
             <div className="flex gap-4">
               {currentCourseId && isCourseAuthor && (
-                <Button
+                <button
                   onClick={() => setShowCollaboratorsModal(true)}
-                  variant="outline"
-                  className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent transition-colors"
+                  className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                 >
                   Управление соавторами
-                </Button>
+                </button>
               )}
-              <Button
+              <button
                 onClick={saveCourse}
                 disabled={isSaving}
-                variant="outline"
-                className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent transition-colors"
+                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white disabled:opacity-50"
               >
                 {isSaving ? "Сохранение..." : "Сохранить черновик"}
-              </Button>
-            <Button
-              onClick={publishCourse}
-              disabled={isPublishing}
-              className="bg-[#659AB8] hover:bg-[#5589a7] text-white transition-colors"
-            >
-              {isPublishing ? "Публикация..." : "Опубликовать курс"}
-            </Button>
-            {notification.type === "published" && (
-              <Button
-                onClick={unpublishCourse}
-                variant="secondary"
-                className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 bg-transparent transition-colors"
+              </button>
+              <button
+                onClick={publishCourse}
+                disabled={isPublishing}
+                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50"
               >
-                Снять с публикации
-              </Button>
-            )}
+                {isPublishing ? "Публикация..." : "Опубликовать курс"}
+              </button>
+              {notification.type === "published" && (
+                <button
+                  onClick={unpublishCourse}
+                  className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                >
+                  Снять с публикации
+                </button>
+              )}
             </div>
           </div>
         }
@@ -2410,7 +2407,7 @@ export default function CourseConstructor() {
                       alert('Сначала сохраните курс, чтобы просмотреть адаптацию')
                     }
                   }}
-                  className="w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-slate-600 border border-slate-300 hover:border-[#659AB8] hover:text-[#5589a7]"
+                  className="w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 border-[#659AB8] bg-white text-[#659AB8] hover:bg-[#659AB8] hover:text-white"
                 >
                   Просмотр адаптации
                 </button>

@@ -210,10 +210,10 @@ export function CourseCollaboratorsManager({
                 </Button>
               </div>
               {error && (
-                <p className="text-sm text-red-600 bg-red-50 p-2 rounded">{error}</p>
+                <p className="text-sm text-slate-700 bg-[#FDF8F3] border border-[#E5E7EB] p-2 rounded">{error}</p>
               )}
               {success && (
-                <p className="text-sm text-green-600 bg-green-50 p-2 rounded">{success}</p>
+                <p className="text-sm text-[#5589a7] bg-[#E8F4FA] border border-[#CDE6F9] p-2 rounded">{success}</p>
               )}
             </div>
           )}
