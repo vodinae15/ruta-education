@@ -22,7 +22,7 @@ export function AuthorTestResults({ authorTypeResult, onRetakeTest }: AuthorTest
                 <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7]">
                   {authorTypeResult.title}
                 </h2>
-                <span className="inline-block bg-[#FDF8F3] text-slate-600 px-3 py-1.5 text-xs font-semibold rounded-full border border-[#E5E7EB]">
+                <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB]">
                   {authorTypeResult.superpower}
                 </span>
               </div>
