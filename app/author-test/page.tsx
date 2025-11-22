@@ -281,7 +281,7 @@ export default function AuthorTestPage() {
               <RadioGroup
                 value={answers[currentQuestionId] || ""}
                 onValueChange={handleAnswerChange}
-                className="space-y-2"
+                className="space-y-1"
               >
                 {authorTestQuestions[currentQuestion].options.map((option) => (
                   <div key={option.id} className="flex items-start space-x-4 py-2 px-3 rounded-lg hover:bg-light-blue transition-colors">
