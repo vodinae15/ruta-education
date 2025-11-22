@@ -2274,21 +2274,8 @@ export default function CourseConstructor() {
             ? `Персонализированный режим для типа «${authorProfile?.author_type || "Загрузка..."}»`
             : "Стандартный режим создания курса"
         }
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: "Дашборд", href: "/dashboard" },
-          { label: "Создание курса" },
-        ]}
         actions={
           <div className="space-y-2">
-            {/* Плашка текущего режима */}
-            <div className="flex items-center justify-end gap-2 text-sm mb-2">
-              <span className="text-slate-600">Режим:</span>
-              <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB]">
-                {constructorMode === "standard" ? "Стандартная сборка" : "По типу автора"}
-              </span>
-            </div>
-
             {/* Индикатор статуса автосохранения */}
             {courseTitle.trim() && (
               <div className="flex items-center justify-end gap-2 text-sm">
@@ -2362,6 +2349,13 @@ export default function CourseConstructor() {
         onClose={() => setNotification({ ...notification, isVisible: false })}
       />
 
+      {/* Sticky mode badge */}
+      <div className="fixed top-20 right-6 z-40">
+        <span className="text-xs px-3 py-1.5 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB] shadow-sm">
+          {constructorMode === "standard" ? "Стандартная сборка" : "По типу автора"}
+        </span>
+      </div>
+
       {currentCourseId && (
         <CourseCollaboratorsManager
           courseId={currentCourseId}
@@ -2380,20 +2374,20 @@ export default function CourseConstructor() {
               <div className="space-y-3">
                 <button
                   onClick={() => handleModeSwitch("standard")}
-                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 ${
+                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 border-[#659AB8] ${
                     constructorMode === "standard"
-                      ? "bg-[#659AB8] text-white border-[#659AB8]"
-                      : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
+                      ? "bg-[#659AB8] text-white"
+                      : "bg-[#659AB8] text-white hover:bg-white hover:text-[#659AB8]"
                   }`}
                 >
                   Стандартная сборка
                 </button>
                 <button
                   onClick={() => handleModeSwitch("personalized")}
-                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 ${
+                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 border-[#659AB8] ${
                     constructorMode === "personalized"
-                      ? "bg-[#659AB8] text-white border-[#659AB8]"
-                      : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
+                      ? "bg-[#659AB8] text-white"
+                      : "bg-[#659AB8] text-white hover:bg-white hover:text-[#659AB8]"
                   }`}
                 >
                   По типу автора
