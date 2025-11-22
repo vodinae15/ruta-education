@@ -2277,13 +2277,7 @@ export default function CourseConstructor() {
             {/* Плашка текущего режима */}
             <div className="flex items-center justify-end gap-2 text-sm mb-2">
               <span className="text-slate-600">Режим:</span>
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  constructorMode === "standard"
-                    ? "bg-blue-100 text-blue-700 border border-blue-300"
-                    : "bg-purple-100 text-purple-700 border border-purple-300"
-                }`}
-              >
+              <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB]">
                 {constructorMode === "standard" ? "Стандартная сборка" : "По типу автора"}
               </span>
             </div>
@@ -2377,39 +2371,31 @@ export default function CourseConstructor() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Левый столбец - Режим создания курса */}
-          <Card className="bg-white border-2 rounded-lg ">
-            <CardContent className="p-6 sm:p-8 lg:p-10">
-              <div className="text-center mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Выберите режим создания курса</h3>
-                <p className="text-lg text-slate-600">
-                  Стандартный режим подходит всем, персонализированный — адаптирован под ваш тип автора
-                </p>
-              </div>
+          <Card className="border">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-[#5589a7] mb-4">Режим создания курса</h3>
               <div className="space-y-3">
-                <Button
-                  variant="secondary"
+                <button
                   onClick={() => handleModeSwitch("standard")}
-                  className={`w-full h-14 px-8 text-lg font-medium  border-2 transition-all duration-200 ${
+                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 ${
                     constructorMode === "standard"
-                      ? "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7]"
-                      : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent"
+                      ? "bg-[#659AB8] text-white border-[#659AB8]"
+                      : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
                   }`}
                 >
-                  Стандартная сборка курса
-                </Button>
-                <Button
-                  variant="secondary"
+                  Стандартная сборка
+                </button>
+                <button
                   onClick={() => handleModeSwitch("personalized")}
-                  className={`w-full h-14 px-8 text-lg font-medium  border-2 transition-all duration-200 ${
+                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 border-2 ${
                     constructorMode === "personalized"
-                      ? "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7]"
-                      : "border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent"
+                      ? "bg-[#659AB8] text-white border-[#659AB8]"
+                      : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
                   }`}
                 >
-                  Сборка по вашему типу автора
-                </Button>
-                <Button
-                  variant="secondary"
+                  По типу автора
+                </button>
+                <button
                   onClick={() => {
                     const currentCourseId = localStorage.getItem("currentCourseId")
                     if (currentCourseId) {
@@ -2418,210 +2404,47 @@ export default function CourseConstructor() {
                       alert('Сначала сохраните курс, чтобы просмотреть адаптацию')
                     }
                   }}
-                  className="w-full h-14 px-8 text-lg font-medium  border-2 transition-all duration-200 border-[#659AB8] text-[#5589a7] hover:bg-light-blue bg-transparent"
+                  className="w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-slate-600 border border-slate-300 hover:border-[#659AB8] hover:text-[#5589a7]"
                 >
                   Просмотр адаптации
-                </Button>
+                </button>
               </div>
             </CardContent>
           </Card>
 
-          {/* Правый столбец - Приглашение учеников */}
-          <Card className="bg-white border-2 rounded-lg ">
-            <CardContent className="p-6 sm:p-8 lg:p-10">
-              <div className="text-center mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7] mb-2">Пригласите учеников по почте</h3>
-                <p className="text-lg text-slate-600">
-                  Введите email-адреса учеников, которым нужно открыть доступ к курсу
-                </p>
-              </div>
+          {/* Правый столбец - Название и описание курса */}
+          <Card className="border">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-[#5589a7] mb-4">Информация о курсе</h3>
               <div className="space-y-4">
-              <div>
-                <Textarea
-                  value={inviteEmails}
-                  onChange={(e) => {
-                    setInviteEmails(e.target.value)
-                    validateEmails(e.target.value)
-                  }}
-                  placeholder="Введите email-адреса через запятую или с новой строки&#10;example1@email.com, example2@email.com&#10;example3@email.com"
-                  className={`min-h-[100px] text-lg ${
-                    inviteEmails.trim() && !emailValidation.isValid 
-                      ? "border-red-300 focus:border-red-500" 
-                      : ""
-                  }`}
-                  rows={4}
-                />
-                <p className="text-sm text-slate-600 mt-2">
-                  💡 Подсказка: Можно вводить email-адреса через запятую, точку с запятой или с новой строки
-                </p>
-                
-                {/* Отображение результатов валидации */}
-                {inviteEmails.trim() && (
-                  <div className="mt-3 space-y-2">
-                    {emailValidation.validEmails.length > 0 && (
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                        <span>Корректные email ({emailValidation.validEmails.length}): {emailValidation.validEmails.join(", ")}</span>
-                      </div>
-                    )}
-                    {emailValidation.invalidEmails.length > 0 && (
-                      <div className="flex items-center gap-2 text-sm text-red-600">
-                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                        <span>Некорректные email ({emailValidation.invalidEmails.length}): {emailValidation.invalidEmails.join(", ")}</span>
-                      </div>
-                    )}
-                    {emailValidation.duplicateEmails.length > 0 && (
-                      <div className="flex items-center gap-2 text-sm text-yellow-600">
-                        <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                        <span>Дубликаты ({emailValidation.duplicateEmails.length}): {emailValidation.duplicateEmails.join(", ")}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-                <div className="text-center">
-                  <Button
-                    onClick={inviteStudents}
-                    disabled={!inviteEmails.trim() || isInviting || !emailValidation.isValid}
-                    className="w-full h-12 px-8 text-lg font-medium  transition-colors"
-                  >
-                    {isInviting ? "Открываем доступ..." : "Открыть доступ к курсу"}
-                  </Button>
+                <div>
+                  <Label htmlFor="course-title" className="text-sm font-medium text-slate-900 mb-2 block">
+                    Название курса
+                  </Label>
+                  <Input
+                    id="course-title"
+                    value={courseTitle}
+                    onChange={(e) => setCourseTitle(e.target.value)}
+                    placeholder="Введите название курса"
+                    className="h-12"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="course-description" className="text-sm font-medium text-slate-900 mb-2 block">
+                    Описание курса
+                  </Label>
+                  <Textarea
+                    id="course-description"
+                    value={courseDescription}
+                    onChange={(e) => setCourseDescription(e.target.value)}
+                    placeholder="Краткое описание курса"
+                    rows={4}
+                  />
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
-
-        {/* Список студентов с доступом */}
-        <Card className="mb-8 bg-white border-2 rounded-lg ">
-          <CardContent className="p-6 sm:p-8 lg:p-10">
-            <div className="text-center mb-6">
-              <div className="flex items-center justify-center gap-4 mb-2">
-                <h3 className="text-xl lg:text-2xl font-semibold text-[#5589a7]">
-                  Студенты с доступом к курсу
-                  {studentsWithAccess.length > 0 && (
-                    <span className="ml-2 px-3 py-1 bg-[#659AB8]/10 text-[#5589a7] text-sm font-medium rounded-full">
-                      {studentsWithAccess.length}
-                    </span>
-                  )}
-                </h3>
-                <Button
-                  onClick={loadStudentsWithAccess}
-                  disabled={loadingStudents}
-                  variant="secondary"
-                  size="sm"
-                  className="border-[#659AB8] text-[#5589a7] hover:bg-light-blue transition-colors"
-                >
-                  {loadingStudents ? (
-                    <Skeleton className="h-4 w-4 rounded-full" />
-                  ) : (
-                    "Обновить"
-                  )}
-                </Button>
-              </div>
-              <p className="text-lg text-slate-600">
-                Управляйте доступом студентов к курсу
-              </p>
-            </div>
-            
-            {loadingStudents ? (
-              <div className="space-y-4 py-8">
-                <Skeleton className="h-6 w-48 mx-auto" />
-                <div className="space-y-3">
-                  {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-16 w-full" />
-                  ))}
-                </div>
-              </div>
-            ) : studentsWithAccess.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-slate-600 text-lg mb-4">Пока никто не имеет доступа к курсу</p>
-                <p className="text-slate-400 text-sm">Пригласите студентов, чтобы они появились в этом списке</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {studentsWithAccess.map((student) => (
-                  <div
-                    key={student.id}
-                    className="flex items-center justify-between p-4 bg-light-blue/20 rounded-lg border border-[#659AB8]/20"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
-                          <span className="text-[#5589a7] font-semibold text-sm">
-                            {student.email.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="font-medium text-[#111827]">{student.email}</p>
-                          <p className="text-sm text-slate-600">
-                            Доступ предоставлен: {new Date(student.first_accessed_at).toLocaleDateString('ru-RU')}
-                          </p>
-                          {student.last_accessed_at !== student.first_accessed_at && (
-                            <p className="text-sm text-slate-600">
-                              Последний вход: {new Date(student.last_accessed_at).toLocaleDateString('ru-RU')}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <Button
-                      onClick={() => showRemoveAccessConfirmation(student.id, student.email)}
-                      variant="secondary"
-                      size="sm"
-                      className="border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400 transition-colors"
-                    >
-                      <TrashIcon className="w-4 h-4 mr-2" />
-                      Закрыть доступ
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Course Info */}
-        <Card className="mb-8 bg-white border-2 rounded-lg ">
-          <CardContent className="p-6 sm:p-8 lg:p-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <Label htmlFor="course-title" className="text-lg font-semibold text-[#5589a7] mb-2 block">
-                  Название курса
-                </Label>
-                <Input
-                  id="course-title"
-                  value={courseTitle}
-                  onChange={(e) => setCourseTitle(e.target.value)}
-                  placeholder="Введите название курса"
-                  className="h-12 text-lg"
-                />
-              </div>
-              <div>
-                <Label htmlFor="course-description" className="text-lg font-semibold text-[#5589a7] mb-2 block">
-                  Описание курса
-                </Label>
-                <Textarea
-                  id="course-description"
-                  value={courseDescription}
-                  onChange={(e) => setCourseDescription(e.target.value)}
-                  placeholder="Краткое описание курса"
-                  className="text-lg"
-                  rows={3}
-                />
-              </div>
-            </div>
-
-            {/* <div className="flex items-center justify-between text-base text-[#659AB8] font-semibold mb-3">
-                <span>Прогресс создания курса</span>
-                <span>
-                  {completedBlocks} из {courseBlocks.length} блоков готово
-                </span>
-              </div>
-              <Progress value={progress} className="h-3" /> */}
-          </CardContent>
-        </Card>
 
         {/* Тарифы и оплата */}
         {currentCourseId && (
@@ -2768,7 +2591,7 @@ export default function CourseConstructor() {
                       key={lesson.id}
                       className={`cursor-pointer transition-all ${
                         activeLessonId === lesson.id
-                          ? "ring-2 ring-primary bg-[#659AB8]/5 border-[#659AB8]/30"
+                          ? "ring-2 ring-[#659AB8] bg-[#659AB8]/5 border-[#659AB8]/30"
                           : "hover:bg-background-gray"
                       }`}
                       onClick={() => selectLesson(lesson.id)}
@@ -2875,7 +2698,7 @@ export default function CourseConstructor() {
                           onDrop={(e) => handleBlockDrop(e, block.id)}
                           className={`cursor-pointer transition-all ${
                             activeBlockId === block.id
-                              ? "ring-2 ring-primary bg-[#659AB8]/5 border-[#659AB8]/30"
+                              ? "ring-2 ring-[#659AB8] bg-[#659AB8]/5 border-[#659AB8]/30"
                               : "hover:bg-background-gray"
                           } ${draggedBlock === block.id ? "opacity-50" : ""}`}
                           onClick={() => setActiveBlockId(block.id)}
