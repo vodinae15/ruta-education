@@ -96,7 +96,7 @@ export function StudentStatisticsTable({
 
   if (loading) {
     return (
-      <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+      <Card className="border">
         <CardContent className="p-8">
           <div className="space-y-4">
             <Skeleton className="h-6 w-48 mx-auto" />
@@ -113,16 +113,16 @@ export function StudentStatisticsTable({
 
   if (students.length === 0) {
     return (
-      <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+      <Card className="border">
         <CardContent className="p-8 text-center">
-          <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-            <UserIcon className="w-8 h-8 text-primary" />
+          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <UserIcon className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-lg font-semibold text-slate-900 mb-2">
             {courseId ? "Нет учеников в этом курсе" : "У вас пока нет учеников"}
           </h3>
-          <p className="text-slate-600">
-            {courseId 
+          <p className="text-sm text-slate-600">
+            {courseId
               ? "Добавьте учеников к этому курсу, чтобы увидеть их статистику"
               : "Добавьте учеников к своим курсам, чтобы отслеживать их прогресс"}
           </p>
@@ -133,11 +133,10 @@ export function StudentStatisticsTable({
 
   return (
     <>
-      <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+      <Card className="border">
         <CardHeader>
-          <CardTitle className="text-xl text-primary font-bold flex items-center gap-2">
-            <UserIcon className="w-5 h-5" />
-            Мои ученики ({students.length})
+          <CardTitle className="text-xl text-[#5589a7] font-bold">
+            {courseId ? `Ученики курса (${students.length})` : `Все ученики (${students.length})`}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">

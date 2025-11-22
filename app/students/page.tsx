@@ -11,7 +11,7 @@ import { MainNavigation } from "@/components/ui/main-navigation"
 import { PageHeader } from "@/components/ui/page-header"
 import { CourseSelector } from "@/components/ui/course-selector"
 import { StudentStatisticsTable } from "@/components/ui/student-statistics-table"
-import { UserIcon, MailIcon, PlusIcon, UsersIcon } from "@/components/ui/icons"
+import { UserIcon, MailIcon } from "@/components/ui/icons"
 import { useAuth } from "@/lib/auth"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -292,13 +292,12 @@ export default function StudentsPage() {
         title="Управление учениками"
         description="Отслеживайте прогресс учеников и управляйте доступом к курсам"
         actions={
-          <Button
-            variant="secondary"
+          <button
             onClick={() => router.push("/dashboard")}
-            className="flex items-center gap-2"
+            className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
           >
             В дашборд
-          </Button>
+          </button>
         }
       />
 
@@ -314,10 +313,9 @@ export default function StudentsPage() {
 
         <div className="space-y-8">
           {/* Выбор курса и добавление ученика */}
-          <Card className="bg-white border-2 rounded-lg shadow-ruta-sm">
+          <Card className="border">
             <CardHeader>
-              <CardTitle className="text-xl text-primary font-bold flex items-center gap-2">
-                <UsersIcon className="w-5 h-5" />
+              <CardTitle className="text-xl text-[#5589a7] font-bold">
                 Управление доступом
               </CardTitle>
               <CardDescription>
@@ -367,28 +365,23 @@ export default function StudentsPage() {
                           />
                         </div>
                       </div>
-                      <Button
+                      <button
                         onClick={handleAddStudent}
                         disabled={addingStudent || !email.trim()}
-                        className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+                        className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {addingStudent ? (
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                          <PlusIcon className="w-4 h-4" />
-                        )}
-                        Добавить
-                      </Button>
+                        {addingStudent ? "Добавление..." : "Добавить"}
+                      </button>
                     </div>
                   </div>
                 </div>
               )}
 
               {!selectedCourseId && (
-                <div className="p-4 bg-light-blue/30 border border-primary/20 rounded-lg">
-                  <p className="text-sm text-[#111827]">
+                <div className="p-4 bg-light-blue rounded-lg">
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     Выберите курс, чтобы добавить учеников или просмотреть статистику по конкретному курсу.
-                    Или оставьте "Все курсы" для просмотра всех ваших учеников.
+                    Или оставьте «Все курсы» для просмотра всех ваших учеников.
                   </p>
                 </div>
               )}
