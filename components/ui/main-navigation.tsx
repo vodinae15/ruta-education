@@ -43,7 +43,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/">
-            <Logo />
+            <Logo size="md" />
           </Link>
 
           {/* Navigation Menu */}

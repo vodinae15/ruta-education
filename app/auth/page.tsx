@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Logo } from "@/components/ui/logo"
-import { PageHeader } from "@/components/ui/page-header"
 import { UserIcon, MailIcon, LockIcon } from "@/components/ui/icons"
 import { createClient } from "@/lib/supabase/client"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -314,213 +313,209 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-light-gray">
-      <PageHeader
-        title={userType === "teacher" ? (isLogin ? "Вход в систему" : "Регистрация автора") : "Вход для студентов"}
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: userType === "teacher" ? (isLogin ? "Вход" : "Регистрация") : "Студенты" },
-        ]}
-      />
-
-      <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16 py-8">
-        <div className="w-full max-w-md mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-6">
-              <Logo />
-            </div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-[#659AB8] mb-4">
-              Добро пожаловать в Ruta.education
-            </h1>
+    <div className="min-h-screen bg-light-gray flex items-center justify-center py-8">
+      <div className="w-full max-w-md mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center mb-4">
+            <Logo size="md" />
           </div>
+          <h1 className="text-2xl font-bold text-slate-900">
+            Добро пожаловать
+          </h1>
+        </div>
 
-          <div className="flex justify-center mb-8">
-            <div className="bg-white rounded-lg p-1 flex">
-              <button
-                onClick={() => {
-                  setUserType("teacher")
-                  setFormData({ name: "", email: "", password: "" })
-                  setError("")
-                  setSuccess("")
-                }}
-                className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  userType === "teacher" ? "bg-[#659AB8] text-white" : "text-[#6B7280] hover:text-[#111827]"
-                }`}
-              >
-                Преподаватель
-              </button>
-              <button
-                onClick={() => {
-                  setUserType("student")
-                  setFormData({ name: "", email: "", password: "" })
-                  setError("")
-                  setSuccess("")
-                }}
-                className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  userType === "student" ? "bg-[#659AB8] text-white" : "text-[#6B7280] hover:text-[#111827]"
-                }`}
-              >
-                Студент
-              </button>
-            </div>
+        {/* User type tabs */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-light-gray rounded-lg p-1 flex border border-[#E5E7EB]">
+            <button
+              onClick={() => {
+                setUserType("teacher")
+                setFormData({ name: "", email: "", password: "" })
+                setError("")
+                setSuccess("")
+              }}
+              className={`px-6 py-2 rounded-md font-medium transition-colors duration-200 ${
+                userType === "teacher" ? "bg-white text-[#5589a7]" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Преподаватель
+            </button>
+            <button
+              onClick={() => {
+                setUserType("student")
+                setFormData({ name: "", email: "", password: "" })
+                setError("")
+                setSuccess("")
+              }}
+              className={`px-6 py-2 rounded-md font-medium transition-colors duration-200 ${
+                userType === "student" ? "bg-white text-[#5589a7]" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Студент
+            </button>
           </div>
+        </div>
 
-          <Card className="border-0 bg-[#F3FAFE]">
-            <CardHeader className="text-center pb-6">
-              <CardTitle className="text-2xl lg:text-3xl text-[#659AB8] font-bold">
-                {isLogin ? "Вход" : "Регистрация"}
-              </CardTitle>
-              <CardDescription className="text-base mt-2">
-                {isLogin
-                  ? "Введите ваши данные для входа в систему"
-                  : userType === "student"
-                    ? "Заполните форму для создания аккаунта студента"
-                    : "Заполните форму для создания аккаунта преподавателя"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Name field for registration (both teachers and students) */}
-                {!isLogin && (
-                  <Input
-                    label="Имя"
-                    type="text"
-                    placeholder="Введите ваше имя"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    required
-                    autoComplete="name"
-                    icon={<UserIcon className="w-5 h-5 text-[#659AB8]" />}
-                  />
-                )}
-
-                {/* Email field */}
+        <Card className="border border-[#E5E7EB] bg-white">
+          <CardHeader className="text-center pb-4">
+            <CardTitle className="text-xl text-slate-900 font-bold">
+              {isLogin ? "Вход" : "Регистрация"}
+            </CardTitle>
+            <CardDescription className="text-sm text-slate-600 mt-1">
+              {isLogin
+                ? "Введите ваши данные для входа"
+                : userType === "student"
+                  ? "Создайте аккаунт студента"
+                  : "Создайте аккаунт преподавателя"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Name field for registration */}
+              {!isLogin && (
                 <Input
-                  label="Электронная почта"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  label="Имя"
+                  type="text"
+                  placeholder="Введите ваше имя"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                   required
-                  autoComplete="email"
-                  icon={<MailIcon className="w-5 h-5 text-[#659AB8]" />}
+                  autoComplete="name"
+                  icon={<UserIcon className="w-4 h-4 text-[#5589a7]" />}
                 />
+              )}
 
-                {/* Password field for both teachers and students */}
-                <Input
-                  label="Пароль"
-                  type="password"
-                  placeholder="Введите пароль"
-                  value={formData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  helper={!isLogin ? "Минимум 6 символов" : undefined}
-                  icon={<LockIcon className="w-5 h-5 text-[#659AB8]" />}
-                />
+              {/* Email field */}
+              <Input
+                label="Электронная почта"
+                type="email"
+                placeholder="your@email.com"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                required
+                autoComplete="email"
+                icon={<MailIcon className="w-4 h-4 text-[#5589a7]" />}
+              />
 
-                {/* Agreement checkboxes for both teachers and students during registration */}
-                {!isLogin && (
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <Checkbox
-                        id="terms"
-                        checked={agreements.terms}
-                        onCheckedChange={(checked) => setAgreements((prev) => ({ ...prev, terms: checked as boolean }))}
-                      />
-                      <label htmlFor="terms" className="text-sm text-[#6B7280] leading-relaxed">
-                        Я соглашаюсь с{" "}
-                        <a href="https://docs.google.com/document/d/1gD6B9RPVtZDHXn9Jsha4GLi7kaSWY3Ve/edit?usp=drive_link&ouid=117485244745598251135&rtpof=true&sd=true" target="_blank" className="text-[#659AB8] hover:underline" rel="noreferrer">
-                          пользовательским соглашением
-                        </a>
-                      </label>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <Checkbox
-                        id="privacy"
-                        checked={agreements.privacy}
-                        onCheckedChange={(checked) =>
-                          setAgreements((prev) => ({ ...prev, privacy: checked as boolean }))
-                        }
-                      />
-                      <label htmlFor="privacy" className="text-sm text-[#6B7280] leading-relaxed">
-                        Я соглашаюсь с{" "}
-                        <a href="https://docs.google.com/document/d/18EkmXPeV0ays8ZGx_cz79duNZhr-cwnW/edit?usp=drive_link&ouid=117485244745598251135&rtpof=true&sd=true" target="_blank" className="text-[#659AB8] hover:underline" rel="noreferrer">
-                          политикой конфиденциальности
-                        </a>
-                      </label>
-                    </div>
+              {/* Password field */}
+              <Input
+                label="Пароль"
+                type="password"
+                placeholder="Введите пароль"
+                value={formData.password}
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                required
+                autoComplete="current-password"
+                helper={!isLogin ? "Минимум 6 символов" : undefined}
+                icon={<LockIcon className="w-4 h-4 text-[#5589a7]" />}
+              />
+
+              {/* Agreement checkboxes */}
+              {!isLogin && (
+                <div className="space-y-2">
+                  <div className="flex items-start space-x-2">
+                    <Checkbox
+                      id="terms"
+                      checked={agreements.terms}
+                      onCheckedChange={(checked) => setAgreements((prev) => ({ ...prev, terms: checked as boolean }))}
+                    />
+                    <label htmlFor="terms" className="text-xs text-slate-600 leading-relaxed">
+                      Соглашаюсь с{" "}
+                      <a href="https://docs.google.com/document/d/1gD6B9RPVtZDHXn9Jsha4GLi7kaSWY3Ve/edit?usp=drive_link&ouid=117485244745598251135&rtpof=true&sd=true" target="_blank" className="text-[#5589a7] hover:underline" rel="noreferrer">
+                        пользовательским соглашением
+                      </a>
+                    </label>
                   </div>
-                )}
-
-                {/* Success message */}
-                {success && (
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-sm text-green-600">{success}</p>
+                  <div className="flex items-start space-x-2">
+                    <Checkbox
+                      id="privacy"
+                      checked={agreements.privacy}
+                      onCheckedChange={(checked) =>
+                        setAgreements((prev) => ({ ...prev, privacy: checked as boolean }))
+                      }
+                    />
+                    <label htmlFor="privacy" className="text-xs text-slate-600 leading-relaxed">
+                      Соглашаюсь с{" "}
+                      <a href="https://docs.google.com/document/d/18EkmXPeV0ays8ZGx_cz79duNZhr-cwnW/edit?usp=drive_link&ouid=117485244745598251135&rtpof=true&sd=true" target="_blank" className="text-[#5589a7] hover:underline" rel="noreferrer">
+                        политикой конфиденциальности
+                      </a>
+                    </label>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Error message */}
-                {error && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-600" dangerouslySetInnerHTML={{ __html: error }} />
-                  </div>
-                )}
+              {/* Success message */}
+              {success && (
+                <div className="p-3 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                  <p className="text-sm text-[#5589a7]">{success}</p>
+                </div>
+              )}
 
-                {/* Submit button */}
-                <Button type="submit" className="w-full h-12 text-base" loading={loading} disabled={loading}>
-                  {loading
-                    ? isLogin
-                      ? "Вход..."
-                      : "Создание аккаунта..."
-                    : isLogin
-                      ? "Войти в систему"
-                      : "Создать аккаунт"}
-                </Button>
-              </form>
+              {/* Error message */}
+              {error && (
+                <div className="p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg">
+                  <p className="text-sm text-slate-900" dangerouslySetInnerHTML={{ __html: error }} />
+                </div>
+              )}
 
-              {/* Toggle between login/register for both teachers and students */}
-              <div className="mt-8 text-center">
-                <p className="text-sm text-[#6B7280]">{isLogin ? "Ещё нет аккаунта?" : "Уже есть аккаунт?"}</p>
-                <Button
-                  variant="text"
-                  onClick={() => {
-                    setIsLogin(!isLogin)
-                    setError("")
-                    setSuccess("")
-                    setFormData({ name: "", email: "", password: "" })
-                    setAgreements({ terms: false, privacy: false })
-                  }}
-                  className="mt-2 text-[#659AB8] hover:text-[#5a8ba3]"
-                >
-                  {isLogin ? "Зарегистрироваться" : "Войти"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Manual redirect button */}
-          {showManualRedirect && (
-            <div className="mt-6">
+              {/* Submit button */}
               <Button
-                onClick={() => {
-                  console.log("🔄 Manual redirect clicked")
-                  window.location.href = "/dashboard"
-                }}
-                className="w-full bg-green-600 hover:bg-green-700 text-white"
+                type="submit"
+                className="w-full h-10 text-sm bg-[#659AB8] hover:bg-[#5589a7] text-white border-2 border-[#659AB8] hover:border-[#5589a7] rounded-lg font-semibold"
+                loading={loading}
+                disabled={loading}
               >
-                Перейти в личный кабинет
+                {loading
+                  ? isLogin
+                    ? "Вход..."
+                    : "Создание..."
+                  : isLogin
+                    ? "Войти"
+                    : "Создать аккаунт"}
               </Button>
-            </div>
-          )}
+            </form>
 
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-[#6B7280]">
-              {userType === "student" ? "Студенты получают доступ к персонализированному обучению" : "Преподаватели создают курсы и управляют обучением"}
-            </p>
+            {/* Toggle between login/register */}
+            <div className="mt-4 text-center">
+              <p className="text-sm text-slate-600">{isLogin ? "Ещё нет аккаунта?" : "Уже есть аккаунт?"}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLogin(!isLogin)
+                  setError("")
+                  setSuccess("")
+                  setFormData({ name: "", email: "", password: "" })
+                  setAgreements({ terms: false, privacy: false })
+                }}
+                className="mt-1 text-sm text-[#5589a7] hover:underline font-medium"
+              >
+                {isLogin ? "Зарегистрироваться" : "Войти"}
+              </button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Manual redirect button */}
+        {showManualRedirect && (
+          <div className="mt-4">
+            <button
+              onClick={() => {
+                console.log("🔄 Manual redirect clicked")
+                window.location.href = "/dashboard"
+              }}
+              className="w-full py-2 bg-[#659AB8] hover:bg-[#5589a7] text-white border-2 border-[#659AB8] hover:border-[#5589a7] rounded-lg text-sm font-semibold transition-colors duration-200"
+            >
+              Перейти в личный кабинет
+            </button>
           </div>
+        )}
+
+        {/* Footer */}
+        <div className="mt-4 text-center">
+          <p className="text-xs text-slate-600">
+            {userType === "student" ? "Персонализированное обучение" : "Создание курсов и управление обучением"}
+          </p>
         </div>
       </div>
     </div>
