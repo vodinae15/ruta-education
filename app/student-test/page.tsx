@@ -219,7 +219,7 @@ function StudentTestContent() {
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-[60vh]">
+        <div className="flex items-center justify-center min-h-[calc(100vh-200px)] px-4">
           <div className="w-full max-w-md">
             <Card className="bg-white border border-[#E5E7EB]">
               <CardContent className="p-6">
