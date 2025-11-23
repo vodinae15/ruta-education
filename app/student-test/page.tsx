@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -21,8 +21,10 @@ import {
 
 export default function StudentTestPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
   const { user, loading: authLoading } = useAuth()
+  const isRetake = searchParams.get("retake") === "true"
 
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Partial<StudentTestAnswers>>({})
@@ -55,13 +57,16 @@ export default function StudentTestPage() {
           // Продолжаем без предварительных данных
         } else if (studentData?.test_results && studentData.test_results.test_version === "3.0") {
           // Если тест уже пройден (новая версия), показываем обобщённое сообщение
-          try {
-            const result = determineStudentType(studentData.test_results.answers as StudentTestAnswers)
-            setStudentTypeResult(result)
-            setShowResults(true)
-          } catch (error) {
-            console.error("Error determining student type:", error)
-            // Продолжаем без предварительных данных
+          // Но если это повторное прохождение, сразу показываем тест
+          if (!isRetake) {
+            try {
+              const result = determineStudentType(studentData.test_results.answers as StudentTestAnswers)
+              setStudentTypeResult(result)
+              setShowResults(true)
+            } catch (error) {
+              console.error("Error determining student type:", error)
+              // Продолжаем без предварительных данных
+            }
           }
         }
       } catch (err) {
@@ -73,7 +78,7 @@ export default function StudentTestPage() {
     }
 
     checkStudentData()
-  }, [user, authLoading, router, supabase])
+  }, [user, authLoading, router, supabase, isRetake])
 
   const handleAnswerChange = (value: string) => {
     const currentQuestionId = studentTestQuestions[currentQuestion].id as keyof StudentTestAnswers
