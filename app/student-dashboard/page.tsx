@@ -301,25 +301,13 @@ export default function StudentDashboardPage() {
                 </h2>
                 <p className="text-sm text-slate-600 mb-4">Ученик Ruta.Education</p>
 
-                {student?.test_results && student.test_results.test_version === "3.0" ? (
+                {student?.test_results && student.test_results.test_version === "3.0" && (
                   <button
                     onClick={() => router.push("/student-test?retake=true")}
                     className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                   >
                     Пройти тест повторно
                   </button>
-                ) : (
-                  <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
-                    <p className="text-slate-900 mb-3 font-medium">
-                      Пройдите тест, чтобы настроить профиль
-                    </p>
-                    <button
-                      className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
-                      onClick={() => router.push("/student-test")}
-                    >
-                      Пройти тест
-                    </button>
-                  </div>
                 )}
               </div>
             </CardContent>
@@ -355,9 +343,15 @@ export default function StudentDashboardPage() {
                   <h3 className="text-lg text-slate-600 font-bold mb-2">
                     Профиль не настроен
                   </h3>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-500 mb-4">
                     Пройдите тест для персонализации обучения
                   </p>
+                  <button
+                    className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                    onClick={() => router.push("/student-test")}
+                  >
+                    Пройти тест
+                  </button>
                 </div>
               )}
             </CardContent>
