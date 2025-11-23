@@ -57,15 +57,6 @@ export function PricingCard({ pricing, isPurchased, isFreeAccess, onPurchase, is
             </div>
           )}
         </div>
-
-        {/* Плашка обратной связи - фиксированная высота */}
-        <div className="h-8 flex items-center justify-center">
-          {pricing.has_feedback && (
-            <span className="bg-[#FDF8F3] text-sm text-slate-600 px-3 py-1 rounded border border-[#E5E7EB]">
-              С обратной связью
-            </span>
-          )}
-        </div>
       </CardHeader>
 
       <CardContent className="text-sm text-slate-600 text-center flex-1 flex flex-col">
@@ -89,7 +80,7 @@ export function PricingCard({ pricing, isPurchased, isFreeAccess, onPurchase, is
           {isFirstTier ? (
             isFreeAccess ? (
               <button
-                className="w-full bg-[#FDF8F3] text-slate-600 px-6 py-3 border border-[#E5E7EB] rounded-lg text-sm font-semibold"
+                className="w-full bg-white text-[#659AB8] px-6 py-3 border-2 border-[#659AB8] rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
                 disabled
               >
                 У вас уже есть доступ
@@ -106,7 +97,7 @@ export function PricingCard({ pricing, isPurchased, isFreeAccess, onPurchase, is
           ) : (
             isPurchased ? (
               <button
-                className="w-full bg-[#FDF8F3] text-slate-600 px-6 py-3 border border-[#E5E7EB] rounded-lg text-sm font-semibold"
+                className="w-full bg-white text-[#659AB8] px-6 py-3 border-2 border-[#659AB8] rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
                 disabled
               >
                 Куплено
