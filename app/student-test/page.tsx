@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/client"
 import { useAuth } from "@/lib/auth"
 import { CheckCircleIcon, ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icons"
 import { MainNavigation } from "@/components/ui/main-navigation"
+import { PageHeader } from "@/components/ui/page-header"
 import {
   studentTestQuestions,
   determineStudentType,
@@ -212,24 +213,27 @@ export default function StudentTestPage() {
     return (
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-          <div className="mb-8">
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Профиль настроен</h1>
-            <p className="text-lg text-slate-600">Тест завершён</p>
-          </div>
-
+        <PageHeader
+          title="Профиль настроен"
+          description="Тест завершён"
+          breadcrumbs={[
+            { label: "Главная", href: "/" },
+            { label: "Личный кабинет", href: "/student-dashboard" },
+            { label: "Тест ученика" }
+          ]}
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="max-w-2xl mx-auto">
-            <Card className="bg-white border border-[#E5E7EB]">
+            <Card className="border">
               <CardContent className="p-8 sm:p-10">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircleIcon className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="text-lg text-[#5589a7] font-bold mb-4">
+                  <h2 className="text-xl lg:text-2xl text-[#5589a7] font-bold mb-6">
                     Профиль настроен
                   </h2>
-                  <p className="text-sm text-slate-600 mb-8 leading-relaxed">
+                  <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                     {studentTypeResult.generalMessage}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -259,47 +263,52 @@ export default function StudentTestPage() {
     <div className="min-h-screen bg-cream">
       <MainNavigation user={user} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Определим ваш стиль обучения</h1>
-          <p className="text-lg text-slate-600">Ответьте на 4 вопроса, чтобы мы адаптировали курсы под ваш стиль</p>
-        </div>
+      <PageHeader
+        title="Определим ваш стиль обучения"
+        description="Ответьте на 4 вопроса, чтобы мы адаптировали курсы под ваш стиль обучения"
+        breadcrumbs={[
+          { label: "Главная", href: "/" },
+          { label: "Личный кабинет", href: "/student-dashboard" },
+          { label: "Тест ученика" }
+        ]}
+      />
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         <div className="max-w-2xl mx-auto">
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-sm font-medium text-slate-600">
+              <span className="text-lg font-semibold text-[#5589a7]">
                 Вопрос {currentQuestion + 1} из {studentTestQuestions.length}
               </span>
-              <span className="text-sm font-medium text-[#5589a7]">{Math.round(progress)}%</span>
+              <span className="text-lg font-semibold text-[#5589a7]">{Math.round(progress)}% завершено</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-3" />
           </div>
 
           {/* Question Card */}
-          <Card className="mb-8 bg-white border border-[#E5E7EB]">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg text-[#5589a7] font-bold leading-relaxed">
+          <Card className="mb-8 border">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed min-h-[3.5rem]">
                 {studentTestQuestions[currentQuestion].question}
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-0">
+            <CardContent className="pt-0 min-h-[280px]">
               <RadioGroup
                 value={answers[currentQuestionId] || ""}
                 onValueChange={handleAnswerChange}
-                className="space-y-2"
+                className="space-y-1"
               >
                 {studentTestQuestions[currentQuestion].options.map((option) => (
-                  <div key={option.id} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-[#E8F4FA] transition-colors duration-200">
+                  <div key={option.id} className="flex items-start space-x-4 py-2 px-3 rounded-lg hover:bg-light-blue transition-colors">
                     <RadioGroupItem
                       value={option.value}
                       id={option.id}
-                      className="mt-1 border-[#659AB8] text-[#5589a7]"
+                      className="mt-1 border-[#659AB8] text-[#659AB8]"
                     />
                     <Label
                       htmlFor={option.id}
-                      className="text-sm text-slate-600 leading-relaxed cursor-pointer flex-1"
+                      className="text-lg leading-relaxed cursor-pointer flex-1 text-slate-900"
                     >
                       {option.text}
                     </Label>
@@ -311,8 +320,8 @@ export default function StudentTestPage() {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-8 p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg">
-              <p className="text-sm text-slate-900">{error}</p>
+            <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm">{error}</p>
             </div>
           )}
 
@@ -321,11 +330,7 @@ export default function StudentTestPage() {
             <button
               onClick={handlePrevious}
               disabled={currentQuestion === 0}
-              className={`px-6 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 ${
-                currentQuestion === 0
-                  ? "bg-[#FDF8F3] text-slate-400 border-[#E5E7EB] cursor-not-allowed"
-                  : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
-              }`}
+              className="bg-white text-[#659AB8] px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Назад
             </button>
@@ -334,11 +339,7 @@ export default function StudentTestPage() {
               <button
                 onClick={handleSubmit}
                 disabled={!canProceed || isSubmitting}
-                className={`px-6 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 ${
-                  !canProceed || isSubmitting
-                    ? "bg-[#FDF8F3] text-slate-400 border-[#E5E7EB] cursor-not-allowed"
-                    : "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7] hover:border-[#5589a7]"
-                }`}
+                className="bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Сохранение..." : "Завершить тест"}
               </button>
@@ -346,11 +347,7 @@ export default function StudentTestPage() {
               <button
                 onClick={handleNext}
                 disabled={!canProceed}
-                className={`px-6 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 ${
-                  !canProceed
-                    ? "bg-[#FDF8F3] text-slate-400 border-[#E5E7EB] cursor-not-allowed"
-                    : "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7] hover:border-[#5589a7]"
-                }`}
+                className="bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Далее
               </button>
@@ -359,8 +356,8 @@ export default function StudentTestPage() {
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-xs text-slate-600">
-              {!canProceed && "Выберите один из вариантов ответа"}
+            <p className="text-sm text-[#6B7280]">
+              {!canProceed && "Выберите один из вариантов ответа для продолжения"}
             </p>
           </div>
         </div>

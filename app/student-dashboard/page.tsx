@@ -386,30 +386,6 @@ export default function StudentDashboardPage() {
                       </div>
                     </div>
 
-                    {/* Статус доступа */}
-                    {courseAccessInfo[courseAccess.course_id] && (
-                      <div className="mb-4 p-3 rounded-lg bg-[#FDF8F3] border border-[#E5E7EB]">
-                        {courseAccessInfo[courseAccess.course_id].accessStatus === "granted" ? (
-                          <div className="flex items-center gap-2 text-[#5589a7]">
-                            <PlayIcon className="w-4 h-4" />
-                            <span className="text-sm font-medium">Доступ открыт</span>
-                          </div>
-                        ) : courseAccessInfo[courseAccess.course_id].accessStatus === "pending" ? (
-                          <div className="flex items-center gap-2 text-[#5589a7]">
-                            <ClockIcon className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              {courseAccessInfo[courseAccess.course_id].accessMessage}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2 text-slate-600">
-                            <LockIcon className="w-4 h-4" />
-                            <span className="text-sm font-medium">Нет доступа</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
                     <div className="flex flex-col gap-2">
                       {courseAccess.courses.is_published ? (
                         <>
