@@ -205,7 +205,6 @@ export default function AuthorTestPage() {
         <PageHeader
           title="Ваш тип автора"
           description="Результаты теста определения стиля преподавания"
-          breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Тест автора" }]}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           {authorTypeResult ? (
@@ -254,7 +253,6 @@ export default function AuthorTestPage() {
       <PageHeader
         title="Определим ваш стиль преподавания"
         description="Ответьте на 5 вопросов, чтобы мы подобрали идеальный конструктор курсов"
-        breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Тест автора" }]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">

@@ -287,11 +287,6 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
       <PageHeader
         title="Результаты теста"
         description="Ваш тип восприятия информации определен"
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: "Личный кабинет", href: "/student-dashboard" },
-          { label: "Результаты теста" },
-        ]}
       />
 
       <div className="max-w-6xl mx-auto space-y-6">

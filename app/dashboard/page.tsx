@@ -780,7 +780,6 @@ export default function DashboardPage() {
       <PageHeader
         title="Личный кабинет"
         description="Управляйте своими курсами и отслеживайте прогресс учеников"
-        breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Личный кабинет" }]}
         actions={
           <div className="flex items-center gap-3">
             <Link

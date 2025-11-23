@@ -197,11 +197,6 @@ export default function StudentTestPage({ params }: { params: { courseId: string
         <PageHeader
           title={`Ваш режим представления материала: ${studentTypeResult.title}`}
           description="Результаты теста определения стиля обучения"
-          breadcrumbs={[
-            { label: "Главная", href: "/" }, 
-            { label: "Курс", href: `/course/${params.courseId}` }, 
-            { label: "Тест ученика" }
-          ]}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <StudentTestResults studentTypeResult={studentTypeResult} />
@@ -244,11 +239,6 @@ export default function StudentTestPage({ params }: { params: { courseId: string
       <PageHeader
         title="Определим ваш стиль обучения"
         description="Ответьте на 7 вопросов, чтобы мы адаптировали курс под ваш режим представления материала"
-        breadcrumbs={[
-          { label: "Главная", href: "/" }, 
-          { label: "Курс", href: `/course/${params.courseId}` }, 
-          { label: "Тест ученика" }
-        ]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">

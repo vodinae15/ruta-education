@@ -219,12 +219,6 @@ export default function CoursePricingPage() {
       <PageHeader
         title="Тарифы курса"
         description="Выберите подходящий тариф для доступа к курсу"
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: "Курсы", href: "/student-dashboard" },
-          { label: course.title, href: `/course/${courseId}` },
-          { label: "Тарифы" },
-        ]}
         actions={
           <Button
             variant="secondary"
