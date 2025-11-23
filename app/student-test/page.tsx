@@ -11,7 +11,6 @@ import { createClient } from "@/lib/supabase/client"
 import { useAuth } from "@/lib/auth"
 import { CheckCircleIcon, ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icons"
 import { MainNavigation } from "@/components/ui/main-navigation"
-import { PageHeader } from "@/components/ui/page-header"
 import {
   studentTestQuestions,
   determineStudentType,
@@ -213,43 +212,39 @@ export default function StudentTestPage() {
     return (
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
-        <PageHeader
-          title="Профиль настроен"
-          description="Тест завершён"
-          breadcrumbs={[
-            { label: "Главная", href: "/" }, 
-            { label: "Личный кабинет", href: "/student-dashboard" }, 
-            { label: "Тест ученика" }
-          ]}
-        />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+          <div className="mb-8">
+            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Профиль настроен</h1>
+            <p className="text-lg text-slate-600">Тест завершён</p>
+          </div>
+
           <div className="max-w-2xl mx-auto">
-            <Card className="bg-white border-2 rounded-lg ">
+            <Card className="bg-white border border-[#E5E7EB]">
               <CardContent className="p-8 sm:p-10">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircleIcon className="w-10 h-10 text-green-600" />
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircleIcon className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7] mb-6">
+                  <h2 className="text-lg text-[#5589a7] font-bold mb-4">
                     Профиль настроен
                   </h2>
-                  <p className="text-lg text-[#111827] mb-8 leading-relaxed">
+                  <p className="text-sm text-slate-600 mb-8 leading-relaxed">
                     {studentTypeResult.generalMessage}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button 
-                      onClick={() => router.push("/student-dashboard")} 
-                      className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#659AB8]/90 text-white h-12 px-8"
+                    <button
+                      onClick={() => router.push("/student-dashboard")}
+                      className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                     >
                       В личный кабинет
-                    </Button>
-                    <Button 
-                      onClick={handleRetakeTest} 
-                      variant="secondary" 
-                      className="flex items-center gap-2 border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 h-12 px-8"
+                    </button>
+                    <button
+                      onClick={handleRetakeTest}
+                      className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                     >
                       Пройти тест повторно
-                    </Button>
+                    </button>
                   </div>
                 </div>
               </CardContent>
@@ -264,33 +259,28 @@ export default function StudentTestPage() {
     <div className="min-h-screen bg-cream">
       <MainNavigation user={user} />
 
-      <PageHeader
-        title="Определим ваш стиль обучения"
-        description="Ответьте на 4 вопроса, чтобы мы адаптировали курсы под ваш стиль обучения"
-        breadcrumbs={[
-          { label: "Главная", href: "/" }, 
-          { label: "Личный кабинет", href: "/student-dashboard" }, 
-          { label: "Тест ученика" }
-        ]}
-      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Определим ваш стиль обучения</h1>
+          <p className="text-lg text-slate-600">Ответьте на 4 вопроса, чтобы мы адаптировали курсы под ваш стиль</p>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         <div className="max-w-2xl mx-auto">
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-[#5589a7]">
+              <span className="text-sm font-medium text-slate-600">
                 Вопрос {currentQuestion + 1} из {studentTestQuestions.length}
               </span>
-              <span className="text-lg font-semibold text-[#5589a7]">{Math.round(progress)}% завершено</span>
+              <span className="text-sm font-medium text-[#5589a7]">{Math.round(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-3" />
+            <Progress value={progress} className="h-2" />
           </div>
 
           {/* Question Card */}
-          <Card className="mb-8 bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg ">
-            <CardHeader className="pb-6">
-              <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed">
+          <Card className="mb-8 bg-white border border-[#E5E7EB]">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg text-[#5589a7] font-bold leading-relaxed">
                 {studentTestQuestions[currentQuestion].question}
               </CardTitle>
             </CardHeader>
@@ -301,7 +291,7 @@ export default function StudentTestPage() {
                 className="space-y-2"
               >
                 {studentTestQuestions[currentQuestion].options.map((option) => (
-                  <div key={option.id} className="flex items-start space-x-4 p-2 rounded-lg hover:bg-light-blue/20 transition-colors">
+                  <div key={option.id} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-[#E8F4FA] transition-colors duration-200">
                     <RadioGroupItem
                       value={option.value}
                       id={option.id}
@@ -309,7 +299,7 @@ export default function StudentTestPage() {
                     />
                     <Label
                       htmlFor={option.id}
-                      className="text-lg leading-relaxed cursor-pointer flex-1 text-[#111827]"
+                      className="text-sm text-slate-600 leading-relaxed cursor-pointer flex-1"
                     >
                       {option.text}
                     </Label>
@@ -321,53 +311,56 @@ export default function StudentTestPage() {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-600 text-sm">{error}</p>
+            <div className="mb-8 p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg">
+              <p className="text-sm text-slate-900">{error}</p>
             </div>
           )}
 
           {/* Navigation */}
           <div className="flex justify-between items-center">
-            <Button
-              variant="secondary"
+            <button
               onClick={handlePrevious}
               disabled={currentQuestion === 0}
-              className="flex items-center gap-2 h-12 px-6 transition-colors"
+              className={`px-6 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 ${
+                currentQuestion === 0
+                  ? "bg-[#FDF8F3] text-slate-400 border-[#E5E7EB] cursor-not-allowed"
+                  : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
+              }`}
             >
-              <ArrowLeftIcon className="w-5 h-5" />
               Назад
-            </Button>
+            </button>
 
             {isLastQuestion ? (
-              <Button
+              <button
                 onClick={handleSubmit}
                 disabled={!canProceed || isSubmitting}
-                className="flex items-center gap-2 h-12 px-6 transition-colors"
+                className={`px-6 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 ${
+                  !canProceed || isSubmitting
+                    ? "bg-[#FDF8F3] text-slate-400 border-[#E5E7EB] cursor-not-allowed"
+                    : "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7] hover:border-[#5589a7]"
+                }`}
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Сохранение...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleIcon className="w-5 h-5" />
-                    Завершить тест
-                  </>
-                )}
-              </Button>
+                {isSubmitting ? "Сохранение..." : "Завершить тест"}
+              </button>
             ) : (
-              <Button onClick={handleNext} disabled={!canProceed} className="flex items-center gap-2 h-12 px-6 transition-colors">
+              <button
+                onClick={handleNext}
+                disabled={!canProceed}
+                className={`px-6 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 ${
+                  !canProceed
+                    ? "bg-[#FDF8F3] text-slate-400 border-[#E5E7EB] cursor-not-allowed"
+                    : "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7] hover:border-[#5589a7]"
+                }`}
+              >
                 Далее
-                <ArrowRightIcon className="w-5 h-5" />
-              </Button>
+              </button>
             )}
           </div>
 
           {/* Help Text */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-slate-600">
-              {!canProceed && "Выберите один из вариантов ответа для продолжения"}
+            <p className="text-xs text-slate-600">
+              {!canProceed && "Выберите один из вариантов ответа"}
             </p>
           </div>
         </div>

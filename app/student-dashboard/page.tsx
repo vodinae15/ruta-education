@@ -11,7 +11,6 @@ import { BookOpenIcon, PlayIcon, UserIcon, GraduationCapIcon, MessageCircleIcon,
 import { StudentNotesManager } from "@/components/ui/student-notes-manager"
 import { createClient } from "@/lib/supabase/client"
 import { MainNavigation } from "@/components/ui/main-navigation"
-import { PageHeader } from "@/components/ui/page-header"
 
 interface Student {
   id: string
@@ -258,12 +257,15 @@ export default function StudentDashboardPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white border-2 rounded-lg ">
+        <Card className="w-full max-w-md bg-white border border-[#E5E7EB]">
           <CardContent className="text-center py-8">
-            <p className="text-red-600 mb-4">{error}</p>
-            <Button onClick={() => router.push("/auth")} className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white">
+            <p className="text-slate-900 mb-4">{error}</p>
+            <button
+              onClick={() => router.push("/auth")}
+              className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+            >
               Вернуться к входу
-            </Button>
+            </button>
           </CardContent>
         </Card>
       </div>
@@ -273,45 +275,41 @@ export default function StudentDashboardPage() {
   return (
     <div className="min-h-screen bg-cream">
       <MainNavigation user={user} />
-      
-      <PageHeader
-        title="Личный кабинет ученика"
-        description="Добро пожаловать в Ruta.Education! Здесь вы можете проходить обучение по доступным курсам"
-        breadcrumbs={[{ label: "Главная", href: "/" }, { label: "Личный кабинет" }]}
-      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Личный кабинет</h1>
+          <p className="text-lg text-slate-600">Добро пожаловать в Ruta.Education</p>
+        </div>
         {/* Student Profile Section */}
-        <div className="mb-8 sm:mb-10 lg:mb-12">
-          <Card className="bg-white border-2 rounded-lg ">
+        <div className="mb-8">
+          <Card className="bg-white border border-[#E5E7EB]">
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center flex-shrink-0">
-                  <UserIcon className="w-8 h-8 text-white" />
+                <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                  <UserIcon className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-xl lg:text-2xl font-bold text-[#5589a7] mb-2">
+                  <h2 className="text-lg text-[#5589a7] font-bold mb-1">
                     {student?.email}
                   </h2>
-                  <p className="text-slate-600 mb-4">Ученик Ruta.Education</p>
-                  
+                  <p className="text-sm text-slate-600 mb-4">Ученик Ruta.Education</p>
+
                   {student?.test_results && student.test_results.test_version === "3.0" ? (
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                      <Button 
-                        onClick={() => router.push("/student-test")}
-                        variant="secondary"
-                        className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 w-fit"
-                      >
-                        Пройти тест повторно
-                      </Button>
-                    </div>
+                    <Button
+                      onClick={() => router.push("/student-test")}
+                      className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                    >
+                      Пройти тест повторно
+                    </Button>
                   ) : (
-                    <div className="p-4 bg-light-blue/30 border border-[#659AB8]/20 rounded-lg">
-                      <p className="text-[#111827] mb-3">
-                        <span className="font-semibold">Пройдите тест, чтобы настроить профиль</span>
+                    <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                      <p className="text-slate-900 mb-3 font-medium">
+                        Пройдите тест, чтобы настроить профиль
                       </p>
-                      <Button 
-                        className="bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
+                      <Button
+                        className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                         onClick={() => router.push("/student-test")}
                       >
                         Пройти тест
@@ -326,23 +324,22 @@ export default function StudentDashboardPage() {
 
         {/* Courses Section */}
         <div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-[#5589a7] mb-6 sm:mb-8">Ваши курсы</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-8">Ваши курсы</h2>
 
           {courses.length === 0 ? (
-            <Card className="bg-white border-2 rounded-lg ">
+            <Card className="bg-white border border-[#E5E7EB]">
               <CardContent className="text-center py-12 sm:py-16">
-                <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-6">
-                  <BookOpenIcon className="w-10 h-10 text-[#5589a7]" />
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BookOpenIcon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-[#5589a7] mb-3">
+                <h3 className="text-lg text-[#5589a7] font-bold mb-2">
                   У вас пока нет доступных курсов
                 </h3>
-                <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                <p className="text-sm text-slate-600 mb-6 max-w-md mx-auto">
                   Получите ссылку на курс от автора, чтобы начать обучение
                 </p>
-                <Button 
-                  variant="secondary" 
-                  className="border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5"
+                <Button
+                  className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                   onClick={() => router.push("/")}
                 >
                   Вернуться на главную
@@ -350,27 +347,27 @@ export default function StudentDashboardPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {courses.map((courseAccess) => (
-                <Card 
-                  key={courseAccess.course_id} 
-                  className="bg-white border-2 hover:border-[#659AB8]/20 transition-colors rounded-lg "
+                <Card
+                  key={courseAccess.course_id}
+                  className="bg-white border border-[#E5E7EB] h-full"
                 >
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-lg font-bold text-[#5589a7] mb-2 leading-tight">
+                        <CardTitle className="text-lg text-[#5589a7] font-bold mb-2 leading-tight">
                           {courseAccess.courses.title || "Без названия"}
                         </CardTitle>
-                        <CardDescription className="text-slate-600 leading-relaxed">
+                        <CardDescription className="text-sm text-slate-600 leading-relaxed">
                           {courseAccess.courses.description || "Описание курса не добавлено"}
                         </CardDescription>
                       </div>
                       <Badge
                         className={
                           courseAccess.courses.is_published
-                            ? "bg-green-100 text-green-800 border-green-200"
-                            : "bg-yellow-100 text-yellow-800 border-yellow-200"
+                            ? "bg-[#FDF8F3] text-slate-900 border border-[#E5E7EB]"
+                            : "bg-[#FDF8F3] text-slate-900 border border-[#E5E7EB]"
                         }
                       >
                         {courseAccess.courses.is_published ? "Доступен" : "В разработке"}
@@ -391,21 +388,21 @@ export default function StudentDashboardPage() {
 
                     {/* Статус доступа */}
                     {courseAccessInfo[courseAccess.course_id] && (
-                      <div className="mb-4 p-3 rounded-lg border-2">
+                      <div className="mb-4 p-3 rounded-lg bg-[#FDF8F3] border border-[#E5E7EB]">
                         {courseAccessInfo[courseAccess.course_id].accessStatus === "granted" ? (
-                          <div className="flex items-center gap-2 text-green-700">
+                          <div className="flex items-center gap-2 text-[#5589a7]">
                             <PlayIcon className="w-4 h-4" />
                             <span className="text-sm font-medium">Доступ открыт</span>
                           </div>
                         ) : courseAccessInfo[courseAccess.course_id].accessStatus === "pending" ? (
-                          <div className="flex items-center gap-2 text-blue-700">
+                          <div className="flex items-center gap-2 text-[#5589a7]">
                             <ClockIcon className="w-4 h-4" />
                             <span className="text-sm font-medium">
                               {courseAccessInfo[courseAccess.course_id].accessMessage}
                             </span>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-2 text-red-700">
+                          <div className="flex items-center gap-2 text-slate-600">
                             <LockIcon className="w-4 h-4" />
                             <span className="text-sm font-medium">Нет доступа</span>
                           </div>
@@ -418,48 +415,41 @@ export default function StudentDashboardPage() {
                         <>
                           {courseAccessInfo[courseAccess.course_id]?.hasAccess ? (
                             <>
-                              <Button
-                                className="w-full bg-[#659AB8] hover:bg-[#659AB8]/90 text-white flex items-center gap-2 h-12"
+                              <button
+                                className="w-full bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                                 onClick={() => handleStartLearning(courseAccess.course_id)}
                               >
-                                <PlayIcon className="w-4 h-4" />
                                 Начать обучение
-                              </Button>
-                              <Button
-                                variant="secondary"
-                                className="w-full border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 flex items-center gap-2 h-10"
+                              </button>
+                              <button
+                                className="w-full bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                                 onClick={() => router.push(`/course/${courseAccess.course_id}/pricing`)}
                               >
-                                <ArrowRightIcon className="w-4 h-4" />
                                 Выбрать тариф
-                              </Button>
-                              <Button
-                                variant="secondary"
-                                className="w-full border-[#659AB8] text-[#5589a7] hover:bg-[#659AB8]/5 flex items-center gap-2 h-10"
+                              </button>
+                              <button
+                                className="w-full bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                                 onClick={() => handleOpenNotes(courseAccess.course_id)}
                               >
-                                <MessageCircleIcon className="w-4 h-4" />
                                 Заметки
-                              </Button>
+                              </button>
                             </>
                           ) : (
-                            <Button
-                              className="w-full bg-[#659AB8] hover:bg-[#659AB8]/90 text-white flex items-center gap-2 h-12"
+                            <button
+                              className="w-full bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                               onClick={() => router.push(`/course/${courseAccess.course_id}/pricing`)}
                             >
-                              <ArrowRightIcon className="w-4 h-4" />
                               Выбрать тариф
-                            </Button>
+                            </button>
                           )}
                         </>
                       ) : (
-                        <Button 
-                          variant="secondary" 
-                          disabled 
-                          className="w-full h-12 border-slate-200 text-slate-400"
+                        <button
+                          disabled
+                          className="w-full bg-[#FDF8F3] text-slate-600 px-6 py-3 border border-[#E5E7EB] rounded-lg font-semibold cursor-not-allowed"
                         >
                           Курс в разработке
-                        </Button>
+                        </button>
                       )}
                     </div>
                   </CardContent>
