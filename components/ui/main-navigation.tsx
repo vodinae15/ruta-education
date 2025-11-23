@@ -2,8 +2,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Logo } from "./logo"
-import { Button } from "./button"
-import { LogOutIcon, UserIcon } from "./icons"
+import { UserIcon } from "./icons"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { NotificationsBell } from "./notifications-bell"
@@ -78,15 +77,12 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
                   <UserIcon className="w-4 h-4 text-slate-900" />
                   <span className="text-sm text-slate-900">{user.email?.split("@")[0] || "Автор"}</span>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
                   onClick={handleSignOut}
-                  className="text-slate-900 hover:text-[#5589a7] transition-colors duration-200"
+                  className="bg-white text-[#659AB8] px-4 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                 >
-                  <LogOutIcon className="w-4 h-4 mr-2" />
                   Выйти
-                </Button>
+                </button>
               </div>
             ) : (
               <Link

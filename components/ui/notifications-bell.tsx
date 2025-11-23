@@ -52,20 +52,18 @@ export function NotificationsBell({ authorId }: NotificationsBellProps) {
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative h-10 w-10 rounded-full hover:bg-light-blue"
+        <button
+          className="relative h-10 w-10 rounded-full flex items-center justify-center text-slate-900 hover:text-[#5589a7] transition-colors duration-200"
         >
-          <BellIcon className="h-5 w-5 text-[#5589a7]" />
+          <BellIcon className="h-5 w-5" />
           {unreadCount > 0 && (
-            <Badge
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500 text-white text-xs rounded-full"
+            <span
+              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-[#659AB8] text-white text-xs rounded-full"
             >
               {unreadCount > 99 ? "99+" : unreadCount}
-            </Badge>
+            </span>
           )}
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent className="w-96 p-0" align="end">
         <NotificationsList
