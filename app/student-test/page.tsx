@@ -216,7 +216,7 @@ export default function StudentTestPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-[60vh]">
           <div className="w-full max-w-md">
-            <Card className="border border-[#E5E7EB]">
+            <Card className="bg-white border border-[#E5E7EB]">
               <CardContent className="p-6">
                 <div className="text-center">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
@@ -274,13 +274,13 @@ export default function StudentTestPage() {
           </div>
 
           {/* Question Card */}
-          <Card className="mb-8 border">
+          <Card className="mb-8 bg-white border border-[#E5E7EB]">
             <CardHeader className="pb-6">
               <CardTitle className="text-xl lg:text-2xl text-[#5589a7] font-bold leading-relaxed min-h-[3.5rem]">
                 {studentTestQuestions[currentQuestion].question}
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-0 min-h-[180px]">
+            <CardContent className="pt-0">
               <RadioGroup
                 value={answers[currentQuestionId] || ""}
                 onValueChange={handleAnswerChange}
