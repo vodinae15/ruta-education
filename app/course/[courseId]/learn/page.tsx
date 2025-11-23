@@ -510,24 +510,24 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F3FAFE]">
+      <div className="min-h-screen bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="space-y-6">
-            <Skeleton className="h-12 w-64" />
+            <Skeleton className="h-12 w-64 bg-gray-200" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-4">
-                <Skeleton className="h-8 w-full" />
-                <Card className="p-6">
-                  <Skeleton className="h-6 w-48 mb-4" />
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-8 w-full bg-gray-200" />
+                <Card className="p-6 bg-white border border-[#E5E7EB]">
+                  <Skeleton className="h-6 w-48 mb-4 bg-gray-200" />
+                  <Skeleton className="h-4 w-full mb-2 bg-gray-200" />
+                  <Skeleton className="h-4 w-full mb-2 bg-gray-200" />
+                  <Skeleton className="h-4 w-3/4 bg-gray-200" />
                 </Card>
               </div>
               <div className="space-y-4">
-                <Card className="p-6">
-                  <Skeleton className="h-6 w-32 mb-4" />
-                  <Skeleton className="h-20 w-full" />
+                <Card className="p-6 bg-white border border-[#E5E7EB]">
+                  <Skeleton className="h-6 w-32 mb-4 bg-gray-200" />
+                  <Skeleton className="h-20 w-full bg-gray-200" />
                 </Card>
               </div>
             </div>

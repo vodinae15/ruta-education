@@ -188,17 +188,17 @@ export default function CoursePricingPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen bg-cream">
+      <div className="min-h-screen bg-white">
         <MainNavigation user={user} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="space-y-6">
-            <Skeleton className="h-12 w-64" />
+            <Skeleton className="h-12 w-64 bg-gray-200" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="p-6">
-                  <Skeleton className="h-6 w-32 mb-4" />
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-3/4" />
+                <Card key={i} className="p-6 bg-white border border-[#E5E7EB]">
+                  <Skeleton className="h-6 w-32 mb-4 bg-gray-200" />
+                  <Skeleton className="h-4 w-full mb-2 bg-gray-200" />
+                  <Skeleton className="h-4 w-3/4 bg-gray-200" />
                 </Card>
               ))}
             </div>
@@ -213,7 +213,7 @@ export default function CoursePricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-white">
       <MainNavigation user={user} />
 
       <PageHeader
@@ -239,20 +239,20 @@ export default function CoursePricingPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         {/* Информация о курсе */}
-        <Card className="mb-8 bg-white border-2 border-[#CDE6F9]">
+        <Card className="mb-8 bg-white border border-[#E5E7EB]">
           <CardHeader>
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center flex-shrink-0">
-                <BookOpenIcon className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-[#E8F4FA] rounded-full flex items-center justify-center flex-shrink-0">
+                <BookOpenIcon className="w-6 h-6 text-[#659AB8]" />
               </div>
               <div className="flex-1">
                 <CardTitle className="text-2xl text-[#1E293B] mb-2">{course.title}</CardTitle>
                 {course.description && (
-                  <CardDescription className="text-base">{course.description}</CardDescription>
+                  <CardDescription className="text-base text-[#64748B]">{course.description}</CardDescription>
                 )}
                 {course.launch_mode === "stream" && course.stream_start_date && (
-                  <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800">
+                  <div className="mt-3 p-3 bg-[#E8F4FA] border border-[#659AB8]/20 rounded-lg">
+                    <p className="text-sm text-[#1E293B]">
                       <span className="font-semibold">Потоковый курс</span> — старт{" "}
                       {new Date(course.stream_start_date).toLocaleDateString("ru-RU", {
                         day: "numeric",
@@ -305,15 +305,15 @@ export default function CoursePricingPage() {
         )}
 
         {/* Дополнительная информация */}
-        <Card className="mt-8 bg-light-blue border-2 border-[#CDE6F9]">
+        <Card className="mt-8 bg-[#FDF8F3] border border-[#E5E7EB]">
           <CardContent className="p-6">
             <h3 className="font-semibold text-[#1E293B] mb-3">О тарифах</h3>
-            <ul className="space-y-2 text-sm text-[#111827]">
-              <li>• <strong>Базовый тариф</strong> — бесплатный доступ к курсу без обратной связи</li>
-              <li>• <strong>С обратной связью</strong> — доступ к курсу с поддержкой автора</li>
-              <li>• <strong>Премиум</strong> — полный доступ с обратной связью и дополнительными материалами</li>
+            <ul className="space-y-2 text-sm text-[#64748B]">
+              <li>• <strong className="text-[#1E293B]">Базовый тариф</strong> — бесплатный доступ к курсу без обратной связи</li>
+              <li>• <strong className="text-[#1E293B]">С обратной связью</strong> — доступ к курсу с поддержкой автора</li>
+              <li>• <strong className="text-[#1E293B]">Премиум</strong> — полный доступ с обратной связью и дополнительными материалами</li>
             </ul>
-            <p className="mt-4 text-xs text-slate-600">
+            <p className="mt-4 text-xs text-[#64748B]">
               Это тестовая оплата. В реальной версии здесь будет подключена платежная система.
             </p>
           </CardContent>
