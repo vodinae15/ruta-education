@@ -11,6 +11,11 @@ import { BookOpenIcon, PlayIcon, UserIcon, GraduationCapIcon, MessageCircleIcon,
 import { StudentNotesManager } from "@/components/ui/student-notes-manager"
 import { createClient } from "@/lib/supabase/client"
 import { MainNavigation } from "@/components/ui/main-navigation"
+import { CheckCircleIcon } from "@/components/ui/icons"
+import {
+  determineStudentType,
+  type StudentTestAnswers,
+} from "@/lib/student-test-logic"
 
 interface Student {
   id: string
@@ -283,41 +288,80 @@ export default function StudentDashboardPage() {
           <p className="text-lg text-slate-600">Добро пожаловать в Ruta.Education</p>
         </div>
         {/* Student Profile Section */}
-        <div className="mb-8">
+        <div className="mb-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left column - Profile info */}
           <Card className="bg-white border border-[#E5E7EB]">
-            <CardContent className="p-6 sm:p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4 mb-4">
                 <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                   <UserIcon className="w-7 h-7 text-white" />
                 </div>
-                <div className="flex-1">
-                  <h2 className="text-lg text-[#5589a7] font-bold mb-1">
+                <div>
+                  <h2 className="text-lg text-[#5589a7] font-bold">
                     {student?.email || user?.email}
                   </h2>
-                  <p className="text-sm text-slate-600 mb-4">Ученик Ruta.Education</p>
-
-                  {student?.test_results && student.test_results.test_version === "3.0" ? (
-                    <button
-                      onClick={() => router.push("/student-test")}
-                      className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
-                    >
-                      Пройти тест повторно
-                    </button>
-                  ) : (
-                    <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
-                      <p className="text-slate-900 mb-3 font-medium">
-                        Пройдите тест, чтобы настроить профиль
-                      </p>
-                      <Button
-                        className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
-                        onClick={() => router.push("/student-test")}
-                      >
-                        Пройти тест
-                      </Button>
-                    </div>
-                  )}
+                  <p className="text-sm text-slate-600">Ученик Ruta.Education</p>
                 </div>
               </div>
+
+              {student?.test_results && student.test_results.test_version === "3.0" ? (
+                <button
+                  onClick={() => router.push("/student-test")}
+                  className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                >
+                  Пройти тест повторно
+                </button>
+              ) : (
+                <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                  <p className="text-slate-900 mb-3 font-medium">
+                    Пройдите тест, чтобы настроить профиль
+                  </p>
+                  <button
+                    className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                    onClick={() => router.push("/student-test")}
+                  >
+                    Пройти тест
+                  </button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Right column - Test results */}
+          <Card className="bg-white border border-[#E5E7EB]">
+            <CardContent className="p-6">
+              {student?.test_results && student.test_results.test_version === "3.0" ? (
+                <div className="text-center">
+                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircleIcon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-lg text-[#5589a7] font-bold mb-4">
+                    Профиль настроен
+                  </h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    {(() => {
+                      try {
+                        const result = determineStudentType(student.test_results.answers as StudentTestAnswers)
+                        return result.generalMessage
+                      } catch {
+                        return "Ваш профиль обучения настроен на основе результатов теста."
+                      }
+                    })()}
+                  </p>
+                </div>
+              ) : (
+                <div className="text-center py-4">
+                  <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <UserIcon className="w-7 h-7 text-slate-400" />
+                  </div>
+                  <h3 className="text-lg text-slate-600 font-bold mb-2">
+                    Профиль не настроен
+                  </h3>
+                  <p className="text-sm text-slate-500">
+                    Пройдите тест для персонализации обучения
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
