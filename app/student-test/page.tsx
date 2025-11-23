@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,7 +19,7 @@ import {
   type StudentTypeResult,
 } from "@/lib/student-test-logic"
 
-export default function StudentTestPage() {
+function StudentTestContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
@@ -355,5 +355,27 @@ export default function StudentTestPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function StudentTestPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-cream">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+          <div className="space-y-6">
+            <Skeleton className="h-12 w-64" />
+            <Card className="p-6 bg-white border border-[#E5E7EB]">
+              <Skeleton className="h-8 w-48 mb-4" />
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-3/4" />
+            </Card>
+          </div>
+        </div>
+      </div>
+    }>
+      <StudentTestContent />
+    </Suspense>
   )
 }
