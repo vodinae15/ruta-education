@@ -54,6 +54,7 @@ import { createBrowserClient } from "@supabase/ssr"
 import { AudioUpload } from "@/components/ui/audio-upload"
 import { createDefaultPricing } from "@/lib/course-pricing"
 import { VideoUpload } from "@/components/ui/video-upload"
+import { DocumentUpload } from "@/components/ui/document-upload"
 import { ImageLibrary } from "@/components/ui/image-library"
 import { ModeSwitchWarning } from "@/components/ui/mode-switch-warning"
 
@@ -2843,11 +2844,14 @@ export default function CourseConstructor() {
                                   }}
                                 />
                               ) : element.type === "file" ? (
-                                <FileUploadElement
-                                  elementId={element.id}
+                                <DocumentUpload
+                                  courseId={currentCourseId || ""}
+                                  lessonId={undefined}
                                   blockId={activeBlockId}
-                                  currentContent={element.content}
-                                  onContentUpdate={updateElementContent}
+                                  elementId={element.id}
+                                  onDocumentUpload={(fileId, fileUrl, fileName) => {
+                                    updateElementContent(activeBlockId, element.id, fileUrl)
+                                  }}
                                 />
                               ) : element.type === "test" ? (
                                 <TestCreator
