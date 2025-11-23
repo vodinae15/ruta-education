@@ -184,7 +184,7 @@ export default function StudentTestPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="space-y-6">
             <Skeleton className="h-12 w-64" />
-            <Card className="p-6">
+            <Card className="p-6 bg-white border border-[#E5E7EB]">
               <Skeleton className="h-8 w-48 mb-4" />
               <Skeleton className="h-4 w-full mb-2" />
               <Skeleton className="h-4 w-full mb-2" />
@@ -214,9 +214,9 @@ export default function StudentTestPage() {
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-          <div className="max-w-md mx-auto">
-            <Card className="border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-[60vh]">
+          <div className="w-full max-w-md">
+            <Card className="border border-[#E5E7EB]">
               <CardContent className="p-6">
                 <div className="text-center">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
@@ -280,7 +280,7 @@ export default function StudentTestPage() {
                 {studentTestQuestions[currentQuestion].question}
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-0 min-h-[280px]">
+            <CardContent className="pt-0 min-h-[180px]">
               <RadioGroup
                 value={answers[currentQuestionId] || ""}
                 onValueChange={handleAnswerChange}

@@ -241,7 +241,7 @@ export default function StudentDashboardPage() {
             <Skeleton className="h-12 w-64" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="p-6">
+                <Card key={i} className="p-6 bg-white border border-[#E5E7EB]">
                   <Skeleton className="h-6 w-32 mb-4" />
                   <Skeleton className="h-4 w-full mb-2" />
                   <Skeleton className="h-4 w-3/4" />
@@ -292,7 +292,7 @@ export default function StudentDashboardPage() {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-lg text-[#5589a7] font-bold mb-1">
-                    {student?.email}
+                    {student?.email || user?.email}
                   </h2>
                   <p className="text-sm text-slate-600 mb-4">Ученик Ruta.Education</p>
 
