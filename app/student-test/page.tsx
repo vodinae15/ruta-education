@@ -213,39 +213,31 @@ export default function StudentTestPage() {
     return (
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
-        <PageHeader
-          title="Профиль настроен"
-          description="Тест завершён"
-          breadcrumbs={[
-            { label: "Главная", href: "/" },
-            { label: "Личный кабинет", href: "/student-dashboard" },
-            { label: "Тест ученика" }
-          ]}
-        />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-md mx-auto">
             <Card className="border">
-              <CardContent className="p-8 sm:p-10">
+              <CardContent className="p-6">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircleIcon className="w-8 h-8 text-white" />
+                  <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircleIcon className="w-7 h-7 text-white" />
                   </div>
-                  <h2 className="text-xl lg:text-2xl text-[#5589a7] font-bold mb-6">
+                  <h2 className="text-lg text-[#5589a7] font-bold mb-4">
                     Профиль настроен
                   </h2>
-                  <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                  <p className="text-sm text-slate-600 mb-6 leading-relaxed">
                     {studentTypeResult.generalMessage}
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="flex flex-col gap-3">
                     <button
                       onClick={() => router.push("/student-dashboard")}
-                      className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                      className="w-full bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                     >
                       В личный кабинет
                     </button>
                     <button
                       onClick={handleRetakeTest}
-                      className="bg-white text-[#659AB8] px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
+                      className="w-full bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                     >
                       Пройти тест повторно
                     </button>
@@ -263,17 +255,12 @@ export default function StudentTestPage() {
     <div className="min-h-screen bg-cream">
       <MainNavigation user={user} />
 
-      <PageHeader
-        title="Определим ваш стиль обучения"
-        description="Ответьте на 4 вопроса, чтобы мы адаптировали курсы под ваш стиль обучения"
-        breadcrumbs={[
-          { label: "Главная", href: "/" },
-          { label: "Личный кабинет", href: "/student-dashboard" },
-          { label: "Тест ученика" }
-        ]}
-      />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Определим ваш стиль обучения</h1>
+          <p className="text-lg text-slate-600">Ответьте на 4 вопроса</p>
+        </div>
+
         <div className="max-w-2xl mx-auto">
           {/* Progress Bar */}
           <div className="mb-8">

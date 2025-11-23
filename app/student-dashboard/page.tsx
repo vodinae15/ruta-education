@@ -297,12 +297,12 @@ export default function StudentDashboardPage() {
                   <p className="text-sm text-slate-600 mb-4">Ученик Ruta.Education</p>
 
                   {student?.test_results && student.test_results.test_version === "3.0" ? (
-                    <Button
+                    <button
                       onClick={() => router.push("/student-test")}
                       className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white"
                     >
                       Пройти тест повторно
-                    </Button>
+                    </button>
                   ) : (
                     <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
                       <p className="text-slate-900 mb-3 font-medium">
