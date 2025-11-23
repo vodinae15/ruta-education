@@ -45,6 +45,13 @@ interface Lesson {
     title: string
     content: string
     type: string
+    elements?: Array<{
+      id: string
+      type: string
+      content: string
+      required?: boolean
+      completed?: boolean
+    }>
   }>
   materials?: string[]
   tests?: string[]
@@ -461,7 +468,8 @@ export default function CourseAdaptationPage() {
           blocks: (selectedLesson.blocks || []).map((block: any) => ({
             title: block.title || block.name || '',
             content: block.content || block.text || '',
-            type: block.type || 'text'
+            type: block.type || 'text',
+            elements: block.elements || [] // Передаем элементы (video, audio, image, file)
           })),
           materials: selectedLesson.materials || [],
           tests: selectedLesson.tests || []
@@ -631,7 +639,8 @@ export default function CourseAdaptationPage() {
           blocks: (selectedLesson.blocks || []).map((block: any) => ({
             title: block.title || block.name || '',
             content: block.content || block.text || '',
-            type: block.type || 'text'
+            type: block.type || 'text',
+            elements: block.elements || [] // Передаем элементы (video, audio, image, file)
           })),
           materials: selectedLesson.materials || [],
           tests: selectedLesson.tests || []

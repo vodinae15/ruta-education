@@ -29,6 +29,13 @@ interface LessonContent {
     title: string
     content: string
     type: string
+    elements?: Array<{
+      id: string
+      type: string
+      content: string
+      required?: boolean
+      completed?: boolean
+    }>
   }>
   materials?: string[]
   tests?: string[]
@@ -665,7 +672,18 @@ const getAdaptationPrompt = (studentType: string, lessonContent: LessonContent):
 Название: ${lessonContent.title}
 Описание: ${lessonContent.description || 'Не указано'}
 Блоки урока:
-${lessonContent.blocks.map((block, index) => `${index + 1}. ${block.title}: ${block.content}`).join('\n')}
+${lessonContent.blocks.map((block, index) => {
+  let blockInfo = `${index + 1}. ${block.title}: ${block.content}`
+  if (block.elements && block.elements.length > 0) {
+    const mediaElements = block.elements.filter(el => ['video', 'audio', 'image', 'file'].includes(el.type))
+    if (mediaElements.length > 0) {
+      blockInfo += '\n   Медиа-элементы (НЕ ИЗМЕНЯТЬ): ' + mediaElements.map(el => `${el.type} (${el.content})`).join(', ')
+    }
+  }
+  return blockInfo
+}).join('\n')}
+
+⚠️ ВАЖНО: Некоторые блоки содержат медиа-элементы (video, audio, image, file). Эти элементы НЕ НУЖНО адаптировать или изменять - они автоматически добавятся в content.elements во всех адаптациях.
 
 ЗАДАЧА: Отформатировать и структурировать этот контент БЕЗ адаптации, создав ОБЯЗАТЕЛЬНО ВСЕ 5 БЛОКОВ с трехслойной структурой.
 
@@ -704,7 +722,18 @@ ${lessonContent.blocks.map((block, index) => `${index + 1}. ${block.title}: ${bl
 Название: ${lessonContent.title}
 Описание: ${lessonContent.description || 'Не указано'}
 Блоки урока:
-${lessonContent.blocks.map((block, index) => `${index + 1}. ${block.title}: ${block.content}`).join('\n')}
+${lessonContent.blocks.map((block, index) => {
+  let blockInfo = `${index + 1}. ${block.title}: ${block.content}`
+  if (block.elements && block.elements.length > 0) {
+    const mediaElements = block.elements.filter(el => ['video', 'audio', 'image', 'file'].includes(el.type))
+    if (mediaElements.length > 0) {
+      blockInfo += '\n   Медиа-элементы (НЕ ИЗМЕНЯТЬ): ' + mediaElements.map(el => `${el.type} (${el.content})`).join(', ')
+    }
+  }
+  return blockInfo
+}).join('\n')}
+
+⚠️ ВАЖНО: Некоторые блоки содержат медиа-элементы (video, audio, image, file). Эти элементы НЕ НУЖНО адаптировать или изменять - они автоматически добавятся в content.elements во всех адаптациях.
 
 ЗАДАЧА: ${studentType === 'original' ? 'Отформатировать и структурировать этот контент БЕЗ адаптации, создав ОБЯЗАТЕЛЬНО ВСЕ 5 БЛОКОВ с трехслойной структурой.' : `Адаптировать этот контент под тип восприятия "${normalizedType}", создав ОБЯЗАТЕЛЬНО ВСЕ 5 БЛОКОВ с трехслойной структурой.`}
 
@@ -2440,7 +2469,33 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ [AI Adaptation] Parsed adapted content successfully')
     console.log('✅ [AI Adaptation] Parsed content blocks:', Object.keys(adaptedContent).filter(k => k.startsWith('block')))
-    
+
+    // Копируем медиа-элементы из оригинальных блоков в адаптированные
+    console.log('🔄 [AI Adaptation] Copying media elements from original blocks...')
+    lessonContent.blocks.forEach((originalBlock, index) => {
+      const blockKey = `block${index + 1}` as keyof typeof adaptedContent
+      if (adaptedContent[blockKey] && originalBlock.elements && originalBlock.elements.length > 0) {
+        const mediaElements = originalBlock.elements.filter(el =>
+          ['video', 'audio', 'image', 'file'].includes(el.type)
+        )
+        if (mediaElements.length > 0) {
+          if (!adaptedContent[blockKey].content.elements) {
+            adaptedContent[blockKey].content.elements = []
+          }
+          // Добавляем медиа-элементы которых еще нет
+          mediaElements.forEach(mediaEl => {
+            const exists = adaptedContent[blockKey].content.elements?.some(
+              (el: any) => el.id === mediaEl.id
+            )
+            if (!exists) {
+              adaptedContent[blockKey].content.elements!.push(mediaEl)
+              console.log(`✅ [AI Adaptation] Added ${mediaEl.type} element to ${blockKey}`)
+            }
+          })
+        }
+      }
+    })
+
     // Проверяем наличие всех блоков перед валидацией
     const foundBlocks = Object.keys(adaptedContent).filter(k => k.startsWith('block')).sort()
     const requiredBlocks = ['block1', 'block2', 'block3', 'block4', 'block5']
