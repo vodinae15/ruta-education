@@ -17,7 +17,15 @@ export function Logo({ className = "", size = "lg" }: LogoProps) {
   const config = sizeConfig[size]
 
   return (
-    <div className={`flex items-center gap-3 ${className}`} style={{ minHeight: config.height }}>
+    <div
+      className={`flex items-center gap-3 ${className}`}
+      style={{
+        minHeight: config.height,
+        minWidth: config.width,
+        height: config.height,
+        width: config.width
+      }}
+    >
       <Image
         src="/images/ruta-logo-compact.png"
         alt="Ruta.education"
