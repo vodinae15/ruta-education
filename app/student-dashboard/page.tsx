@@ -291,7 +291,7 @@ export default function StudentDashboardPage() {
         <div className="mb-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left column - Profile info */}
           <Card className="bg-white border border-[#E5E7EB]">
-            <CardContent className="p-6">
+            <CardContent className="p-6 h-full flex flex-col justify-center">
               <div className="text-center">
                 <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                   <UserIcon className="w-7 h-7 text-white" />
@@ -309,7 +309,7 @@ export default function StudentDashboardPage() {
                     Пройти тест повторно
                   </button>
                 ) : (
-                  <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg text-left">
+                  <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
                     <p className="text-slate-900 mb-3 font-medium">
                       Пройдите тест, чтобы настроить профиль
                     </p>
@@ -327,7 +327,7 @@ export default function StudentDashboardPage() {
 
           {/* Right column - Test results */}
           <Card className="bg-white border border-[#E5E7EB]">
-            <CardContent className="p-6">
+            <CardContent className="p-6 h-full flex flex-col justify-center">
               {student?.test_results && student.test_results.test_version === "3.0" ? (
                 <div className="text-center">
                   <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
@@ -348,7 +348,7 @@ export default function StudentDashboardPage() {
                   </p>
                 </div>
               ) : (
-                <div className="text-center py-4">
+                <div className="text-center">
                   <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <UserIcon className="w-7 h-7 text-slate-400" />
                   </div>
