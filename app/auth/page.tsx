@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Logo } from "@/components/ui/logo"
+import { MainNavigation } from "@/components/ui/main-navigation"
 import { UserIcon, MailIcon, LockIcon } from "@/components/ui/icons"
 import { createClient } from "@/lib/supabase/client"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -313,17 +313,17 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-light-gray flex items-center justify-center py-8">
-      <div className="w-full max-w-md mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-center mb-4">
-            <Logo size="md" />
+    <div className="min-h-screen bg-light-gray">
+      <MainNavigation />
+
+      <div className="flex items-center justify-center py-8">
+        <div className="w-full max-w-md mx-auto px-4">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-bold text-slate-900">
+              Добро пожаловать
+            </h1>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">
-            Добро пожаловать
-          </h1>
-        </div>
 
         {/* User type tabs */}
         <div className="flex justify-center mb-6">
@@ -511,11 +511,12 @@ export default function AuthPage() {
           </div>
         )}
 
-        {/* Footer */}
-        <div className="mt-4 text-center">
-          <p className="text-xs text-slate-600">
-            {userType === "student" ? "Персонализированное обучение" : "Создание курсов и управление обучением"}
-          </p>
+          {/* Footer */}
+          <div className="mt-4 text-center">
+            <p className="text-xs text-slate-600">
+              {userType === "student" ? "Персонализированное обучение" : "Создание курсов и управление обучением"}
+            </p>
+          </div>
         </div>
       </div>
     </div>
