@@ -51,9 +51,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className={`text-sm font-medium transition-colors ${
-                isActive("/") ? "text-[#5589a7]" : "text-slate-600 hover:text-[#5589a7]"
-              }`}
+              className="text-sm font-medium transition-colors duration-200 text-slate-900 hover:text-[#5589a7]"
             >
               Главная
             </Link>
@@ -61,9 +59,7 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
             {user && (
               <Link
                 href="/dashboard"
-                className={`text-sm font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-[#5589a7]" : "text-slate-600 hover:text-[#5589a7]"
-                }`}
+                className="text-sm font-medium transition-colors duration-200 text-slate-900 hover:text-[#5589a7]"
               >
                 Личный кабинет
               </Link>
@@ -79,14 +75,14 @@ export function MainNavigation({ user, className = "" }: MainNavigationProps) {
                   <NotificationsBell authorId={user.id} />
                 )}
                 <div className="flex items-center space-x-2">
-                  <UserIcon className="w-4 h-4 text-slate-600" />
-                  <span className="text-sm text-slate-600">{user.email?.split("@")[0] || "Автор"}</span>
+                  <UserIcon className="w-4 h-4 text-slate-900" />
+                  <span className="text-sm text-slate-900">{user.email?.split("@")[0] || "Автор"}</span>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleSignOut}
-                  className="text-slate-600 hover:text-[#5589a7] transition-colors"
+                  className="text-slate-900 hover:text-[#5589a7] transition-colors duration-200"
                 >
                   <LogOutIcon className="w-4 h-4 mr-2" />
                   Выйти
