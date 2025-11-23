@@ -239,31 +239,27 @@ export default function CoursePricingPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         {/* Информация о курсе */}
-        <Card className="mb-8 bg-white border border-[#E5E7EB]">
-          <CardHeader>
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="w-12 h-12 bg-[#FDF8F3] rounded-full flex items-center justify-center">
-                <BookOpenIcon className="w-6 h-6 text-[#659AB8]" />
-              </div>
-              <div>
-                <CardTitle className="text-xl text-[#1E293B] mb-2">{course.title}</CardTitle>
-                {course.description && (
-                  <CardDescription className="text-sm text-[#64748B]">{course.description}</CardDescription>
-                )}
-                {course.launch_mode === "stream" && course.stream_start_date && (
-                  <div className="mt-3 p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg">
-                    <p className="text-sm text-[#1E293B]">
-                      <span className="font-semibold">Потоковый курс</span> — старт{" "}
-                      {new Date(course.stream_start_date).toLocaleDateString("ru-RU", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
-                )}
-              </div>
+        <Card className="text-center border mb-8">
+          <CardHeader className="pb-4">
+            <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <BookOpenIcon className="w-7 h-7 text-white" />
             </div>
+            <CardTitle className="text-lg text-[#5589a7]">{course.title}</CardTitle>
+            {course.description && (
+              <p className="text-sm text-slate-600 mt-2">{course.description}</p>
+            )}
+            {course.launch_mode === "stream" && course.stream_start_date && (
+              <div className="mt-3 p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg inline-block">
+                <p className="text-sm text-slate-600">
+                  <span className="font-semibold text-slate-900">Потоковый курс</span> — старт{" "}
+                  {new Date(course.stream_start_date).toLocaleDateString("ru-RU", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
+            )}
           </CardHeader>
         </Card>
 

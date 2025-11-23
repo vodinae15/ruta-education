@@ -1,8 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircleIcon, MessageCircleIcon, StarIcon } from "@/components/ui/icons"
 
 interface PricingCardProps {
@@ -29,91 +27,98 @@ export function PricingCard({ pricing, isPurchased, isFreeAccess, onPurchase, is
   // Определяем иконку для тарифа
   const getIcon = () => {
     if (isFirstTier) {
-      return <CheckCircleIcon className="w-5 h-5" />
+      return <CheckCircleIcon className="w-7 h-7 text-white" />
     } else if (pricing.order_index === 1) {
-      return <MessageCircleIcon className="w-5 h-5" />
+      return <MessageCircleIcon className="w-7 h-7 text-white" />
     } else {
-      return <StarIcon className="w-5 h-5" />
+      return <StarIcon className="w-7 h-7 text-white" />
     }
   }
 
   return (
-    <Card className="bg-white border border-[#E5E7EB] hover:border-[#659AB8] hover:shadow-md transition-all duration-200">
-      <CardHeader className="text-center pb-4">
-        <div className="flex items-center justify-center mb-4">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[#FDF8F3] text-[#659AB8]">
-            {getIcon()}
-          </div>
+    <Card className="text-center border h-full flex flex-col">
+      <CardHeader className="pb-4">
+        {/* Иконка */}
+        <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+          {getIcon()}
         </div>
-        <CardTitle className="text-lg font-semibold text-[#1E293B]">{pricing.name}</CardTitle>
-        <div className="mt-3">
+
+        {/* Название тарифа */}
+        <CardTitle className="text-lg text-[#5589a7]">{pricing.name}</CardTitle>
+
+        {/* Цена - фиксированная высота для выравнивания */}
+        <div className="h-12 flex items-center justify-center mt-2">
           {isFree ? (
-            <div className="text-2xl font-bold text-[#659AB8]">Бесплатно</div>
+            <div className="text-3xl font-bold text-[#5589a7]">Бесплатно</div>
           ) : (
             <div>
-              <span className="text-2xl font-bold text-[#1E293B]">{pricing.price}</span>
-              <span className="text-base text-[#64748B] ml-1">₽</span>
+              <span className="text-3xl font-bold text-[#5589a7]">{pricing.price}</span>
+              <span className="text-sm text-slate-600 ml-1">₽</span>
             </div>
           )}
         </div>
-        {pricing.has_feedback && (
-          <Badge className="mt-2 bg-[#FDF8F3] text-[#1E293B] border border-[#E5E7EB]">
-            С обратной связью
-          </Badge>
-        )}
+
+        {/* Плашка обратной связи - фиксированная высота */}
+        <div className="h-8 flex items-center justify-center">
+          {pricing.has_feedback && (
+            <span className="bg-[#FDF8F3] text-sm text-slate-600 px-3 py-1 rounded border border-[#E5E7EB]">
+              С обратной связью
+            </span>
+          )}
+        </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <CardDescription className="text-center text-sm text-[#64748B] min-h-[48px]">
-          {pricing.description}
-        </CardDescription>
 
-        {pricing.bonus_content && (
-          <div className="p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg">
-            <p className="text-xs text-[#1E293B] font-medium">Бонус:</p>
-            <p className="text-xs text-[#64748B]">{pricing.bonus_content}</p>
-          </div>
-        )}
+      <CardContent className="text-sm text-slate-600 text-center flex-1 flex flex-col">
+        {/* Описание - фиксированная высота */}
+        <div className="h-16 mb-4">
+          <p>{pricing.description}</p>
+        </div>
 
-        <div className="pt-2">
+        {/* Бонусный контент - фиксированная высота */}
+        <div className="h-20 mb-4">
+          {pricing.bonus_content && (
+            <div className="p-3 bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg text-left">
+              <p className="text-xs font-medium text-slate-900">Бонус:</p>
+              <p className="text-xs text-slate-600">{pricing.bonus_content}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Кнопка - всегда внизу */}
+        <div className="mt-auto">
           {isFirstTier ? (
-            // Бесплатный тариф
             isFreeAccess ? (
-              <Button
-                variant="secondary"
-                className="w-full bg-[#FDF8F3] text-[#659AB8] border border-[#E5E7EB] hover:bg-[#FDF8F3]"
+              <button
+                className="w-full bg-[#FDF8F3] text-slate-600 px-6 py-3 border border-[#E5E7EB] rounded-lg text-sm font-semibold"
                 disabled
               >
-                <CheckCircleIcon className="w-4 h-4 mr-2" />
                 У вас уже есть доступ
-              </Button>
+              </button>
             ) : (
-              <Button
+              <button
                 onClick={() => onPurchase(pricing.id)}
                 disabled={isPurchasing}
-                className="w-full bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                className="w-full bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50"
               >
                 {isPurchasing ? "Обработка..." : "Получить бесплатно"}
-              </Button>
+              </button>
             )
           ) : (
-            // Платные тарифы
             isPurchased ? (
-              <Button
-                variant="secondary"
-                className="w-full bg-[#FDF8F3] text-[#659AB8] border border-[#E5E7EB] hover:bg-[#FDF8F3]"
+              <button
+                className="w-full bg-[#FDF8F3] text-slate-600 px-6 py-3 border border-[#E5E7EB] rounded-lg text-sm font-semibold"
                 disabled
               >
-                <CheckCircleIcon className="w-4 h-4 mr-2" />
                 Куплено
-              </Button>
+              </button>
             ) : (
-              <Button
+              <button
                 onClick={() => onPurchase(pricing.id)}
                 disabled={isPurchasing}
-                className="w-full bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                className="w-full bg-[#659AB8] text-white px-6 py-3 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50"
               >
                 {isPurchasing ? "Обработка..." : "Купить"}
-              </Button>
+              </button>
             )
           )}
         </div>
