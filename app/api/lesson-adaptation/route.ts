@@ -369,6 +369,33 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ [Lesson Adaptation] Adaptation published successfully')
 
+    // Проверяем, опубликованы ли все 4 адаптации
+    const { data: allAdaptations, error: adaptationsError } = await supabase
+      .from('lesson_adaptations')
+      .select('adaptation_type, status')
+      .eq('lesson_id', lessonId)
+      .eq('status', 'published')
+
+    if (!adaptationsError && allAdaptations) {
+      const publishedTypes = allAdaptations.map(a => a.adaptation_type)
+      const requiredTypes = ['visual', 'auditory', 'kinesthetic', 'original']
+      const allPublished = requiredTypes.every(type => publishedTypes.includes(type))
+
+      if (allPublished) {
+        // Все 4 адаптации опубликованы - публикуем урок
+        const { error: lessonUpdateError } = await supabase
+          .from('course_lessons')
+          .update({ is_published: true })
+          .eq('id', lessonId)
+
+        if (!lessonUpdateError) {
+          console.log('✅ [Lesson Adaptation] Lesson auto-published - all 4 adaptations are published')
+        } else {
+          console.error('❌ [Lesson Adaptation] Error auto-publishing lesson:', lessonUpdateError)
+        }
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Адаптация успешно опубликована'

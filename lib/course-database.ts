@@ -25,6 +25,7 @@ export interface LessonData {
   order_index: number
   blocks: any[]
   completed: boolean
+  is_published: boolean
   created_at: string
   updated_at: string
 }
@@ -187,6 +188,7 @@ export class CourseDatabase {
       blocks?: any[]
       completed?: boolean
       order_index?: number
+      is_published?: boolean
     },
   ): Promise<boolean> {
     try {
@@ -292,6 +294,7 @@ export class CourseDatabase {
             order_index: lesson.order,
             blocks: lesson.blocks,
             completed: lesson.completed,
+            is_published: false, // По умолчанию черновик
           })
 
           if (error) {

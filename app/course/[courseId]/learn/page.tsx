@@ -373,6 +373,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
             )
           `)
           .eq("course_id", params.courseId)
+          .eq("is_published", true) // Студенты видят только опубликованные уроки
           .order("order_index")
 
         if (!lessonsError && lessonsData) {
