@@ -12,6 +12,7 @@ import { StudentNotesManager } from "@/components/ui/student-notes-manager"
 import { createClient } from "@/lib/supabase/client"
 import { MainNavigation } from "@/components/ui/main-navigation"
 import { CheckCircleIcon } from "@/components/ui/icons"
+import { useAuth } from "@/lib/auth"
 import {
   determineStudentType,
   type StudentTestAnswers,
@@ -58,56 +59,46 @@ export default function StudentDashboardPage() {
   const [courses, setCourses] = useState<CourseAccess[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isClient, setIsClient] = useState(false)
-  const [user, setUser] = useState<any>(null)
   const [selectedCourseForNotes, setSelectedCourseForNotes] = useState<string | null>(null)
   const [notesOpen, setNotesOpen] = useState(false)
   const [courseAccessInfo, setCourseAccessInfo] = useState<Record<string, CourseAccessInfo>>({})
   const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
 
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    // Ждем пока useAuth загрузит пользователя
+    if (authLoading) return
 
-  useEffect(() => {
-    if (!isClient) return
+    // Если нет пользователя, перенаправляем на авторизацию
+    if (!user) {
+      router.push("/auth")
+      return
+    }
+
+    // Проверяем, что это студент (не преподаватель)
+    if (user.user_metadata?.user_type === "teacher") {
+      router.push("/dashboard")
+      return
+    }
 
     const loadStudentData = async () => {
       try {
         const supabase = createClient()
 
-        // Получаем текущего пользователя из Supabase Auth
-        const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser()
-
-        if (authError || !currentUser) {
-          router.push("/auth")
-          return
-        }
-
-        setUser(currentUser)
-
-        // Проверяем, что это студент (не преподаватель)
-        // Если user_type не установлен, считаем студентом по умолчанию
-        if (currentUser.user_metadata?.user_type === "teacher") {
-          // Если это преподаватель, перенаправляем на его дашборд
-          router.push("/dashboard")
-          return
-        }
-
         // Ищем или создаем запись студента
         let { data: studentData, error: studentError } = await supabase
           .from("students")
           .select("*")
-          .eq("email", currentUser.email)
+          .eq("email", user.email)
           .maybeSingle()
 
         if (studentError) {
           console.error("Error loading student:", studentError)
           // Если не можем загрузить, создаем временную структуру
           studentData = {
-            id: currentUser.id,
-            email: currentUser.email!,
-            user_id: currentUser.id,
+            id: user.id,
+            email: user.email!,
+            user_id: user.id,
             student_type: null,
             test_results: null,
             created_at: new Date().toISOString(),
@@ -117,9 +108,9 @@ export default function StudentDashboardPage() {
           // Если студент не найден, создаем запись
           const { data: newStudent, error: createError } = await supabase
             .from("students")
-            .insert({ 
-              email: currentUser.email!,
-              user_id: currentUser.id 
+            .insert({
+              email: user.email!,
+              user_id: user.id
             })
             .select()
             .single()
@@ -128,9 +119,9 @@ export default function StudentDashboardPage() {
             console.error("Error creating student:", createError)
             // Если не можем создать запись, создаем временную структуру
             studentData = {
-              id: currentUser.id,
-              email: currentUser.email!,
-              user_id: currentUser.id,
+              id: user.id,
+              email: user.email!,
+              user_id: user.id,
               student_type: null,
               test_results: null,
               created_at: new Date().toISOString(),
@@ -146,7 +137,7 @@ export default function StudentDashboardPage() {
         // Загружаем курсы студента через API, используя email из базы данных
         try {
           // Нормализуем email: trim и lowercase для консистентности
-          const studentEmail = (studentData.email || currentUser.email || '').trim().toLowerCase()
+          const studentEmail = (studentData.email || user.email || '').trim().toLowerCase()
           console.log("📚 [Dashboard] Загружаем курсы для студента с email:", studentEmail)
           const response = await fetch(`/api/student-courses?email=${encodeURIComponent(studentEmail)}`)
           if (response.ok) {
@@ -219,7 +210,7 @@ export default function StudentDashboardPage() {
     }
 
     loadStudentData()
-  }, [router, isClient])
+  }, [router, user, authLoading])
 
   const handleStartLearning = (courseId: string) => {
     router.push(`/course/${courseId}/learn`)
@@ -237,7 +228,7 @@ export default function StudentDashboardPage() {
   }
 
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
