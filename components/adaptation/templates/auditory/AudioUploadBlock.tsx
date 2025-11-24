@@ -7,26 +7,33 @@ import { Music, Upload, X } from "lucide-react"
 interface AudioUploadBlockProps {
   isEmpty?: boolean
   audioUrl?: string
-  onReplaceWithText?: () => void
+  introText?: string
 }
 
 export function AudioUploadBlock({
   isEmpty = true,
   audioUrl,
-  onReplaceWithText,
+  introText,
 }: AudioUploadBlockProps) {
-  const [showRecommendations, setShowRecommendations] = useState(true)
+  const [showRecommendations, setShowRecommendations] = useState(false)
 
   return (
     <BlockWrapper
       blockNumber={1}
-      title="Обзор темы (Аудио)"
-      intro="Запишите или загрузите аудио-обзор темы для студентов"
+      title="Обзор темы"
+      intro="Аудио-обзор темы для студентов"
       isEmpty={false}
     >
       <div className="space-y-6">
+        {/* Текст от автора */}
+        {introText && (
+          <div className="p-4 bg-white border-l-4 border-[#659AB8] rounded-r-lg">
+            <p className="text-sm text-slate-700 leading-relaxed">{introText}</p>
+          </div>
+        )}
+
         {/* Рекомендации для автора */}
-        {isEmpty && showRecommendations && (
+        {showRecommendations && (
           <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-4">
             <div className="flex items-start gap-3">
               <Music className="w-5 h-5 text-[#659AB8] flex-shrink-0 mt-0.5" />
@@ -72,14 +79,14 @@ export function AudioUploadBlock({
 
         {/* Превью аудио */}
         {audioUrl && (
-          <div className="bg-white border border-[#E5E7EB] rounded-lg p-6">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-[#659AB8] rounded-full flex items-center justify-center">
-                <Music className="w-6 h-6 text-white" />
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-[#659AB8] rounded-full flex items-center justify-center">
+                <Music className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-medium text-slate-900">Аудио-обзор темы</p>
-                <p className="text-sm text-slate-600">Готово к прослушиванию</p>
+                <p className="text-sm font-medium text-slate-900">Аудио-обзор темы</p>
+                <p className="text-xs text-slate-600">Готово к прослушиванию</p>
               </div>
             </div>
             <audio controls className="w-full" src={audioUrl}>
@@ -87,16 +94,6 @@ export function AudioUploadBlock({
             </audio>
           </div>
         )}
-
-        {/* Опция замены на текст */}
-        <div className="flex items-center justify-center gap-4 pt-4 border-t border-[#E5E7EB]">
-          <button
-            onClick={onReplaceWithText}
-            className="text-sm text-[#659AB8] hover:text-[#5589a7] font-medium transition-colors duration-200"
-          >
-            Заменить аудио на текстовый блок
-          </button>
-        </div>
       </div>
     </BlockWrapper>
   )

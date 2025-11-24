@@ -87,26 +87,30 @@ export default function AdaptationPreviewPage() {
     ],
   }
 
+  const sampleIntroText = "В этом уроке мы разберем основы химических реакций. Вы узнаете, что такое реакция, какие типы реакций существуют, и как они применяются в реальной жизни."
+
+  const sampleAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Пример аудио для демонстрации
+
   const adaptationTypes = [
     {
       id: "original" as const,
       name: "Оригинальный",
-      description: "Флип-карточки + структурированный текст",
+      description: "Для тех, кто любит структуру и систематизацию. Четкие определения и логичное изложение.",
     },
     {
       id: "visual" as const,
       name: "Визуальный",
-      description: "Mermaid-схема + таблицы сравнения",
+      description: "Для тех, кто лучше воспринимает информацию через схемы и таблицы. Наглядные связи между понятиями.",
     },
     {
       id: "auditory" as const,
       name: "Аудиальный",
-      description: "Аудио-обзор + аудио-карточки",
+      description: "Для тех, кто предпочитает слушать. Удобно учиться во время прогулки или в дороге.",
     },
     {
       id: "kinesthetic" as const,
       name: "Кинестетический",
-      description: "Цели с чек-листом + практический текст",
+      description: "Для тех, кто учится через действие. Практические задачи и пошаговые инструкции.",
     },
   ]
 
@@ -155,10 +159,10 @@ export default function AdaptationPreviewPage() {
         {/* Структура из 5 блоков */}
         <div className="space-y-6">
           {/* Блок 1 - зависит от типа */}
-          {selectedType === "original" && <FlipCards isEmpty={false} cards={sampleFlipCards} />}
-          {selectedType === "visual" && <MermaidDiagram isEmpty={false} />}
-          {selectedType === "auditory" && <AudioUploadBlock isEmpty={false} />}
-          {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={false} goals={sampleGoals} />}
+          {selectedType === "original" && <FlipCards isEmpty={false} cards={sampleFlipCards} introText={sampleIntroText} />}
+          {selectedType === "visual" && <MermaidDiagram isEmpty={false} introText={sampleIntroText} />}
+          {selectedType === "auditory" && <AudioUploadBlock isEmpty={false} audioUrl={sampleAudioUrl} introText={sampleIntroText} />}
+          {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={false} goals={sampleGoals} introText={sampleIntroText} />}
 
           {/* Блок 2 - зависит от типа */}
           {selectedType === "original" && <StructuredText isEmpty={false} sections={sampleStructuredText.sections} />}

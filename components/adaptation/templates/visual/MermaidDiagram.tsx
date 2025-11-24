@@ -7,6 +7,7 @@ import { BlockWrapper } from "../../blocks/BlockWrapper"
 interface MermaidDiagramProps {
   isEmpty?: boolean
   mermaidCode?: string
+  introText?: string
 }
 
 // Инициализируем Mermaid с нашими цветами
@@ -46,7 +47,7 @@ const defaultMermaidCode = `graph TD
     style H fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827
     style I fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827`
 
-export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramProps) {
+export function MermaidDiagram({ isEmpty = true, mermaidCode, introText }: MermaidDiagramProps) {
   const mermaidRef = useRef<HTMLDivElement>(null)
   const [diagramId] = useState(() => `mermaid-${Math.random().toString(36).substr(2, 9)}`)
 
@@ -79,6 +80,13 @@ export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramPr
       intro="Схема взаимосвязей между концепциями"
       isEmpty={false}
     >
+      {/* Текст от автора */}
+      {introText && (
+        <div className="mb-6 p-4 bg-white border-l-4 border-[#659AB8] rounded-r-lg">
+          <p className="text-sm text-slate-700 leading-relaxed">{introText}</p>
+        </div>
+      )}
+
       <div className="bg-[#F8FAFB] rounded-lg border border-[#E5E7EB] p-4 max-h-64 overflow-auto">
         <div ref={mermaidRef} className="mermaid-diagram flex justify-center items-center min-h-[200px]">
           {/* Mermaid SVG будет вставлен сюда */}

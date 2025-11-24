@@ -13,9 +13,10 @@ interface Goal {
 interface GoalsChecklistProps {
   isEmpty?: boolean
   goals?: Goal[]
+  introText?: string
 }
 
-export function GoalsChecklist({ isEmpty = true, goals }: GoalsChecklistProps) {
+export function GoalsChecklist({ isEmpty = true, goals, introText }: GoalsChecklistProps) {
   const defaultGoals: Goal[] = [
     { id: "1", goal: "Понять механизм химических реакций", completed: false },
     { id: "2", goal: "Научиться определять типы реакций", completed: false },
@@ -47,6 +48,13 @@ export function GoalsChecklist({ isEmpty = true, goals }: GoalsChecklistProps) {
       isEmpty={false}
     >
       <div className="space-y-4">
+        {/* Текст от автора */}
+        {introText && (
+          <div className="p-4 bg-white border-l-4 border-[#659AB8] rounded-r-lg">
+            <p className="text-sm text-slate-700 leading-relaxed">{introText}</p>
+          </div>
+        )}
+
         {/* Прогресс */}
         <div className="bg-[#E8F4FA] rounded-lg p-3">
           <div className="flex items-center justify-between mb-2">
