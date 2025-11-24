@@ -14,6 +14,7 @@ interface AudioCardData {
 interface AudioCardsProps {
   isEmpty?: boolean
   cards?: AudioCardData[]
+  contentText?: string
 }
 
 function AudioCard({
@@ -83,7 +84,7 @@ function AudioCard({
   )
 }
 
-export function AudioCards({ isEmpty = true, cards }: AudioCardsProps) {
+export function AudioCards({ isEmpty = true, cards, contentText }: AudioCardsProps) {
   const defaultCards: AudioCardData[] = Array.from({ length: 6 }, (_, i) => ({
     id: `audio-card-${i}`,
     term: "",
@@ -100,6 +101,13 @@ export function AudioCards({ isEmpty = true, cards }: AudioCardsProps) {
       intro="Аудио-объяснения ключевых терминов и концепций"
       isEmpty={false}
     >
+      {/* Текст от автора */}
+      {contentText && (
+        <div className="mb-6 p-4 bg-white border-l-4 border-[#659AB8] rounded-r-lg">
+          <p className="text-sm text-slate-700 leading-relaxed">{contentText}</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {displayCards.map((card) => (
           <AudioCard

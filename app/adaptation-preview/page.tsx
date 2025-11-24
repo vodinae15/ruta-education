@@ -89,6 +89,8 @@ export default function AdaptationPreviewPage() {
 
   const sampleIntroText = "В этом уроке мы разберем основы химических реакций. Вы узнаете, что такое реакция, какие типы реакций существуют, и как они применяются в реальной жизни."
 
+  const sampleContentText = "Химические реакции делятся на несколько типов в зависимости от того, выделяется или поглощается энергия. Понимание этих различий поможет вам предсказывать поведение веществ."
+
   const sampleAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Пример аудио для демонстрации
 
   const adaptationTypes = [
@@ -166,8 +168,8 @@ export default function AdaptationPreviewPage() {
 
           {/* Блок 2 - зависит от типа */}
           {selectedType === "original" && <StructuredText isEmpty={false} sections={sampleStructuredText.sections} />}
-          {selectedType === "visual" && <ComparisonTable isEmpty={false} rows={sampleComparisonTable.rows} />}
-          {selectedType === "auditory" && <AudioCards isEmpty={false} cards={sampleAudioCards} />}
+          {selectedType === "visual" && <ComparisonTable isEmpty={false} rows={sampleComparisonTable.rows} contentText={sampleContentText} />}
+          {selectedType === "auditory" && <AudioCards isEmpty={false} cards={sampleAudioCards} contentText={sampleContentText} />}
           {selectedType === "kinesthetic" && <PracticalText isEmpty={false} sections={samplePracticalText.sections} />}
 
           {/* Блок 3 - Практика (одинаковый для всех) */}
