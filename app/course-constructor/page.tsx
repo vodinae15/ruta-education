@@ -2829,11 +2829,36 @@ export default function CourseConstructor() {
                                         })()
                                       : undefined
                                   }
-                                  onVideoUpload={(fileId, fileUrl, fileName) => {
+                                  initialFileName={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileName
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialSource={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.source
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  onVideoUpload={(fileId, fileUrl, fileName, source) => {
                                     const videoData = JSON.stringify({
                                       fileId,
                                       fileUrl,
                                       fileName,
+                                      source: source || "file",
                                       uploadedAt: new Date().toISOString(),
                                     })
                                     updateElementContent(activeBlockId, element.id, videoData)
