@@ -370,7 +370,6 @@ export default function CourseConstructor() {
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
   const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null)
   const isInitialLoadRef = useRef(false) // Флаг для предотвращения повторной загрузки
-  const isDataLoadedRef = useRef(false) // Флаг что данные уже загружены (не показывать скелетон)
   const [showTestPrompt, setShowTestPrompt] = useState(false)
   const [draggedElement, setDraggedElement] = useState<string | null>(null)
   const [draggedBlock, setDraggedBlock] = useState<string | null>(null)
@@ -822,7 +821,6 @@ export default function CourseConstructor() {
       setPersonalizedInterface(interfaceSettings)
 
       await loadSavedCourse(profileData)
-      isDataLoadedRef.current = true // Данные загружены, больше не показываем скелетон
     } catch (err) {
       console.error("Error loading author profile:", err)
       // Don't throw the error, just log it and continue
@@ -2263,8 +2261,11 @@ export default function CourseConstructor() {
     setDraggedBlock(null)
   }
 
-  // Показываем скелетон только при ПЕРВОЙ загрузке, не при каждом переключении вкладок
-  if ((authLoading || loading) && !isDataLoadedRef.current) {
+  // Показываем скелетон только если данные ЕЩЕ НЕ загружены
+  // Проверяем реальные данные, а не флаг (который сбрасывается при размонтировании)
+  const hasData = authorProfile !== null || courseLessons.length > 0 || courseTitle.trim() !== ""
+
+  if ((authLoading || loading) && !hasData) {
     return (
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
