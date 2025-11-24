@@ -84,28 +84,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log("🔄 Auth state change:", event, session?.user?.email || "No user")
-      
+
       if (mounted) {
-        setUser(session?.user ?? null)
-        
+        // ВАЖНО: Игнорируем повторные SIGNED_IN события если user уже есть
+        // Это происходит при переключении вкладок браузера
+        if (event === 'SIGNED_IN' && user !== null && session?.user?.id === user.id) {
+          console.log("⏭️ Skipping duplicate SIGNED_IN event (user already set)")
+          return
+        }
+
+        // Обновляем user только если он реально изменился
+        const newUserId = session?.user?.id ?? null
+        const currentUserId = user?.id ?? null
+
+        if (newUserId !== currentUserId) {
+          console.log("🔄 User changed, updating state")
+          setUser(session?.user ?? null)
+        }
+
         // Дополнительная проверка для SIGNED_IN события
         if (event === 'SIGNED_IN' && session?.user) {
           console.log("✅ User signed in successfully:", session.user.email)
           console.log("👤 User metadata:", JSON.stringify(session.user.user_metadata, null, 2))
         }
-        
+
         // Проверка для INITIAL_SESSION
         if (event === 'INITIAL_SESSION') {
           console.log("🔄 Initial session event:", session?.user?.email || "No user")
         }
-        
+
         // Проверка для SIGNED_OUT события
         if (event === 'SIGNED_OUT') {
           console.log("🚪 User signed out")
+          setUser(null)
         }
-        
-        // Всегда устанавливаем loading в false после любого события
-        setLoading(false)
+
+        // Устанавливаем loading в false только если это первая загрузка
+        if (loading) {
+          setLoading(false)
+        }
       }
     })
 
