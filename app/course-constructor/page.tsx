@@ -2895,13 +2895,13 @@ export default function CourseConstructor() {
                               ) : element.type === "image" ? (
                                 <ImageLibrary
                                   onImageSelect={(imageUrl, imageData) => {
-                                    const imageData = JSON.stringify({
+                                    const imageDataString = JSON.stringify({
                                       fileUrl: imageUrl,
                                       fileName: imageData.alt_description || "Unsplash image",
                                       source: "unsplash",
                                       uploadedAt: new Date().toISOString(),
                                     })
-                                    updateElementContent(activeBlockId, element.id, imageData)
+                                    updateElementContent(activeBlockId, element.id, imageDataString)
                                   }}
                                   onCustomUpload={async (file) => {
                                     try {
@@ -2922,14 +2922,14 @@ export default function CourseConstructor() {
                                       }
 
                                       const data = await response.json()
-                                      const imageData = JSON.stringify({
+                                      const imageDataString = JSON.stringify({
                                         fileId: data.file.id,
                                         fileUrl: data.file.url,
                                         fileName: data.file.fileName,
                                         source: "custom",
                                         uploadedAt: new Date().toISOString(),
                                       })
-                                      updateElementContent(activeBlockId, element.id, imageData)
+                                      updateElementContent(activeBlockId, element.id, imageDataString)
                                     } catch (error) {
                                       console.error("Image upload error:", error)
                                       alert("Ошибка при загрузке изображения")
