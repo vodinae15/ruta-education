@@ -1,68 +1,50 @@
 import React from "react"
 import { BlockWrapper } from "../../blocks/BlockWrapper"
 
-interface StructuredTextProps {
-  isEmpty?: boolean
-  content?: string
+interface TextSection {
+  id: string
+  title: string
+  content: string
 }
 
-export function StructuredText({ isEmpty = true, content }: StructuredTextProps) {
+interface StructuredTextProps {
+  isEmpty?: boolean
+  sections?: TextSection[]
+}
+
+export function StructuredText({ isEmpty = true, sections }: StructuredTextProps) {
+  const defaultSections: TextSection[] = [
+    { id: "1", title: "Первый раздел", content: "Абзац с описанием первой концепции..." },
+    { id: "2", title: "Второй раздел", content: "Абзац с описанием второй концепции..." },
+    { id: "3", title: "Третий раздел", content: "Абзац с описанием третьей концепции..." },
+  ]
+
+  const displaySections = sections && sections.length > 0 ? sections : defaultSections
+
   return (
     <BlockWrapper
       blockNumber={2}
       title="Основы темы"
       intro="Структурированное изложение основных концепций"
-      isEmpty={isEmpty}
+      isEmpty={false}
     >
-      {!isEmpty && content ? (
-        <div className="prose max-w-none">
-          <div className="space-y-6 text-slate-600">
-            {content}
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {/* Пример структуры */}
-          <div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm">
-                1
+      <div className="space-y-4">
+        {displaySections.map((section, index) => (
+          <div key={section.id}>
+            <h3 className="text-base font-semibold text-slate-900 mb-2 flex items-center gap-2">
+              <span className="w-5 h-5 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-xs">
+                {index + 1}
               </span>
-              Первый раздел
+              {section.title}
             </h3>
-            <div className="pl-8 space-y-2">
-              <p className="text-slate-400">Абзац с описанием первой концепции...</p>
-              <p className="text-slate-400">Дополнительные детали и примеры...</p>
+            <div className="pl-7">
+              <p className={`text-sm ${isEmpty ? "text-slate-400" : "text-slate-600"}`}>
+                {section.content}
+              </p>
             </div>
           </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm">
-                2
-              </span>
-              Второй раздел
-            </h3>
-            <div className="pl-8 space-y-2">
-              <p className="text-slate-400">Абзац с описанием второй концепции...</p>
-              <p className="text-slate-400">Дополнительные детали и примеры...</p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-[#659AB8] text-white rounded-full flex items-center justify-center text-sm">
-                3
-              </span>
-              Третий раздел
-            </h3>
-            <div className="pl-8 space-y-2">
-              <p className="text-slate-400">Абзац с описанием третьей концепции...</p>
-              <p className="text-slate-400">Дополнительные детали и примеры...</p>
-            </div>
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
     </BlockWrapper>
   )
 }

@@ -63,7 +63,7 @@ export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramPr
       intro="Схема взаимосвязей между концепциями"
       isEmpty={false}
     >
-      <div className="bg-[#F8FAFB] rounded-lg border border-[#E5E7EB] p-6 max-h-96 overflow-auto">
+      <div className="bg-[#F8FAFB] rounded-lg border border-[#E5E7EB] p-4 max-h-64 overflow-auto">
         {isEmpty ? (
           <div
             ref={mermaidRef}

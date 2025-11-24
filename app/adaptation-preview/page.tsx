@@ -18,6 +18,75 @@ type AdaptationType = "original" | "visual" | "auditory" | "kinesthetic"
 export default function AdaptationPreviewPage() {
   const [selectedType, setSelectedType] = useState<AdaptationType>("original")
 
+  // Примеры данных для демонстрации
+  const sampleFlipCards = [
+    { id: "1", front: "Реакция", back: "Химический процесс превращения одних веществ в другие" },
+    { id: "2", front: "Катализатор", back: "Вещество, ускоряющее химическую реакцию" },
+    { id: "3", front: "Продукт", back: "Вещество, образующееся в результате реакции" },
+    { id: "4", front: "Реагент", back: "Исходное вещество, вступающее в реакцию" },
+    { id: "5", front: "Энергия активации", back: "Минимальная энергия для начала реакции" },
+    { id: "6", front: "Скорость реакции", back: "Изменение концентрации веществ за единицу времени" },
+  ]
+
+  const sampleStructuredText = {
+    sections: [
+      {
+        id: "1",
+        title: "Введение в тему",
+        content: "Химические реакции - это основа всех процессов в природе и технике.",
+      },
+      {
+        id: "2",
+        title: "Основные понятия",
+        content: "Каждая реакция характеризуется скоростью, энергией и продуктами.",
+      },
+    ],
+  }
+
+  const sampleComparisonTable = {
+    rows: [
+      {
+        id: "1",
+        concept: "Экзотермическая реакция",
+        definition: "Реакция с выделением тепла",
+        signs: "Нагрев, свет",
+        example: "Горение",
+      },
+      {
+        id: "2",
+        concept: "Эндотермическая реакция",
+        definition: "Реакция с поглощением тепла",
+        signs: "Охлаждение",
+        example: "Фотосинтез",
+      },
+    ],
+  }
+
+  const sampleAudioCards = [
+    { id: "1", term: "Реакция", audioUrl: "", duration: "0:45" },
+    { id: "2", term: "Катализатор", audioUrl: "", duration: "1:20" },
+    { id: "3", term: "Продукт", audioUrl: "", duration: "0:55" },
+    { id: "4", term: "Реагент", audioUrl: "", duration: "1:05" },
+    { id: "5", term: "Энергия активации", audioUrl: "", duration: "1:30" },
+    { id: "6", term: "Скорость реакции", audioUrl: "", duration: "1:10" },
+  ]
+
+  const sampleGoals = [
+    { id: "1", goal: "Понять механизм химических реакций", completed: false },
+    { id: "2", goal: "Научиться определять типы реакций", completed: false },
+    { id: "3", goal: "Применять знания на практике", completed: false },
+  ]
+
+  const samplePracticalText = {
+    sections: [
+      {
+        id: "1",
+        title: "Практическое применение",
+        content: "Попробуйте провести простой эксперимент: смешайте соду и уксус.",
+      },
+    ],
+  }
+
   const adaptationTypes = [
     {
       id: "original" as const,
@@ -84,27 +153,27 @@ export default function AdaptationPreviewPage() {
         </div>
 
         {/* Структура из 5 блоков */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Блок 1 - зависит от типа */}
-          {selectedType === "original" && <FlipCards isEmpty={true} />}
-          {selectedType === "visual" && <MermaidDiagram isEmpty={true} />}
-          {selectedType === "auditory" && <AudioUploadBlock isEmpty={true} />}
-          {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={true} />}
+          {selectedType === "original" && <FlipCards isEmpty={false} cards={sampleFlipCards} />}
+          {selectedType === "visual" && <MermaidDiagram isEmpty={false} />}
+          {selectedType === "auditory" && <AudioUploadBlock isEmpty={false} />}
+          {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={false} goals={sampleGoals} />}
 
           {/* Блок 2 - зависит от типа */}
-          {selectedType === "original" && <StructuredText isEmpty={true} />}
-          {selectedType === "visual" && <ComparisonTable isEmpty={true} />}
-          {selectedType === "auditory" && <AudioCards isEmpty={true} />}
-          {selectedType === "kinesthetic" && <PracticalText isEmpty={true} />}
+          {selectedType === "original" && <StructuredText isEmpty={false} sections={sampleStructuredText.sections} />}
+          {selectedType === "visual" && <ComparisonTable isEmpty={false} rows={sampleComparisonTable.rows} />}
+          {selectedType === "auditory" && <AudioCards isEmpty={false} cards={sampleAudioCards} />}
+          {selectedType === "kinesthetic" && <PracticalText isEmpty={false} sections={samplePracticalText.sections} />}
 
           {/* Блок 3 - Практика (одинаковый для всех) */}
-          <PracticeBlock isEmpty={true} />
+          <PracticeBlock isEmpty={false} />
 
           {/* Блок 4 - Вложения (одинаковый для всех) */}
-          <AttachmentsBlock isEmpty={true} />
+          <AttachmentsBlock isEmpty={false} />
 
           {/* Блок 5 - Тест (одинаковый для всех) */}
-          <TestBlock isEmpty={true} />
+          <TestBlock isEmpty={false} />
         </div>
 
         {/* Итоговая информация */}

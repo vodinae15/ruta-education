@@ -5,7 +5,7 @@ interface TableRow {
   id: string
   concept: string
   definition: string
-  features: string
+  signs: string
   example: string
 }
 
@@ -19,7 +19,7 @@ export function ComparisonTable({ isEmpty = true, rows }: ComparisonTableProps) 
     id: `row-${i}`,
     concept: "",
     definition: "",
-    features: "",
+    signs: "",
     example: "",
   }))
 
@@ -37,16 +37,16 @@ export function ComparisonTable({ isEmpty = true, rows }: ComparisonTableProps) 
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-[#E8F4FA]">
-              <th className="border border-[#E5E7EB] px-4 py-3 text-left text-sm font-semibold text-[#5589a7]">
+              <th className="border border-[#E5E7EB] px-3 py-2 text-left text-sm font-semibold text-[#5589a7]">
                 Понятие
               </th>
-              <th className="border border-[#E5E7EB] px-4 py-3 text-left text-sm font-semibold text-[#5589a7]">
+              <th className="border border-[#E5E7EB] px-3 py-2 text-left text-sm font-semibold text-[#5589a7]">
                 Определение
               </th>
-              <th className="border border-[#E5E7EB] px-4 py-3 text-left text-sm font-semibold text-[#5589a7]">
+              <th className="border border-[#E5E7EB] px-3 py-2 text-left text-sm font-semibold text-[#5589a7]">
                 Ключевые признаки
               </th>
-              <th className="border border-[#E5E7EB] px-4 py-3 text-left text-sm font-semibold text-[#5589a7]">
+              <th className="border border-[#E5E7EB] px-3 py-2 text-left text-sm font-semibold text-[#5589a7]">
                 Пример
               </th>
             </tr>
@@ -54,24 +54,24 @@ export function ComparisonTable({ isEmpty = true, rows }: ComparisonTableProps) 
           <tbody>
             {displayRows.map((row, index) => (
               <tr key={row.id} className={index % 2 === 0 ? "bg-white" : "bg-[#F8FAFB]"}>
-                <td className="border border-[#E5E7EB] px-4 py-3 text-sm text-slate-600">
+                <td className="border border-[#E5E7EB] px-3 py-2 text-sm text-slate-600">
                   {isEmpty ? <span className="text-slate-400">Понятие {index + 1}</span> : row.concept}
                 </td>
-                <td className="border border-[#E5E7EB] px-4 py-3 text-sm text-slate-600">
+                <td className="border border-[#E5E7EB] px-3 py-2 text-sm text-slate-600">
                   {isEmpty ? (
                     <span className="text-slate-400">Определение...</span>
                   ) : (
                     row.definition
                   )}
                 </td>
-                <td className="border border-[#E5E7EB] px-4 py-3 text-sm text-slate-600">
+                <td className="border border-[#E5E7EB] px-3 py-2 text-sm text-slate-600">
                   {isEmpty ? (
                     <span className="text-slate-400">Признаки...</span>
                   ) : (
-                    row.features
+                    row.signs
                   )}
                 </td>
-                <td className="border border-[#E5E7EB] px-4 py-3 text-sm text-slate-600">
+                <td className="border border-[#E5E7EB] px-3 py-2 text-sm text-slate-600">
                   {isEmpty ? <span className="text-slate-400">Пример...</span> : row.example}
                 </td>
               </tr>
@@ -81,27 +81,27 @@ export function ComparisonTable({ isEmpty = true, rows }: ComparisonTableProps) 
       </div>
 
       {/* Мобильная версия - карточки */}
-      <div className="lg:hidden space-y-4">
+      <div className="lg:hidden space-y-3">
         {displayRows.map((row, index) => (
-          <div key={row.id} className="bg-white border border-[#E5E7EB] rounded-lg p-4">
-            <div className="mb-3">
+          <div key={row.id} className="bg-white border border-[#E5E7EB] rounded-lg p-3">
+            <div className="mb-2">
               <span className="text-xs font-semibold text-[#5589a7] uppercase">Понятие</span>
               <p className="text-sm text-slate-600 mt-1">
                 {isEmpty ? <span className="text-slate-400">Понятие {index + 1}</span> : row.concept}
               </p>
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <span className="text-xs font-semibold text-[#5589a7] uppercase">Определение</span>
               <p className="text-sm text-slate-600 mt-1">
                 {isEmpty ? <span className="text-slate-400">Определение...</span> : row.definition}
               </p>
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <span className="text-xs font-semibold text-[#5589a7] uppercase">
                 Ключевые признаки
               </span>
               <p className="text-sm text-slate-600 mt-1">
-                {isEmpty ? <span className="text-slate-400">Признаки...</span> : row.features}
+                {isEmpty ? <span className="text-slate-400">Признаки...</span> : row.signs}
               </p>
             </div>
             <div>

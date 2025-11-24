@@ -19,7 +19,7 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
 
   return (
     <div
-      className="relative h-32 cursor-pointer perspective-1000"
+      className="relative h-24 cursor-pointer perspective-1000"
       onClick={() => !isEmpty && setIsFlipped(!isFlipped)}
     >
       <div
@@ -36,8 +36,8 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
           className="absolute w-full h-full backface-hidden"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="w-full h-full bg-[#E8F4FA] border-2 border-[#659AB8] rounded-lg p-4 flex items-center justify-center">
-            <p className="text-center text-base font-semibold text-slate-900">
+          <div className="w-full h-full bg-[#E8F4FA] border-2 border-[#659AB8] rounded-lg p-3 flex items-center justify-center">
+            <p className="text-center text-sm font-semibold text-slate-900">
               {isEmpty ? "Термин" : front}
             </p>
           </div>
@@ -51,8 +51,8 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
             transform: "rotateY(180deg)",
           }}
         >
-          <div className="w-full h-full bg-[#659AB8] rounded-lg p-4 flex items-center justify-center">
-            <p className="text-center text-sm text-white">
+          <div className="w-full h-full bg-[#659AB8] rounded-lg p-3 flex items-center justify-center">
+            <p className="text-center text-xs text-white">
               {isEmpty ? "Объяснение термина появится здесь" : back}
             </p>
           </div>
