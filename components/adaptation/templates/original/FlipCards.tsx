@@ -38,7 +38,7 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
         >
           <div className="w-full h-full bg-[#E8F4FA] border-2 border-[#659AB8] rounded-lg p-4 flex items-center justify-center">
             <p className="text-center text-base font-semibold text-slate-900">
-              {isEmpty ? «Термин» : front}
+              {isEmpty ? "Термин" : front}
             </p>
           </div>
         </div>
@@ -53,7 +53,7 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
         >
           <div className="w-full h-full bg-[#659AB8] rounded-lg p-4 flex items-center justify-center">
             <p className="text-center text-sm text-white">
-              {isEmpty ? «Объяснение термина появится здесь» : back}
+              {isEmpty ? "Объяснение термина появится здесь" : back}
             </p>
           </div>
         </div>
