@@ -721,18 +721,18 @@ export default function CourseConstructor() {
     }
   }, [currentCourseId])
 
-  // Автосохранение каждые 4 минуты
+  // Автосохранение каждые 30 секунд
   useEffect(() => {
     // Очищаем предыдущий таймер
     if (autosaveTimerRef.current) {
       clearInterval(autosaveTimerRef.current)
     }
 
-    // Устанавливаем новый таймер (4 минуты = 240000 мс)
+    // Устанавливаем новый таймер (30 секунд = 30000 мс)
     if (courseTitle.trim()) {
       autosaveTimerRef.current = setInterval(() => {
         autosaveCourse(true)
-      }, 240000) // 4 минуты
+      }, 30000) // 30 секунд
     }
 
     // Очищаем таймер при размонтировании компонента
@@ -742,6 +742,34 @@ export default function CourseConstructor() {
       }
     }
   }, [courseTitle, courseDescription, courseLessons, courseBlocks])
+
+  // Автосохранение при потере фокуса (переключение вкладок)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && courseTitle.trim()) {
+        // Пользователь переключился на другую вкладку - сохраняем
+        autosaveCourse(true)
+      }
+    }
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (saveStatus === "unsaved" && courseTitle.trim()) {
+        // Пытаемся сохранить перед уходом
+        autosaveCourse(true)
+        // Предупреждаем о несохраненных изменениях
+        e.preventDefault()
+        e.returnValue = ""
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+    window.addEventListener("beforeunload", handleBeforeUnload)
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+    }
+  }, [courseTitle, saveStatus])
 
   // Отмечаем данные как "несохраненные" при изменениях
   useEffect(() => {
@@ -865,33 +893,6 @@ export default function CourseConstructor() {
         }
 
         if (course) {
-          setCourseTitle(course.title || "")
-          setCourseDescription(course.description || "")
-
-          if (course.modules && course.modules.lessons) {
-            setCourseLessons(course.modules.lessons)
-            if (course.modules.lessons.length > 0) {
-              const firstLesson = course.modules.lessons[0]
-              setActiveLessonId(firstLesson.id)
-              setCourseBlocks(firstLesson.blocks)
-              setActiveBlockId(firstLesson.blocks[0]?.id || "")
-            }
-          } else if (course.modules && course.modules.blocks) {
-            // Миграция старых курсов: создаем урок из существующих блоков
-            const migrationLesson: CourseLesson = {
-              id: "migration-lesson",
-              title: "Основной урок",
-              description: "Автоматически созданный урок",
-              order: 1,
-              blocks: course.modules.blocks,
-              completed: false,
-            }
-            setCourseLessons([migrationLesson])
-            setActiveLessonId(migrationLesson.id)
-            setCourseBlocks(migrationLesson.blocks)
-            setActiveBlockId(migrationLesson.blocks[0]?.id || "")
-          }
-
           setCurrentCourseId(course.id)
           localStorage.setItem("currentCourseId", course.id)
 
@@ -905,16 +906,22 @@ export default function CourseConstructor() {
           // Загружаем тарифы
           await loadCoursePricing(course.id)
 
-          // Проверяем наличие несохраненного черновика в localStorage
+          // СНАЧАЛА проверяем localStorage (приоритет локальным данным!)
           const draftString = localStorage.getItem("courseConstructorDraft")
+          let useLocalData = false
+          let draftTimestamp: Date | null = null
+
           if (draftString) {
             try {
               const draft = JSON.parse(draftString)
-              const draftTimestamp = new Date(draft.timestamp)
+              draftTimestamp = new Date(draft.timestamp)
               const courseUpdatedAt = new Date(course.updated_at || 0)
 
-              // Если черновик новее, чем сохраненная версия, восстанавливаем его
-              if (draftTimestamp > courseUpdatedAt) {
+              // Используем локальные данные если они свежее или равны (с учетом задержки 5 сек)
+              const timeDiff = draftTimestamp.getTime() - courseUpdatedAt.getTime()
+              if (timeDiff >= -5000) {
+                // localStorage новее или почти равен БД (разница меньше 5 сек)
+                useLocalData = true
                 setCourseTitle(draft.title || "")
                 setCourseDescription(draft.description || "")
                 if (draft.lessons && draft.lessons.length > 0) {
@@ -923,23 +930,52 @@ export default function CourseConstructor() {
                   setCourseBlocks(draft.lessons[0].blocks)
                   setActiveBlockId(draft.lessons[0].blocks[0]?.id || "")
                 }
-                setSaveStatus("unsaved")
-                toast({
-                  title: "Восстановлен несохраненный черновик",
-                  description: `Восстановлены изменения от ${draftTimestamp.toLocaleString("ru-RU")}`,
-                })
-              } else {
-                // Черновик старше - удаляем его
-                localStorage.removeItem("courseConstructorDraft")
-                setLastSavedAt(courseUpdatedAt)
+
+                // Если разница больше 1 секунды - данные еще не сохранены
+                if (timeDiff > 1000) {
+                  setSaveStatus("unsaved")
+                } else {
+                  setSaveStatus("saved")
+                  setLastSavedAt(draftTimestamp)
+                }
               }
             } catch (e) {
               console.error("Error parsing draft:", e)
               localStorage.removeItem("courseConstructorDraft")
             }
-          } else {
-            // Нет черновика в localStorage, устанавливаем lastSavedAt
+          }
+
+          // Если не используем локальные данные - загружаем из БД
+          if (!useLocalData) {
+            setCourseTitle(course.title || "")
+            setCourseDescription(course.description || "")
+
+            if (course.modules && course.modules.lessons) {
+              setCourseLessons(course.modules.lessons)
+              if (course.modules.lessons.length > 0) {
+                const firstLesson = course.modules.lessons[0]
+                setActiveLessonId(firstLesson.id)
+                setCourseBlocks(firstLesson.blocks)
+                setActiveBlockId(firstLesson.blocks[0]?.id || "")
+              }
+            } else if (course.modules && course.modules.blocks) {
+              // Миграция старых курсов: создаем урок из существующих блоков
+              const migrationLesson: CourseLesson = {
+                id: "migration-lesson",
+                title: "Основной урок",
+                description: "Автоматически созданный урок",
+                order: 1,
+                blocks: course.modules.blocks,
+                completed: false,
+              }
+              setCourseLessons([migrationLesson])
+              setActiveLessonId(migrationLesson.id)
+              setCourseBlocks(migrationLesson.blocks)
+              setActiveBlockId(migrationLesson.blocks[0]?.id || "")
+            }
+
             setLastSavedAt(new Date(course.updated_at || Date.now()))
+            setSaveStatus("saved")
           }
         }
       } catch (err) {
@@ -1764,11 +1800,20 @@ export default function CourseConstructor() {
         window.history.replaceState({}, "", `?courseId=${data.courseId}`)
       }
 
+      const savedAt = new Date()
       setSaveStatus("saved")
-      setLastSavedAt(new Date())
+      setLastSavedAt(savedAt)
 
-      // Очищаем localStorage draft после успешного сохранения
-      localStorage.removeItem("courseConstructorDraft")
+      // Обновляем localStorage с новым timestamp (НЕ удаляем!)
+      // Это позволит при перезагрузке понять, что данные актуальные
+      const draftData = {
+        title: courseTitle,
+        description: courseDescription,
+        lessons: courseLessons,
+        blocks: courseBlocks,
+        timestamp: savedAt.toISOString(),
+      }
+      localStorage.setItem("courseConstructorDraft", JSON.stringify(draftData))
 
       if (!silent) {
         toast({
