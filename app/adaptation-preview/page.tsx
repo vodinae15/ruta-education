@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { FlipCards } from "@/components/adaptation/templates/original/FlipCards"
 import { StructuredText } from "@/components/adaptation/templates/original/StructuredText"
-import { VisualDiagram } from "@/components/adaptation/templates/visual/VisualDiagram"
+import { MermaidDiagram } from "@/components/adaptation/templates/visual/MermaidDiagram"
 import { ComparisonTable } from "@/components/adaptation/templates/visual/ComparisonTable"
 import { AudioUploadBlock } from "@/components/adaptation/templates/auditory/AudioUploadBlock"
 import { AudioCards } from "@/components/adaptation/templates/auditory/AudioCards"
@@ -21,27 +21,23 @@ export default function AdaptationPreviewPage() {
   const adaptationTypes = [
     {
       id: "original" as const,
-      name: "Оригинальный",
-      description: "Флип-карточки + структурированный текст",
-      color: "bg-blue-500",
+      name: «Оригинальный»,
+      description: «Флип-карточки + структурированный текст»,
     },
     {
       id: "visual" as const,
-      name: "Визуальный",
-      description: "Диаграммы + таблицы сравнения",
-      color: "bg-purple-500",
+      name: «Визуальный»,
+      description: «Mermaid-схема + таблицы сравнения»,
     },
     {
       id: "auditory" as const,
-      name: "Аудиальный",
-      description: "Аудио-обзор + аудио-карточки",
-      color: "bg-green-500",
+      name: «Аудиальный»,
+      description: «Аудио-обзор + аудио-карточки»,
     },
     {
       id: "kinesthetic" as const,
-      name: "Кинестетический",
-      description: "Цели с чек-листом + практический текст",
-      color: "bg-orange-500",
+      name: «Кинестетический»,
+      description: «Цели с чек-листом + практический текст»,
     },
   ]
 
@@ -72,10 +68,7 @@ export default function AdaptationPreviewPage() {
                   : "border-[#E5E7EB] bg-white hover:border-[#659AB8]"
               }`}
             >
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`w-3 h-3 rounded-full ${type.color}`} />
-                <h3 className="font-semibold text-slate-900">{type.name}</h3>
-              </div>
+              <h3 className="font-semibold text-slate-900 mb-2">{type.name}</h3>
               <p className="text-sm text-slate-600">{type.description}</p>
             </button>
           ))}
@@ -94,7 +87,7 @@ export default function AdaptationPreviewPage() {
         <div className="space-y-8">
           {/* Блок 1 - зависит от типа */}
           {selectedType === "original" && <FlipCards isEmpty={true} />}
-          {selectedType === "visual" && <VisualDiagram isEmpty={true} />}
+          {selectedType === "visual" && <MermaidDiagram isEmpty={true} />}
           {selectedType === "auditory" && <AudioUploadBlock isEmpty={true} />}
           {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={true} />}
 
