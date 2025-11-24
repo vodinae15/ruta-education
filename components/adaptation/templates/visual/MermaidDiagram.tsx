@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import mermaid from "mermaid"
 import { BlockWrapper } from "../../blocks/BlockWrapper"
 
@@ -25,25 +25,16 @@ mermaid.initialize({
   },
 })
 
-export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramProps) {
-  const mermaidRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!isEmpty && mermaidCode && mermaidRef.current) {
-      mermaidRef.current.removeAttribute("data-processed")
-      mermaid.contentLoaded()
-    }
-  }, [isEmpty, mermaidCode])
-
-  // Пример mermaid кода для пустого состояния
-  const defaultMermaidCode = `graph TD
-    A[Центральная тема] --> B[Подтема 1]
-    A --> C[Подтема 2]
-    A --> D[Подтема 3]
-    B --> E[Детали 1]
-    B --> F[Детали 2]
-    C --> G[Детали 3]
-    D --> H[Детали 4]
+// Пример mermaid кода по умолчанию
+const defaultMermaidCode = `graph TD
+    A[Химические реакции] --> B[Типы реакций]
+    A --> C[Скорость реакции]
+    A --> D[Энергия реакции]
+    B --> E[Соединение]
+    B --> F[Разложение]
+    C --> G[Катализаторы]
+    D --> H[Экзотермические]
+    D --> I[Эндотермические]
 
     style A fill:#659AB8,stroke:#5589a7,stroke-width:2px,color:#fff
     style B fill:#E8F4FA,stroke:#659AB8,stroke-width:2px,color:#111827
@@ -52,9 +43,34 @@ export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramPr
     style E fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827
     style F fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827
     style G fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827
-    style H fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827`
+    style H fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827
+    style I fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827`
 
-  const displayCode = mermaidCode || defaultMermaidCode
+export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramProps) {
+  const mermaidRef = useRef<HTMLDivElement>(null)
+  const [diagramId] = useState(() => `mermaid-${Math.random().toString(36).substr(2, 9)}`)
+
+  useEffect(() => {
+    const renderDiagram = async () => {
+      if (mermaidRef.current) {
+        try {
+          // Очищаем предыдущее содержимое
+          mermaidRef.current.removeAttribute("data-processed")
+
+          const displayCode = mermaidCode || defaultMermaidCode
+
+          // Рендерим диаграмму
+          const { svg } = await mermaid.render(diagramId, displayCode)
+          mermaidRef.current.innerHTML = svg
+        } catch (error) {
+          console.error("Mermaid render error:", error)
+          mermaidRef.current.innerHTML = "<p class='text-red-500 text-sm'>Ошибка рендеринга диаграммы</p>"
+        }
+      }
+    }
+
+    renderDiagram()
+  }, [isEmpty, mermaidCode, diagramId])
 
   return (
     <BlockWrapper
@@ -64,25 +80,15 @@ export function MermaidDiagram({ isEmpty = true, mermaidCode }: MermaidDiagramPr
       isEmpty={false}
     >
       <div className="bg-[#F8FAFB] rounded-lg border border-[#E5E7EB] p-4 max-h-64 overflow-auto">
-        {isEmpty ? (
-          <div
-            ref={mermaidRef}
-            className="mermaid text-center"
-            style={{ opacity: 0.6 }}
-          >
-            {displayCode}
-          </div>
-        ) : (
-          <div ref={mermaidRef} className="mermaid text-center">
-            {displayCode}
-          </div>
-        )}
+        <div ref={mermaidRef} className="mermaid-diagram flex justify-center items-center min-h-[200px]">
+          {/* Mermaid SVG будет вставлен сюда */}
+        </div>
       </div>
 
       {isEmpty && (
         <div className="mt-4 text-center">
           <p className="text-sm text-slate-400">
-            Шаблон: схема Mermaid (генерируется AI). Максимум 7-8 узлов, 3 уровня вложенности
+            Шаблон: схема Mermaid (генерируется AI). Максимум 8-9 узлов, 3 уровня вложенности
           </p>
         </div>
       )}
