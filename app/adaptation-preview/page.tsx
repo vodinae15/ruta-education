@@ -21,23 +21,23 @@ export default function AdaptationPreviewPage() {
   const adaptationTypes = [
     {
       id: "original" as const,
-      name: «Оригинальный»,
-      description: «Флип-карточки + структурированный текст»,
+      name: "Оригинальный",
+      description: "Флип-карточки + структурированный текст",
     },
     {
       id: "visual" as const,
-      name: «Визуальный»,
-      description: «Mermaid-схема + таблицы сравнения»,
+      name: "Визуальный",
+      description: "Mermaid-схема + таблицы сравнения",
     },
     {
       id: "auditory" as const,
-      name: «Аудиальный»,
-      description: «Аудио-обзор + аудио-карточки»,
+      name: "Аудиальный",
+      description: "Аудио-обзор + аудио-карточки",
     },
     {
       id: "kinesthetic" as const,
-      name: «Кинестетический»,
-      description: «Цели с чек-листом + практический текст»,
+      name: "Кинестетический",
+      description: "Цели с чек-листом + практический текст",
     },
   ]
 
