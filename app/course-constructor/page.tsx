@@ -2759,59 +2759,6 @@ export default function CourseConstructor() {
                                     {getElementDescription(element.type, element.mode, element.educationalType)}
                                   </div>
                                 </div>
-                              ) : element.type === "video" ? (
-                                <div className="space-y-3">
-                                  <Input
-                                    type="url"
-                                    value={element.content}
-                                    onChange={(e) => updateElementContent(activeBlockId, element.id, e.target.value)}
-                                    placeholder={getElementPlaceholder(element.type, element.educationalType)}
-                                    className="h-11"
-                                  />
-                                  <div className="text-xs text-slate-600 bg-background-gray p-2 rounded">
-                                    {getElementDescription(element.type, element.mode, element.educationalType)}
-                                  </div>
-                                </div>
-                              ) : element.type === "audio" ? (
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                                  <input
-                                    type="file"
-                                    accept="audio/*"
-                                    onChange={(e) => {
-                                      const file = e.target.files?.[0]
-                                      if (file) {
-                                        updateElementContent(activeBlockId, element.id, `Аудиофайл: ${file.name}`)
-                                      }
-                                    }}
-                                    className="hidden"
-                                    id={`audio-${element.id}`}
-                                  />
-                                  <label htmlFor={`audio-${element.id}`} className="cursor-pointer">
-                                    <div className="text-gray-500">
-                                      <p className="text-sm">Выберите файл</p>
-                                    </div>
-                                  </label>
-                                </div>
-                              ) : element.type === "image" ? (
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                                  <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => {
-                                      const file = e.target.files?.[0]
-                                      if (file) {
-                                        updateElementContent(activeBlockId, element.id, `Изображение: ${file.name}`)
-                                      }
-                                    }}
-                                    className="hidden"
-                                    id={`image-${element.id}`}
-                                  />
-                                  <label htmlFor={`image-${element.id}`} className="cursor-pointer">
-                                    <div className="text-gray-500">
-                                      <p className="text-sm">Выберите файл</p>
-                                    </div>
-                                  </label>
-                                </div>
                               ) : element.type === "audio" ? (
                                 <AudioUploadV2
                                   courseId={currentCourseId || ""}
