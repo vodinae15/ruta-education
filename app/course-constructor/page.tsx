@@ -51,9 +51,9 @@ import { TestCreator } from "@/components/test-creator"
 import { PricingEditor } from "@/components/ui/pricing-editor"
 import { toast } from "@/components/ui/use-toast"
 import { createBrowserClient } from "@supabase/ssr"
-import { AudioUpload } from "@/components/ui/audio-upload"
+import { AudioUploadV2 } from "@/components/ui/audio-upload-v2"
 import { createDefaultPricing } from "@/lib/course-pricing"
-import { VideoUpload } from "@/components/ui/video-upload"
+import { VideoUploadV2 } from "@/components/ui/video-upload-v2"
 import { DocumentUpload } from "@/components/ui/document-upload"
 import { ImageLibrary } from "@/components/ui/image-library"
 import { ModeSwitchWarning } from "@/components/ui/mode-switch-warning"
@@ -2813,34 +2813,127 @@ export default function CourseConstructor() {
                                   </label>
                                 </div>
                               ) : element.type === "audio" ? (
-                                <AudioUpload
-                                  onAudioUpload={(audioFile) => {
-                                    updateElementContent(activeBlockId, element.id, `Аудио: ${audioFile.name}`)
-                                  }}
-                                  onTranscription={(transcription) => {
-                                    if (transcription) {
-                                      updateElementContent(activeBlockId, element.id, transcription)
-                                    }
+                                <AudioUploadV2
+                                  courseId={currentCourseId || ""}
+                                  lessonId={undefined}
+                                  blockId={activeBlockId}
+                                  elementId={element.id}
+                                  initialAudioUrl={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileUrl || element.content
+                                          } catch {
+                                            return element.content
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialFileId={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileId
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  onAudioUpload={(fileId, fileUrl, fileName) => {
+                                    const audioData = JSON.stringify({
+                                      fileId,
+                                      fileUrl,
+                                      fileName,
+                                      uploadedAt: new Date().toISOString(),
+                                    })
+                                    updateElementContent(activeBlockId, element.id, audioData)
                                   }}
                                 />
                               ) : element.type === "video" ? (
-                                <VideoUpload
-                                  onVideoUpload={(videoFile) => {
-                                    updateElementContent(activeBlockId, element.id, `Видео: ${videoFile.name}`)
-                                  }}
-                                  onTranscription={(transcription) => {
-                                    if (transcription) {
-                                      updateElementContent(activeBlockId, element.id, transcription)
-                                    }
+                                <VideoUploadV2
+                                  courseId={currentCourseId || ""}
+                                  lessonId={undefined}
+                                  blockId={activeBlockId}
+                                  elementId={element.id}
+                                  initialVideoUrl={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileUrl || element.content
+                                          } catch {
+                                            return element.content
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialFileId={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileId
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  onVideoUpload={(fileId, fileUrl, fileName) => {
+                                    const videoData = JSON.stringify({
+                                      fileId,
+                                      fileUrl,
+                                      fileName,
+                                      uploadedAt: new Date().toISOString(),
+                                    })
+                                    updateElementContent(activeBlockId, element.id, videoData)
                                   }}
                                 />
                               ) : element.type === "image" ? (
                                 <ImageLibrary
                                   onImageSelect={(imageUrl, imageData) => {
-                                    updateElementContent(activeBlockId, element.id, `Изображение: ${imageData.alt_description}`)
+                                    const imageData = JSON.stringify({
+                                      fileUrl: imageUrl,
+                                      fileName: imageData.alt_description || "Unsplash image",
+                                      source: "unsplash",
+                                      uploadedAt: new Date().toISOString(),
+                                    })
+                                    updateElementContent(activeBlockId, element.id, imageData)
                                   }}
-                                  onCustomUpload={(file) => {
-                                    updateElementContent(activeBlockId, element.id, `Изображение: ${file.name}`)
+                                  onCustomUpload={async (file) => {
+                                    try {
+                                      const formData = new FormData()
+                                      formData.append("file", file)
+                                      formData.append("fileType", "image")
+                                      formData.append("courseId", currentCourseId || "")
+                                      formData.append("blockId", activeBlockId)
+                                      formData.append("elementId", element.id)
+
+                                      const response = await fetch("/api/upload", {
+                                        method: "POST",
+                                        body: formData,
+                                      })
+
+                                      if (!response.ok) {
+                                        throw new Error("Ошибка загрузки изображения")
+                                      }
+
+                                      const data = await response.json()
+                                      const imageData = JSON.stringify({
+                                        fileId: data.file.id,
+                                        fileUrl: data.file.url,
+                                        fileName: data.file.fileName,
+                                        source: "custom",
+                                        uploadedAt: new Date().toISOString(),
+                                      })
+                                      updateElementContent(activeBlockId, element.id, imageData)
+                                    } catch (error) {
+                                      console.error("Image upload error:", error)
+                                      alert("Ошибка при загрузке изображения")
+                                    }
                                   }}
                                 />
                               ) : element.type === "file" ? (
@@ -2849,8 +2942,50 @@ export default function CourseConstructor() {
                                   lessonId={undefined}
                                   blockId={activeBlockId}
                                   elementId={element.id}
+                                  initialDocumentUrl={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileUrl || element.content
+                                          } catch {
+                                            return element.content
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialFileId={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileId
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialFileName={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileName
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
                                   onDocumentUpload={(fileId, fileUrl, fileName) => {
-                                    updateElementContent(activeBlockId, element.id, fileUrl)
+                                    const documentData = JSON.stringify({
+                                      fileId,
+                                      fileUrl,
+                                      fileName,
+                                      uploadedAt: new Date().toISOString(),
+                                    })
+                                    updateElementContent(activeBlockId, element.id, documentData)
                                   }}
                                 />
                               ) : element.type === "test" ? (
