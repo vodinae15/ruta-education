@@ -2262,10 +2262,32 @@ export default function CourseConstructor() {
   }
 
   // Показываем скелетон только если данные ЕЩЕ НЕ загружены
-  // Проверяем реальные данные, а не флаг (который сбрасывается при размонтировании)
-  const hasData = authorProfile !== null || courseLessons.length > 0 || courseTitle.trim() !== ""
+  // Проверяем реальные данные в state + localStorage
+  const hasLocalData = typeof window !== 'undefined' && (
+    localStorage.getItem('currentCourseId') !== null ||
+    localStorage.getItem('courseConstructorDraft') !== null
+  )
 
-  if ((authLoading || loading) && !hasData) {
+  const hasData = authorProfile !== null ||
+                  courseLessons.length > 0 ||
+                  courseTitle.trim() !== "" ||
+                  hasLocalData
+
+  // DEBUG: логируем состояние при каждом рендере
+  console.log('🔍 Skeleton check:', {
+    authLoading,
+    loading,
+    hasData,
+    hasLocalData,
+    authorProfile: !!authorProfile,
+    courseLessonsLength: courseLessons.length,
+    courseTitle: courseTitle.substring(0, 30)
+  })
+
+  // ВАЖНО: Проверяем только loading компонента, НЕ authLoading
+  // authLoading может меняться при переключении вкладок независимо от нас
+  if (loading && !hasData) {
+    console.log('⚠️ Showing skeleton because: loading =', loading, 'hasData =', hasData)
     return (
       <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
