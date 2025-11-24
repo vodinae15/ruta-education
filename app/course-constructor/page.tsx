@@ -369,6 +369,7 @@ export default function CourseConstructor() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved")
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
   const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const isInitialLoadRef = useRef(false) // Флаг для предотвращения повторной загрузки
   const [showTestPrompt, setShowTestPrompt] = useState(false)
   const [draggedElement, setDraggedElement] = useState<string | null>(null)
   const [draggedBlock, setDraggedBlock] = useState<string | null>(null)
@@ -705,7 +706,9 @@ export default function CourseConstructor() {
       return
     }
 
-    if (user) {
+    // Загружаем данные только ОДИН РАЗ при первом монтировании
+    if (user && !isInitialLoadRef.current) {
+      isInitialLoadRef.current = true
       checkAuthorProfile()
     }
   }, [user, authLoading, router])
@@ -721,18 +724,18 @@ export default function CourseConstructor() {
     }
   }, [currentCourseId])
 
-  // Автосохранение каждые 30 секунд
+  // Автосохранение каждые 5 минут
   useEffect(() => {
     // Очищаем предыдущий таймер
     if (autosaveTimerRef.current) {
       clearInterval(autosaveTimerRef.current)
     }
 
-    // Устанавливаем новый таймер (30 секунд = 30000 мс)
+    // Устанавливаем новый таймер (5 минут = 300000 мс)
     if (courseTitle.trim()) {
       autosaveTimerRef.current = setInterval(() => {
         autosaveCourse(true)
-      }, 30000) // 30 секунд
+      }, 300000) // 5 минут
     }
 
     // Очищаем таймер при размонтировании компонента
@@ -743,33 +746,21 @@ export default function CourseConstructor() {
     }
   }, [courseTitle, courseDescription, courseLessons, courseBlocks])
 
-  // Автосохранение при потере фокуса (переключение вкладок)
+  // Предупреждение перед уходом со страницы при несохраненных изменениях
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && courseTitle.trim()) {
-        // Пользователь переключился на другую вкладку - сохраняем
-        autosaveCourse(true)
-      }
-    }
-
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (saveStatus === "unsaved" && courseTitle.trim()) {
-        // Пытаемся сохранить перед уходом
-        autosaveCourse(true)
-        // Предупреждаем о несохраненных изменениях
         e.preventDefault()
         e.returnValue = ""
       }
     }
 
-    document.addEventListener("visibilitychange", handleVisibilityChange)
     window.addEventListener("beforeunload", handleBeforeUnload)
 
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange)
       window.removeEventListener("beforeunload", handleBeforeUnload)
     }
-  }, [courseTitle, saveStatus])
+  }, [saveStatus, courseTitle])
 
   // Отмечаем данные как "несохраненные" при изменениях
   useEffect(() => {
