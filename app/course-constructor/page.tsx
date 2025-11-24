@@ -55,7 +55,7 @@ import { AudioUploadV2 } from "@/components/ui/audio-upload-v2"
 import { createDefaultPricing } from "@/lib/course-pricing"
 import { VideoUploadV2 } from "@/components/ui/video-upload-v2"
 import { DocumentUpload } from "@/components/ui/document-upload"
-import { ImageLibrary } from "@/components/ui/image-library"
+import { ImageUploadV2 } from "@/components/ui/image-upload-v2"
 import { ModeSwitchWarning } from "@/components/ui/mode-switch-warning"
 
 type ElementMode = "lesson" | "notes"
@@ -2840,47 +2840,55 @@ export default function CourseConstructor() {
                                   }}
                                 />
                               ) : element.type === "image" ? (
-                                <ImageLibrary
-                                  onImageSelect={(imageUrl, imageData) => {
-                                    const imageDataString = JSON.stringify({
-                                      fileUrl: imageUrl,
-                                      fileName: imageData.alt_description || "Unsplash image",
-                                      source: "unsplash",
+                                <ImageUploadV2
+                                  courseId={currentCourseId || ""}
+                                  lessonId={undefined}
+                                  blockId={activeBlockId}
+                                  elementId={element.id}
+                                  initialImageUrl={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileUrl || element.content
+                                          } catch {
+                                            return element.content
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialFileId={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileId
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  initialFileName={
+                                    element.content
+                                      ? (() => {
+                                          try {
+                                            const parsed = JSON.parse(element.content)
+                                            return parsed.fileName
+                                          } catch {
+                                            return undefined
+                                          }
+                                        })()
+                                      : undefined
+                                  }
+                                  onImageUpload={(fileId, fileUrl, fileName) => {
+                                    const imageData = JSON.stringify({
+                                      fileId,
+                                      fileUrl,
+                                      fileName,
                                       uploadedAt: new Date().toISOString(),
                                     })
-                                    updateElementContent(activeBlockId, element.id, imageDataString)
-                                  }}
-                                  onCustomUpload={async (file) => {
-                                    try {
-                                      const formData = new FormData()
-                                      formData.append("file", file)
-                                      formData.append("fileType", "image")
-                                      formData.append("courseId", currentCourseId || "")
-                                      formData.append("blockId", activeBlockId)
-                                      formData.append("elementId", element.id)
-
-                                      const response = await fetch("/api/upload", {
-                                        method: "POST",
-                                        body: formData,
-                                      })
-
-                                      if (!response.ok) {
-                                        throw new Error("Ошибка загрузки изображения")
-                                      }
-
-                                      const data = await response.json()
-                                      const imageDataString = JSON.stringify({
-                                        fileId: data.file.id,
-                                        fileUrl: data.file.url,
-                                        fileName: data.file.fileName,
-                                        source: "custom",
-                                        uploadedAt: new Date().toISOString(),
-                                      })
-                                      updateElementContent(activeBlockId, element.id, imageDataString)
-                                    } catch (error) {
-                                      console.error("Image upload error:", error)
-                                      alert("Ошибка при загрузке изображения")
-                                    }
+                                    updateElementContent(activeBlockId, element.id, imageData)
                                   }}
                                 />
                               ) : element.type === "file" ? (
