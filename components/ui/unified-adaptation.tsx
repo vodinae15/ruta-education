@@ -37,6 +37,19 @@ import { AdaptationElementRenderer } from "@/components/ui/adaptation-elements/a
 import { TestPlayer } from "@/components/test-player"
 import { AudioPlayer } from "@/components/ui/adaptation-elements/audio-player"
 
+// Новые template-компоненты
+import { FlipCards } from "@/components/adaptation/templates/original/FlipCards"
+import { StructuredText } from "@/components/adaptation/templates/original/StructuredText"
+import { MermaidDiagram } from "@/components/adaptation/templates/visual/MermaidDiagram"
+import { ComparisonTable } from "@/components/adaptation/templates/visual/ComparisonTable"
+import { AudioUploadBlock } from "@/components/adaptation/templates/auditory/AudioUploadBlock"
+import { AudioCards } from "@/components/adaptation/templates/auditory/AudioCards"
+import { GoalsChecklist } from "@/components/adaptation/templates/kinesthetic/GoalsChecklist"
+import { PracticalText } from "@/components/adaptation/templates/kinesthetic/PracticalText"
+import { PracticeBlock } from "@/components/adaptation/blocks/PracticeBlock"
+import { AttachmentsBlock } from "@/components/adaptation/blocks/AttachmentsBlock"
+import { TestBlock } from "@/components/adaptation/blocks/TestBlock"
+
 interface UnifiedAdaptationProps {
   mode: AdaptationMode
   lessonTitle: string
@@ -803,6 +816,162 @@ export function UnifiedAdaptation({
 
   const presentationModeInfo = getPresentationModeInfo()
 
+  // Рендеринг template-компонента (слой 3) на основе типа адаптации и номера блока
+  const renderTemplateComponent = (blockId: keyof AdaptationContent, block: AdaptationBlock, blockNumber: number) => {
+    // Проверяем, что есть данные адаптации
+    if (!block.adaptation || !block.adaptation.element) {
+      return <div className="p-4 text-center text-slate-400">Шаблон не настроен</div>
+    }
+
+    const data = block.adaptation.element.data || {}
+    const adaptationType = mode as AdaptationType
+
+    // Обработчики изменений для inline-редактирования
+    const handleDataChange = (newData: any) => {
+      handleBlockContentChange(blockId, {
+        adaptation: {
+          ...block.adaptation,
+          element: {
+            ...block.adaptation.element,
+            data: newData
+          }
+        }
+      })
+    }
+
+    // Блоки 1-2: специфичные для каждого типа адаптации
+    // НЕ передаем intro и mainText, так как они рендерятся в Слое 1 и Слое 2
+    if (blockNumber === 1) {
+      switch (adaptationType) {
+        case 'original':
+          return (
+            <FlipCards
+              isEmpty={!data.cards || data.cards.length === 0}
+              cards={data.cards}
+              isEditing={isEditing}
+              onCardsChange={(cards) => handleDataChange({ ...data, cards })}
+            />
+          )
+        case 'visual':
+          return (
+            <MermaidDiagram
+              isEmpty={!data.mermaidCode}
+              mermaidCode={data.mermaidCode}
+              isEditing={isEditing}
+              onMermaidCodeChange={(code) => handleDataChange({ ...data, mermaidCode: code })}
+            />
+          )
+        case 'auditory':
+          return (
+            <AudioUploadBlock
+              isEmpty={!data.audioUrl}
+              audioUrl={data.audioUrl}
+              isEditing={isEditing}
+              onAudioUrlChange={(url) => handleDataChange({ ...data, audioUrl: url })}
+              courseId={courseId}
+              lessonId={lessonId}
+            />
+          )
+        case 'kinesthetic':
+          return (
+            <GoalsChecklist
+              isEmpty={!data.goals || data.goals.length === 0}
+              goals={data.goals}
+              isEditing={isEditing}
+              onGoalsChange={(goals) => handleDataChange({ ...data, goals })}
+            />
+          )
+      }
+    }
+
+    if (blockNumber === 2) {
+      switch (adaptationType) {
+        case 'original':
+          return (
+            <StructuredText
+              isEmpty={!data.sections || data.sections.length === 0}
+              sections={data.sections}
+              isEditing={isEditing}
+              onSectionsChange={(sections) => handleDataChange({ ...data, sections })}
+            />
+          )
+        case 'visual':
+          return (
+            <ComparisonTable
+              isEmpty={!data.rows || data.rows.length === 0}
+              rows={data.rows}
+              isEditing={isEditing}
+              onRowsChange={(rows) => handleDataChange({ ...data, rows })}
+            />
+          )
+        case 'auditory':
+          return (
+            <AudioCards
+              isEmpty={!data.audioCards || data.audioCards.length === 0}
+              audioCards={data.audioCards}
+              isEditing={isEditing}
+              onAudioCardsChange={(audioCards) => handleDataChange({ ...data, audioCards })}
+            />
+          )
+        case 'kinesthetic':
+          return (
+            <PracticalText
+              isEmpty={!data.sections || data.sections.length === 0}
+              sections={data.sections}
+              isEditing={isEditing}
+              onSectionsChange={(sections) => handleDataChange({ ...data, sections })}
+            />
+          )
+      }
+    }
+
+    // Блоки 3-5: общие для всех типов
+    // Эти блоки НЕ используют BlockWrapper, поэтому им не нужны intro/mainText
+    if (blockNumber === 3) {
+      return (
+        <PracticeBlock
+          isEmpty={!data.tasks || data.tasks.length === 0}
+          tasks={data.tasks}
+          isEditing={isEditing}
+          onTasksChange={(tasks) => handleDataChange({ ...data, tasks })}
+        />
+      )
+    }
+
+    if (blockNumber === 4) {
+      return (
+        <AttachmentsBlock
+          isEmpty={!data.attachments || data.attachments.length === 0}
+          attachments={data.attachments}
+          isEditing={isEditing}
+          onAttachmentsChange={(attachments) => handleDataChange({ ...data, attachments })}
+          courseId={courseId}
+          lessonId={lessonId}
+        />
+      )
+    }
+
+    if (blockNumber === 5) {
+      return (
+        <TestBlock
+          isEmpty={!data.questions || data.questions.length === 0}
+          questions={data.questions}
+          isEditing={isEditing}
+          onQuestionsChange={(questions) => handleDataChange({ ...data, questions })}
+        />
+      )
+    }
+
+    // Fallback на старый рендерер для неизвестных блоков
+    return (
+      <AdaptationElementRenderer
+        element={block.adaptation.element}
+        blockNumber={blockNumber}
+        onInteraction={recordInteraction}
+      />
+    )
+  }
+
   // Рендеринг блока с трехслойной структурой
   const renderAdaptationBlock = (blockId: string, block: AdaptationBlock, blockNumber: number) => {
     const isExpanded = expandedBlocks.includes(blockId)
@@ -1057,31 +1226,9 @@ export function UnifiedAdaptation({
               </div>
             </div>
 
-            {/* Слой 3: Адаптированный элемент */}
+            {/* Слой 3: Адаптированный элемент (template-компоненты) */}
             <div className="relative">
-              <AdaptationElementRenderer
-                element={block.adaptation.element}
-                blockNumber={blockNumber}
-                onInteraction={recordInteraction}
-              />
-              {/* Индикатор прогресса для интерактивных элементов */}
-              {isStudent && block.adaptation.element && (
-                <div className="mt-2 flex items-center gap-2 text-xs text-gray-600">
-                  {completedInteractiveElements.size > 0 && (
-                    <div className="flex items-center gap-1">
-                      <CheckIcon className="w-4 h-4 text-green-600" />
-                      <span>Выполнено интерактивных элементов: {completedInteractiveElements.size}</span>
-                    </div>
-                  )}
-                  {Object.keys(interactiveElementResults).length > 0 && (
-                    <div className="flex items-center gap-1 ml-2">
-                      <span className="text-gray-500">
-                        Всего попыток: {Object.keys(interactiveElementResults).length}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
+              {renderTemplateComponent(blockId as keyof AdaptationContent, block, blockNumber)}
             </div>
 
             {/* Отображение тестов из оригинального контента (только для блока 5) */}
