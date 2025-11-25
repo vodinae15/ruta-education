@@ -204,7 +204,7 @@ export function ImageUploadV2({
               </div>
               <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-[#659AB8] h-2 rounded-full transition-all duration-300"
+                  className="bg-[#659AB8] h-2 rounded-full"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
