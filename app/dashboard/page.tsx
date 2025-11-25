@@ -441,17 +441,31 @@ export default function DashboardPage() {
 
   // Функция для удаления курса
   const deleteCourse = useCallback(async (courseId: string) => {
+    console.log("[Dashboard] Starting deletion for courseId:", courseId)
     setDeletingCourses(prev => ({ ...prev, [courseId]: true }))
 
     try {
-      const response = await fetch(`/api/courses/${courseId}`, {
+      const url = `/api/courses/${courseId}`
+      console.log("[Dashboard] Sending DELETE request to:", url)
+
+      const response = await fetch(url, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
+
+      console.log("[Dashboard] Response status:", response.status)
+      console.log("[Dashboard] Response ok:", response.ok)
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+        console.error("[Dashboard] Error response:", errorData)
         throw new Error(errorData.error || "Failed to delete course")
       }
+
+      const result = await response.json()
+      console.log("[Dashboard] Success response:", result)
 
       // Удаляем курс из локального состояния
       setCourses(prev => prev.filter(c => c.id !== courseId))
@@ -470,7 +484,7 @@ export default function DashboardPage() {
         description: "Курс успешно удален из вашего списка",
       })
     } catch (error) {
-      console.error("Error deleting course:", error)
+      console.error("[Dashboard] Error deleting course:", error)
       toast({
         title: "Ошибка",
         description: error instanceof Error ? error.message : "Не удалось удалить курс",
