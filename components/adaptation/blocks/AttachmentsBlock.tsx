@@ -12,14 +12,23 @@ interface Attachment {
   id: string
   type: "video" | "audio" | "document" | "image"
   fileUrl: string
-  fileName: string
+  fileName?: string
   fileId?: string
+  caption?: string
+}
+
+interface MediaElement {
+  id: string
+  type: "video" | "audio" | "image" | "file"
+  content: string
+  caption?: string
 }
 
 interface AttachmentsBlockProps {
   isEmpty?: boolean
   mainText?: string
   attachments?: Attachment[]
+  mediaElements?: MediaElement[] // Медиа из content.elements
   isEditing?: boolean
   onAttachmentsChange?: (attachments: Attachment[]) => void
   onMainTextChange?: (text: string) => void
@@ -31,6 +40,7 @@ export function AttachmentsBlock({
   isEmpty = true,
   mainText,
   attachments,
+  mediaElements,
   isEditing = false,
   onAttachmentsChange,
   onMainTextChange,
@@ -40,6 +50,18 @@ export function AttachmentsBlock({
   const defaultAttachments: Attachment[] = attachments || []
   const [localAttachments, setLocalAttachments] = useState<Attachment[]>(defaultAttachments)
   const [uploadingType, setUploadingType] = useState<string | null>(null)
+
+  // Объединяем attachments и mediaElements для отображения
+  const allMedia = [
+    ...localAttachments,
+    ...(mediaElements || []).map(el => ({
+      id: el.id,
+      type: el.type === 'file' ? 'document' as const : el.type,
+      fileUrl: el.content,
+      fileName: el.caption || `${el.type} файл`,
+      caption: el.caption
+    }))
+  ]
 
   const handleAddAttachment = (type: "video" | "audio" | "document" | "image") => {
     setUploadingType(type)
@@ -85,12 +107,94 @@ export function AttachmentsBlock({
     }
   }
 
+  // Рендер медиа в зависимости от типа (для студента)
+  const renderMediaPreview = (media: Attachment) => {
+    if (media.type === 'video') {
+      return (
+        <div className="col-span-full">
+          <div className="rounded-lg overflow-hidden bg-black">
+            {media.fileUrl.includes('youtube.com') || media.fileUrl.includes('youtu.be') ? (
+              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  src={media.fileUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
+                  className="absolute top-0 left-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <video controls className="w-full" src={media.fileUrl}>
+                Ваш браузер не поддерживает видео.
+              </video>
+            )}
+          </div>
+          {media.caption && (
+            <p className="text-sm text-slate-600 mt-2 italic">{media.caption}</p>
+          )}
+        </div>
+      )
+    }
+
+    if (media.type === 'image') {
+      return (
+        <div className="col-span-full">
+          <img
+            src={media.fileUrl}
+            alt={media.caption || media.fileName || 'Изображение'}
+            className="w-full h-auto rounded-lg"
+            loading="lazy"
+          />
+          {media.caption && (
+            <p className="text-sm text-slate-600 mt-2 italic">{media.caption}</p>
+          )}
+        </div>
+      )
+    }
+
+    if (media.type === 'audio') {
+      return (
+        <div className="col-span-full">
+          <div className="bg-slate-100 rounded-lg p-4">
+            <audio controls className="w-full" src={media.fileUrl}>
+              Ваш браузер не поддерживает аудио.
+            </audio>
+          </div>
+          {media.caption && (
+            <p className="text-sm text-slate-600 mt-2 italic">{media.caption}</p>
+          )}
+        </div>
+      )
+    }
+
+    // Для документов показываем ссылку
+    return (
+      <div className="flex items-center gap-3 p-4 bg-[#F8FAFB] rounded-lg border border-[#E5E7EB]">
+        <div className="w-10 h-10 bg-[#659AB8] rounded-full flex items-center justify-center">
+          {getIcon(media.type)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <a
+            href={media.fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-slate-900 truncate hover:text-[#659AB8] flex items-center gap-1"
+            title={media.fileName}
+          >
+            {media.fileName}
+            <ExternalLink className="w-3 h-3" />
+          </a>
+          <p className="text-xs text-slate-600">{getTypeLabel(media.type)}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <BlockWrapper
       blockNumber={4}
       title="Углубленное изучение"
       intro="Дополнительные материалы для изучения темы"
-      isEmpty={isEmpty}
+      isEmpty={isEmpty && allMedia.length === 0}
       mainText={mainText}
       isEditing={isEditing}
       onMainTextChange={onMainTextChange}
@@ -202,26 +306,11 @@ export function AttachmentsBlock({
         </div>
       ) : (
         <>
-          {localAttachments.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {localAttachments.map((attachment) => (
-                <div key={attachment.id} className="flex items-center gap-3 p-4 bg-[#F8FAFB] rounded-lg border border-[#E5E7EB]">
-                  <div className="w-10 h-10 bg-[#659AB8] rounded-full flex items-center justify-center">
-                    {getIcon(attachment.type)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <a
-                      href={attachment.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-slate-900 truncate hover:text-[#659AB8] flex items-center gap-1"
-                      title={attachment.fileName}
-                    >
-                      {attachment.fileName}
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                    <p className="text-xs text-slate-600">{getTypeLabel(attachment.type)}</p>
-                  </div>
+          {allMedia.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6">
+              {allMedia.map((media) => (
+                <div key={media.id}>
+                  {renderMediaPreview(media)}
                 </div>
               ))}
             </div>
