@@ -786,8 +786,8 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    {/* Проверка: если адаптация не опубликована и режим не original, показываем "Скоро" */}
-                    {currentMode !== 'original' && !adaptedContent && !adaptationLoading ? (
+                    {/* Проверка: если адаптация не опубликована, показываем "Скоро" для всех режимов */}
+                    {!adaptedContent && !adaptationLoading ? (
                       <div className="py-12 text-center">
                         <div className="max-w-md mx-auto">
                           <BookOpenIcon className="w-16 h-16 text-[#659AB8] mx-auto mb-4 opacity-50" />
@@ -795,7 +795,10 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                             Урок скоро появится
                           </h3>
                           <p className="text-[#4B5563] mb-6">
-                            Автор курса работает над адаптацией этого урока для режима "{currentMode === 'visual' ? 'Визуал' : currentMode === 'auditory' ? 'Аудиал' : 'Кинестетик'}".
+                            {currentMode === 'original'
+                              ? 'Автор курса работает над адаптацией этого урока.'
+                              : `Автор курса работает над адаптацией этого урока для режима "${currentMode === 'visual' ? 'Визуал' : currentMode === 'auditory' ? 'Аудиал' : 'Кинестетик'}".`
+                            }
                           </p>
                           <div className="bg-[#E8F4FA] border-2 border-[#E5E7EB] rounded-lg p-4">
                             <p className="text-sm text-[#4B5563]">
