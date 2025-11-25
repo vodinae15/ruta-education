@@ -1211,7 +1211,7 @@ export default function CourseAdaptationPage() {
                                   })
                                 }}
                                 disabled={isAdapting}
-                                className="bg-white text-amber-600 px-6 py-2 border-2 border-amber-600 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-amber-50 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                               >
                                 <RefreshCwIcon className="w-4 h-4" />
                                 Перегенерировать
