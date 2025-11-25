@@ -1081,24 +1081,31 @@ export default function CourseAdaptationPage() {
             <Card className="border">
               <CardContent className="py-6">
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-slate-900">
-                      Прогресс адаптации
-                    </h3>
-                    <span className="text-sm text-slate-600 font-semibold">
-                      {Math.round(overallProgress)}%
-                    </span>
-                  </div>
-                  <Progress value={overallProgress} className="h-3" showLabel />
-                  <p className="text-sm text-slate-600">
-                    Адаптация контента может занять несколько минут...
-                  </p>
+                  {adaptingTypes.length > 1 && (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-slate-900">
+                          Общий прогресс
+                        </h3>
+                        <span className="text-sm text-slate-600 font-semibold">
+                          {Math.round(overallProgress)}%
+                        </span>
+                      </div>
+                      <Progress value={overallProgress} className="h-3" showLabel />
+                    </>
+                  )}
+
+                  {adaptingTypes.length === 1 && (
+                    <p className="text-sm text-slate-600">
+                      Адаптация контента может занять несколько минут...
+                    </p>
+                  )}
 
                   {/* Детальный прогресс по типам */}
                   {adaptingTypes.length > 0 && (
-                    <div className="space-y-3 pt-4 border-t border-[#E5E7EB]">
+                    <div className={`space-y-3 ${adaptingTypes.length > 1 ? 'pt-4 border-t border-[#E5E7EB]' : ''}`}>
                       <h4 className="text-sm font-semibold text-slate-900">
-                        {adaptingTypes.length === 1 ? 'Прогресс адаптации:' : 'Прогресс по типам:'}
+                        {adaptingTypes.length === 1 ? 'Прогресс адаптации' : 'Прогресс по типам:'}
                       </h4>
                       {STUDENT_TYPES.filter(type => adaptingTypes.includes(type.id)).map((type) => {
                         const progress = adaptationProgress[type.id] || 0
