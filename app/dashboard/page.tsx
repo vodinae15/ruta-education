@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { createClient } from "@/lib/supabase/client"
 import { useAuth } from "@/lib/auth"
 import Link from "next/link"
-import { Trash2 } from "lucide-react"
+import { Trash2, X } from "lucide-react"
 
 interface AuthorProfile {
   id: string
@@ -1249,7 +1249,7 @@ export default function DashboardPage() {
                         <button
                           onClick={() => setCourseToDelete(course.id)}
                           disabled={deletingCourses[course.id]}
-                          className="text-red-600 hover:text-red-700 p-1 transition-colors disabled:opacity-50"
+                          className="text-[#659AB8] hover:text-[#5589a7] p-1 transition-colors duration-200 disabled:opacity-50"
                           title="Удалить курс"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -1266,29 +1266,42 @@ export default function DashboardPage() {
 
       {/* Модальное окно подтверждения удаления */}
       {courseToDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Удалить курс?</h3>
-            <p className="text-sm text-slate-600 mb-6">
-              Вы уверены, что хотите удалить этот курс? Это действие нельзя отменить. Все уроки, адаптации и связанные данные будут удалены.
-            </p>
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setCourseToDelete(null)}
-                disabled={deletingCourses[courseToDelete]}
-                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
-              >
-                Отмена
-              </button>
-              <button
-                onClick={() => deleteCourse(courseToDelete)}
-                disabled={deletingCourses[courseToDelete]}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
-              >
-                {deletingCourses[courseToDelete] ? "Удаление..." : "Удалить курс"}
-              </button>
-            </div>
-          </div>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4 bg-white border-2 border-[#659AB8]">
+            <CardContent className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold text-[#5589a7] mb-2">Удалить курс?</h2>
+                  <p className="text-slate-600 text-sm">
+                    Вы уверены, что хотите удалить этот курс? Это действие нельзя отменить. Все уроки, адаптации и связанные данные будут удалены.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setCourseToDelete(null)}
+                  disabled={deletingCourses[courseToDelete]}
+                  className="p-1 h-auto text-slate-400 hover:text-slate-600 transition-colors disabled:opacity-50"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="flex gap-3 justify-end mt-6">
+                <button
+                  onClick={() => setCourseToDelete(null)}
+                  disabled={deletingCourses[courseToDelete]}
+                  className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white disabled:opacity-50"
+                >
+                  Отмена
+                </button>
+                <button
+                  onClick={() => deleteCourse(courseToDelete)}
+                  disabled={deletingCourses[courseToDelete]}
+                  className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50"
+                >
+                  {deletingCourses[courseToDelete] ? "Удаление..." : "Удалить курс"}
+                </button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>
