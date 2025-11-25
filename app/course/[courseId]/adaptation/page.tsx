@@ -168,14 +168,23 @@ export default function CourseAdaptationPage() {
         .order("order_index", { ascending: true })
 
       if (!lessonsError && lessonsData && Array.isArray(lessonsData) && lessonsData.length > 0) {
-        console.log("✅ [Adaptation] Loaded lessons from course_lessons table")
+        console.log("✅ [Adaptation] Loaded lessons from course_lessons table:", lessonsData.length, "lessons")
+        console.log("✅ [Adaptation] First lesson ID:", lessonsData[0]?.id)
         lessons = lessonsData
-      } else if (courseData?.modules?.lessons && Array.isArray(courseData.modules.lessons) && courseData.modules.lessons.length > 0) {
-        console.log("⚠️ [Adaptation] Fallback to courseData.modules.lessons")
-        lessons = courseData.modules.lessons
-      } else if (courseData?.course_data?.lessons && Array.isArray(courseData.course_data.lessons) && courseData.course_data.lessons.length > 0) {
-        console.log("⚠️ [Adaptation] Fallback to courseData.course_data.lessons")
-        lessons = courseData.course_data.lessons
+      } else {
+        console.log("⚠️ [Adaptation] No lessons in course_lessons table")
+        console.log("⚠️ [Adaptation] Error:", lessonsError)
+        console.log("⚠️ [Adaptation] Data:", lessonsData)
+
+        if (courseData?.modules?.lessons && Array.isArray(courseData.modules.lessons) && courseData.modules.lessons.length > 0) {
+          console.log("⚠️ [Adaptation] Fallback to courseData.modules.lessons")
+          console.log("⚠️ [Adaptation] First lesson from modules:", courseData.modules.lessons[0])
+          lessons = courseData.modules.lessons
+        } else if (courseData?.course_data?.lessons && Array.isArray(courseData.course_data.lessons) && courseData.course_data.lessons.length > 0) {
+          console.log("⚠️ [Adaptation] Fallback to courseData.course_data.lessons")
+          console.log("⚠️ [Adaptation] First lesson from course_data:", courseData.course_data.lessons[0])
+          lessons = courseData.course_data.lessons
+        }
       }
 
       if (lessons.length === 0) {
