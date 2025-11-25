@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { createClient } from "@/lib/supabase/client"
 import { useAuth } from "@/lib/auth"
 import Link from "next/link"
+import { Trash2 } from "lucide-react"
 
 interface AuthorProfile {
   id: string
@@ -99,6 +100,8 @@ export default function DashboardPage() {
   const [streamLaunchStatus, setStreamLaunchStatus] = useState<Record<string, { canLaunch: boolean; message: string }>>({})
   const [courseAnalytics, setCourseAnalytics] = useState<Record<string, any>>({})
   const [analyticsLoading, setAnalyticsLoading] = useState<Record<string, boolean>>({})
+  const [deletingCourses, setDeletingCourses] = useState<Record<string, boolean>>({})
+  const [courseToDelete, setCourseToDelete] = useState<string | null>(null)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -435,6 +438,49 @@ export default function DashboardPage() {
       })
     }
   }, [analyticsLoading, courseAnalytics])
+
+  // Функция для удаления курса
+  const deleteCourse = useCallback(async (courseId: string) => {
+    setDeletingCourses(prev => ({ ...prev, [courseId]: true }))
+
+    try {
+      const response = await fetch(`/api/courses/${courseId}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+        throw new Error(errorData.error || "Failed to delete course")
+      }
+
+      // Удаляем курс из локального состояния
+      setCourses(prev => prev.filter(c => c.id !== courseId))
+
+      // Обновляем статистику
+      setStats(prev => ({
+        ...prev,
+        totalCourses: Math.max(0, prev.totalCourses - 1),
+        publishedCourses: courses.find(c => c.id === courseId)?.is_published
+          ? Math.max(0, prev.publishedCourses - 1)
+          : prev.publishedCourses,
+      }))
+
+      toast({
+        title: "Курс удален",
+        description: "Курс успешно удален из вашего списка",
+      })
+    } catch (error) {
+      console.error("Error deleting course:", error)
+      toast({
+        title: "Ошибка",
+        description: error instanceof Error ? error.message : "Не удалось удалить курс",
+        variant: "destructive",
+      })
+    } finally {
+      setDeletingCourses(prev => ({ ...prev, [courseId]: false }))
+      setCourseToDelete(null)
+    }
+  }, [courses, toast])
 
   // Загружаем аналитику для всех опубликованных курсов при загрузке
   useEffect(() => {
@@ -1200,6 +1246,14 @@ export default function DashboardPage() {
                         <span className="text-xs px-2 py-1 rounded-full bg-[#FDF8F3] text-slate-600 border border-[#E5E7EB]">
                           {course.is_published ? "Опубликован" : "Черновик"}
                         </span>
+                        <button
+                          onClick={() => setCourseToDelete(course.id)}
+                          disabled={deletingCourses[course.id]}
+                          className="text-red-600 hover:text-red-700 p-1 transition-colors disabled:opacity-50"
+                          title="Удалить курс"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                   </CardContent>
@@ -1209,6 +1263,34 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Модальное окно подтверждения удаления */}
+      {courseToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">Удалить курс?</h3>
+            <p className="text-sm text-slate-600 mb-6">
+              Вы уверены, что хотите удалить этот курс? Это действие нельзя отменить. Все уроки, адаптации и связанные данные будут удалены.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setCourseToDelete(null)}
+                disabled={deletingCourses[courseToDelete]}
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={() => deleteCourse(courseToDelete)}
+                disabled={deletingCourses[courseToDelete]}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+              >
+                {deletingCourses[courseToDelete] ? "Удаление..." : "Удалить курс"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

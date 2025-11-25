@@ -151,6 +151,31 @@ export class CourseDatabase {
     }
   }
 
+  // Удалить курс
+  async deleteCourse(courseId: string, userId: string): Promise<boolean> {
+    try {
+      // Проверяем доступ к редактированию (автор или соавтор)
+      const hasAccess = await canEditCourse(courseId, userId)
+      if (!hasAccess) {
+        console.error("User does not have access to delete this course")
+        return false
+      }
+
+      // Удаляем курс (связанные уроки удалятся каскадно через БД)
+      const { error } = await this.supabase.from("courses").delete().eq("id", courseId)
+
+      if (error) {
+        console.error("Error deleting course:", error)
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error("Error in deleteCourse:", error)
+      return false
+    }
+  }
+
   // Создать урок
   async createLesson(
     courseId: string,
