@@ -112,12 +112,12 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
     // Создаем базовую структуру блока
     legacyContent[blockKey] = {
       intro: {
-        text: newBlock.introText || `Блок ${i}`,
+        text: newBlock.introText || `Введение к разделу ${i}: ключевые понятия для изучения`,
         type: 'intro'
       },
       content: {
         title: `Блок ${i}`,
-        text: newBlock.mainText || '',
+        text: newBlock.mainText || `Основное содержание раздела ${i}. Материал адаптирован под ваш стиль обучения.`,
         type: 'text',
         elements: []
       },
