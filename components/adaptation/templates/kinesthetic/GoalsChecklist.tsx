@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { BlockWrapper } from "../../blocks/BlockWrapper"
-import { CheckCircle2, Circle, Target } from "lucide-react"
+import { CheckCircle2, Circle, Target, Trash2, Plus } from "lucide-react"
 
 interface Goal {
   id: string
@@ -15,9 +15,12 @@ interface GoalsChecklistProps {
   goals?: Goal[]
   introText?: string
   mainText?: string
+  isEditing?: boolean
+  onGoalsChange?: (goals: Goal[]) => void
+  onMainTextChange?: (text: string) => void
 }
 
-export function GoalsChecklist({ isEmpty = true, goals, introText, mainText }: GoalsChecklistProps) {
+export function GoalsChecklist({ isEmpty = true, goals, introText, mainText, isEditing = false, onGoalsChange, onMainTextChange }: GoalsChecklistProps) {
   const defaultGoals: Goal[] = [
     { id: "1", goal: "Понять механизм химических реакций", completed: false },
     { id: "2", goal: "Научиться определять типы реакций", completed: false },
@@ -36,6 +39,25 @@ export function GoalsChecklist({ isEmpty = true, goals, introText, mainText }: G
     )
   }
 
+  const handleGoalChange = (id: string, value: string) => {
+    const updated = goalsState.map(g => g.id === id ? { ...g, goal: value } : g)
+    setGoalsState(updated)
+    onGoalsChange?.(updated)
+  }
+
+  const handleAddGoal = () => {
+    const newGoal: Goal = { id: `goal-${Date.now()}`, goal: "", completed: false }
+    const updated = [...goalsState, newGoal]
+    setGoalsState(updated)
+    onGoalsChange?.(updated)
+  }
+
+  const handleRemoveGoal = (id: string) => {
+    const updated = goalsState.filter(g => g.id !== id)
+    setGoalsState(updated)
+    onGoalsChange?.(updated)
+  }
+
   const calculateProgress = () => {
     const completed = goalsState.filter((g) => g.completed).length
     return goalsState.length > 0 ? Math.round((completed / goalsState.length) * 100) : 0
@@ -48,6 +70,8 @@ export function GoalsChecklist({ isEmpty = true, goals, introText, mainText }: G
       intro="Отметьте цели по мере их достижения"
       isEmpty={false}
       mainText={mainText}
+      isEditing={isEditing}
+      onMainTextChange={onMainTextChange}
     >
       <div className="space-y-4">
         {/* Текст от автора */}
@@ -77,39 +101,71 @@ export function GoalsChecklist({ isEmpty = true, goals, introText, mainText }: G
         </div>
 
         {/* Список целей */}
-        <div className="space-y-2">
-          {goalsState.map((goal) => (
-            <div
-              key={goal.id}
-              className={`flex items-start gap-3 p-3 rounded-lg transition-colors duration-200 cursor-pointer ${
-                goal.completed ? "bg-[#E8F4FA]" : "bg-white hover:bg-[#F8FAFB] border border-[#E5E7EB]"
-              }`}
-              onClick={() => !isEmpty && toggleGoal(goal.id)}
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  !isEmpty && toggleGoal(goal.id)
-                }}
-                disabled={isEmpty}
-                className="flex-shrink-0 mt-0.5"
-              >
-                {goal.completed ? (
-                  <CheckCircle2 className="w-5 h-5 text-[#659AB8]" />
-                ) : (
-                  <Circle className="w-5 h-5 text-slate-300" />
+        {isEditing ? (
+          <div className="space-y-3">
+            {goalsState.map((goal, index) => (
+              <div key={goal.id} className="flex items-center gap-2 border-2 border-[#659AB8] rounded-lg p-3">
+                <span className="text-sm font-semibold text-slate-900 flex-shrink-0">#{index + 1}</span>
+                <input
+                  type="text"
+                  value={goal.goal}
+                  onChange={(e) => handleGoalChange(goal.id, e.target.value)}
+                  className="flex-1 px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                  placeholder="Введите цель обучения"
+                />
+                {goalsState.length > 1 && (
+                  <button
+                    onClick={() => handleRemoveGoal(goal.id)}
+                    className="text-red-600 hover:text-red-700 p-1 flex-shrink-0"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 )}
-              </button>
-              <p
-                className={`flex-1 text-sm ${
-                  goal.completed ? "text-slate-500 line-through" : "text-slate-900"
-                } ${isEmpty ? "text-slate-400" : ""}`}
+              </div>
+            ))}
+            <button
+              onClick={handleAddGoal}
+              className="w-full py-3 border-2 border-dashed border-[#659AB8] rounded-lg text-[#659AB8] hover:bg-[#E8F4FA] transition-colors flex items-center justify-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Добавить цель
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {goalsState.map((goal) => (
+              <div
+                key={goal.id}
+                className={`flex items-start gap-3 p-3 rounded-lg transition-colors duration-200 cursor-pointer ${
+                  goal.completed ? "bg-[#E8F4FA]" : "bg-white hover:bg-[#F8FAFB] border border-[#E5E7EB]"
+                }`}
+                onClick={() => !isEmpty && toggleGoal(goal.id)}
               >
-                {goal.goal}
-              </p>
-            </div>
-          ))}
-        </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    !isEmpty && toggleGoal(goal.id)
+                  }}
+                  disabled={isEmpty}
+                  className="flex-shrink-0 mt-0.5"
+                >
+                  {goal.completed ? (
+                    <CheckCircle2 className="w-5 h-5 text-[#659AB8]" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-slate-300" />
+                  )}
+                </button>
+                <p
+                  className={`flex-1 text-sm ${
+                    goal.completed ? "text-slate-500 line-through" : "text-slate-900"
+                  } ${isEmpty ? "text-slate-400" : ""}`}
+                >
+                  {goal.goal}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
 
         {isEmpty && (
           <div className="text-center mt-3">
