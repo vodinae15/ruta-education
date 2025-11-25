@@ -969,11 +969,11 @@ ${allMediaElements.map((el, i) => `${i + 1}. ${el.type.toUpperCase()}: ${el.cont
 ФОРМАТ ОТВЕТА:
 Верни ТОЛЬКО валидный JSON без комментариев:
 {
-  "block1": { "flipCards": [...], "structuredText": {...}, "media": [...] },
-  "block2": { "flipCards": [...], "structuredText": {...}, "media": [...] },
-  "block3": { "flipCards": [...], "structuredText": {...}, "media": [...] },
-  "block4": { "flipCards": [...], "structuredText": {...}, "media": [...] },
-  "block5": { "flipCards": [...], "structuredText": {...}, "media": [...] }
+  "block1": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] },
+  "block2": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] },
+  "block3": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] },
+  "block4": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [...] },
+  "block5": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] }
 }
 `
 
