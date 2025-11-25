@@ -4,15 +4,17 @@ import { FileText, Video, Music, Image as ImageIcon } from "lucide-react"
 
 interface AttachmentsBlockProps {
   isEmpty?: boolean
+  mainText?: string
 }
 
-export function AttachmentsBlock({ isEmpty = true }: AttachmentsBlockProps) {
+export function AttachmentsBlock({ isEmpty = true, mainText }: AttachmentsBlockProps) {
   return (
     <BlockWrapper
       blockNumber={4}
       title="Углубленное изучение"
       intro="Дополнительные материалы для изучения темы"
       isEmpty={isEmpty}
+      mainText={mainText}
     >
       {!isEmpty && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

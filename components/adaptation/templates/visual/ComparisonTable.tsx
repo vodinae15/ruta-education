@@ -13,9 +13,10 @@ interface ComparisonTableProps {
   isEmpty?: boolean
   rows?: TableRow[]
   contentText?: string
+  mainText?: string
 }
 
-export function ComparisonTable({ isEmpty = true, rows, contentText }: ComparisonTableProps) {
+export function ComparisonTable({ isEmpty = true, rows, contentText, mainText }: ComparisonTableProps) {
   const defaultRows: TableRow[] = Array.from({ length: 4 }, (_, i) => ({
     id: `row-${i}`,
     concept: "",
@@ -32,6 +33,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText }: Compariso
       title="Основы темы"
       intro="Сравнительная таблица ключевых понятий"
       isEmpty={false}
+      mainText={mainText}
     >
       {/* Текст от автора */}
       {contentText && (

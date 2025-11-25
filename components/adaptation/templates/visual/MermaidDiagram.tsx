@@ -8,6 +8,7 @@ interface MermaidDiagramProps {
   isEmpty?: boolean
   mermaidCode?: string
   introText?: string
+  mainText?: string
 }
 
 // Инициализируем Mermaid с нашими цветами
@@ -47,7 +48,7 @@ const defaultMermaidCode = `graph TD
     style H fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827
     style I fill:#F8FAFB,stroke:#659AB8,stroke-width:1px,color:#111827`
 
-export function MermaidDiagram({ isEmpty = true, mermaidCode, introText }: MermaidDiagramProps) {
+export function MermaidDiagram({ isEmpty = true, mermaidCode, introText, mainText }: MermaidDiagramProps) {
   const mermaidRef = useRef<HTMLDivElement>(null)
   const [diagramId] = useState(() => `mermaid-${Math.random().toString(36).substr(2, 9)}`)
 
@@ -79,6 +80,7 @@ export function MermaidDiagram({ isEmpty = true, mermaidCode, introText }: Merma
       title="Визуальная структура темы"
       intro="Схема взаимосвязей между концепциями"
       isEmpty={false}
+      mainText={mainText}
     >
       {/* Текст от автора */}
       {introText && (

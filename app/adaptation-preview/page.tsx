@@ -12,7 +12,6 @@ import { PracticalText } from "@/components/adaptation/templates/kinesthetic/Pra
 import { PracticeBlock } from "@/components/adaptation/blocks/PracticeBlock"
 import { AttachmentsBlock } from "@/components/adaptation/blocks/AttachmentsBlock"
 import { TestBlock } from "@/components/adaptation/blocks/TestBlock"
-import { RichTextContent } from "@/components/adaptation/blocks/RichTextContent"
 
 type AdaptationType = "original" | "visual" | "auditory" | "kinesthetic"
 
@@ -94,6 +93,39 @@ export default function AdaptationPreviewPage() {
 
   const sampleAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Пример аудио для демонстрации
 
+  // Пример распределения основного текстового контента по блокам
+  const mainTextBlock1 = `Химические реакции окружают нас повсюду: от процессов в нашем организме до явлений природы и технологических процессов. Понимание механизмов химических реакций является фундаментом для изучения многих естественных наук.
+
+Химическая реакция — это процесс превращения одних веществ (реагентов) в другие (продукты реакции). При этом происходит разрыв старых химических связей и образование новых. Важно понимать, что в ходе химической реакции атомы не исчезают и не появляются, а лишь перераспределяются между молекулами.`
+
+  const mainTextBlock2 = `Все химические реакции можно классифицировать по различным признакам. Один из важнейших критериев — это энергетический баланс реакции.
+
+Экзотермические реакции сопровождаются выделением энергии в виде тепла. Примером может служить горение: когда дрова сгорают в камине, выделяется большое количество тепла и света. Другой пример — реакция нейтрализации кислоты щелочью.
+
+Эндотермические реакции, напротив, требуют постоянного подвода энергии извне. Классический пример — фотосинтез в растениях, где энергия солнечного света используется для превращения углекислого газа и воды в глюкозу и кислород.`
+
+  const mainTextBlock3 = `Скорость химической реакции — это изменение концентрации реагентов или продуктов за единицу времени. На скорость реакции влияют несколько факторов:
+
+1. Температура — при повышении температуры молекулы движутся быстрее, чаще сталкиваются друг с другом, что ускоряет реакцию.
+
+2. Концентрация реагентов — чем больше концентрация, тем выше вероятность столкновения молекул.
+
+3. Площадь поверхности — измельченные вещества реагируют быстрее, так как имеют большую площадь контакта.
+
+4. Присутствие катализатора — вещества, которые ускоряют реакцию, не расходуясь при этом.`
+
+  const mainTextBlock4 = `Катализаторы играют особую роль в химии. Они снижают энергию активации реакции — минимальную энергию, необходимую для начала химического процесса. При этом катализатор не входит в состав конечных продуктов и может использоваться многократно.
+
+В живых организмах роль катализаторов выполняют ферменты — белковые молекулы, которые ускоряют биохимические реакции в миллионы раз. Без ферментов большинство реакций в организме протекали бы слишком медленно для поддержания жизни.
+
+В промышленности катализаторы применяются повсеместно: от производства серной кислоты до переработки нефти и создания полимеров.`
+
+  const mainTextBlock5 = `Закон сохранения массы, сформулированный М.В. Ломоносовым, гласит: масса веществ, вступивших в реакцию, равна массе образовавшихся продуктов. Этот закон является основой для составления уравнений химических реакций.
+
+При написании уравнения реакции необходимо уравнять количество атомов каждого элемента в левой и правой частях уравнения. Это делается с помощью коэффициентов перед формулами веществ.
+
+Понимание химических реакций открывает двери к осознанному изучению окружающего мира и позволяет предсказывать поведение веществ в различных условиях.`
+
   const adaptationTypes = [
     {
       id: "original" as const,
@@ -162,28 +194,25 @@ export default function AdaptationPreviewPage() {
         {/* Структура из 5 блоков */}
         <div className="space-y-6">
           {/* Блок 1 - зависит от типа */}
-          {selectedType === "original" && <FlipCards isEmpty={false} cards={sampleFlipCards} introText={sampleIntroText} />}
-          {selectedType === "visual" && <MermaidDiagram isEmpty={false} introText={sampleIntroText} />}
-          {selectedType === "auditory" && <AudioUploadBlock isEmpty={false} audioUrl={sampleAudioUrl} introText={sampleIntroText} />}
-          {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={false} goals={sampleGoals} introText={sampleIntroText} />}
+          {selectedType === "original" && <FlipCards isEmpty={false} cards={sampleFlipCards} introText={sampleIntroText} mainText={mainTextBlock1} />}
+          {selectedType === "visual" && <MermaidDiagram isEmpty={false} introText={sampleIntroText} mainText={mainTextBlock1} />}
+          {selectedType === "auditory" && <AudioUploadBlock isEmpty={false} audioUrl={sampleAudioUrl} introText={sampleIntroText} mainText={mainTextBlock1} />}
+          {selectedType === "kinesthetic" && <GoalsChecklist isEmpty={false} goals={sampleGoals} introText={sampleIntroText} mainText={mainTextBlock1} />}
 
           {/* Блок 2 - зависит от типа */}
-          {selectedType === "original" && <StructuredText isEmpty={false} sections={sampleStructuredText.sections} />}
-          {selectedType === "visual" && <ComparisonTable isEmpty={false} rows={sampleComparisonTable.rows} contentText={sampleContentText} />}
-          {selectedType === "auditory" && <AudioCards isEmpty={false} cards={sampleAudioCards} contentText={sampleContentText} />}
-          {selectedType === "kinesthetic" && <PracticalText isEmpty={false} sections={samplePracticalText.sections} />}
-
-          {/* Блок 2.5 - ОСНОВНОЙ КОНСПЕКТ (одинаковый для всех типов) */}
-          <RichTextContent isEmpty={false} />
+          {selectedType === "original" && <StructuredText isEmpty={false} sections={sampleStructuredText.sections} mainText={mainTextBlock2} />}
+          {selectedType === "visual" && <ComparisonTable isEmpty={false} rows={sampleComparisonTable.rows} contentText={sampleContentText} mainText={mainTextBlock2} />}
+          {selectedType === "auditory" && <AudioCards isEmpty={false} cards={sampleAudioCards} contentText={sampleContentText} mainText={mainTextBlock2} />}
+          {selectedType === "kinesthetic" && <PracticalText isEmpty={false} sections={samplePracticalText.sections} mainText={mainTextBlock2} />}
 
           {/* Блок 3 - Практика (одинаковый для всех) */}
-          <PracticeBlock isEmpty={false} />
+          <PracticeBlock isEmpty={false} mainText={mainTextBlock3} />
 
           {/* Блок 4 - Вложения (одинаковый для всех) */}
-          <AttachmentsBlock isEmpty={false} />
+          <AttachmentsBlock isEmpty={false} mainText={mainTextBlock4} />
 
           {/* Блок 5 - Тест (одинаковый для всех) */}
-          <TestBlock isEmpty={false} />
+          <TestBlock isEmpty={false} mainText={mainTextBlock5} />
         </div>
 
         {/* Итоговая информация */}

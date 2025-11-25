@@ -7,9 +7,10 @@ import { Check } from "lucide-react"
 
 interface TestBlockProps {
   isEmpty?: boolean
+  mainText?: string
 }
 
-export function TestBlock({ isEmpty = true }: TestBlockProps) {
+export function TestBlock({ isEmpty = true, mainText }: TestBlockProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const totalQuestions = 10
@@ -33,6 +34,7 @@ export function TestBlock({ isEmpty = true }: TestBlockProps) {
       title="Итоговое задание"
       intro="Проверьте свои знания. У вас есть одна попытка."
       isEmpty={isEmpty}
+      mainText={mainText}
     >
       {!isEmpty && (
         <div className="max-w-3xl mx-auto">

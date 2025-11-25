@@ -10,9 +10,10 @@ interface TextSection {
 interface StructuredTextProps {
   isEmpty?: boolean
   sections?: TextSection[]
+  mainText?: string
 }
 
-export function StructuredText({ isEmpty = true, sections }: StructuredTextProps) {
+export function StructuredText({ isEmpty = true, sections, mainText }: StructuredTextProps) {
   const defaultSections: TextSection[] = [
     { id: "1", title: "Первый раздел", content: "Абзац с описанием первой концепции..." },
     { id: "2", title: "Второй раздел", content: "Абзац с описанием второй концепции..." },
@@ -27,6 +28,7 @@ export function StructuredText({ isEmpty = true, sections }: StructuredTextProps
       title="Основы темы"
       intro="Структурированное изложение основных концепций"
       isEmpty={false}
+      mainText={mainText}
     >
       <div className="space-y-4">
         {displaySections.map((section, index) => (

@@ -11,9 +11,10 @@ interface PracticalSection {
 interface PracticalTextProps {
   isEmpty?: boolean
   sections?: PracticalSection[]
+  mainText?: string
 }
 
-export function PracticalText({ isEmpty = true, sections }: PracticalTextProps) {
+export function PracticalText({ isEmpty = true, sections, mainText }: PracticalTextProps) {
   const defaultSections: PracticalSection[] = [
     { id: "1", title: "Практическое применение", content: "Попробуйте провести простой эксперимент: смешайте соду и уксус." },
   ]
@@ -26,6 +27,7 @@ export function PracticalText({ isEmpty = true, sections }: PracticalTextProps) 
       title="Основы темы"
       intro="Практико-ориентированное изложение с акцентом на действия"
       isEmpty={false}
+      mainText={mainText}
     >
       <div className="space-y-4">
         {displaySections.map((section) => (

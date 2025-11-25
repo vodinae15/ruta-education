@@ -8,12 +8,14 @@ interface AudioUploadBlockProps {
   isEmpty?: boolean
   audioUrl?: string
   introText?: string
+  mainText?: string
 }
 
 export function AudioUploadBlock({
   isEmpty = true,
   audioUrl,
   introText,
+  mainText,
 }: AudioUploadBlockProps) {
   const [showRecommendations, setShowRecommendations] = useState(false)
 
@@ -23,6 +25,7 @@ export function AudioUploadBlock({
       title="Обзор темы"
       intro="Аудио-обзор темы для студентов"
       isEmpty={false}
+      mainText={mainText}
     >
       <div className="space-y-6">
         {/* Текст от автора */}

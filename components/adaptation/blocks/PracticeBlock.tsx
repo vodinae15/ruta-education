@@ -3,15 +3,17 @@ import { BlockWrapper } from "./BlockWrapper"
 
 interface PracticeBlockProps {
   isEmpty?: boolean
+  mainText?: string
 }
 
-export function PracticeBlock({ isEmpty = true }: PracticeBlockProps) {
+export function PracticeBlock({ isEmpty = true, mainText }: PracticeBlockProps) {
   return (
     <BlockWrapper
       blockNumber={3}
       title="Практическое закрепление"
       intro="Примените полученные знания на практике"
       isEmpty={isEmpty}
+      mainText={mainText}
     >
       {!isEmpty && (
         <div className="space-y-6">

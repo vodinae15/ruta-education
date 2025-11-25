@@ -13,6 +13,7 @@ interface FlipCardsProps {
   isEmpty?: boolean
   cards?: FlipCardData[]
   introText?: string
+  mainText?: string
 }
 
 function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmpty: boolean }) {
@@ -63,7 +64,7 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
   )
 }
 
-export function FlipCards({ isEmpty = true, cards, introText }: FlipCardsProps) {
+export function FlipCards({ isEmpty = true, cards, introText, mainText }: FlipCardsProps) {
   const defaultCards: FlipCardData[] = Array.from({ length: 6 }, (_, i) => ({
     id: `card-${i}`,
     front: "",
@@ -78,6 +79,7 @@ export function FlipCards({ isEmpty = true, cards, introText }: FlipCardsProps) 
       title="Обзор темы"
       intro={isEmpty ? "Нажмите на карточку, чтобы перевернуть её" : undefined}
       isEmpty={false}
+      mainText={mainText}
     >
       {/* Текст от автора */}
       {introText && (

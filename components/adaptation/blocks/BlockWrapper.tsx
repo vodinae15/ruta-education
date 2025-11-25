@@ -7,6 +7,7 @@ interface BlockWrapperProps {
   intro?: string
   children: React.ReactNode
   isEmpty?: boolean
+  mainText?: string
 }
 
 export function BlockWrapper({
@@ -15,6 +16,7 @@ export function BlockWrapper({
   intro,
   children,
   isEmpty = false,
+  mainText,
 }: BlockWrapperProps) {
   return (
     <div className="mb-8">
@@ -39,7 +41,20 @@ export function BlockWrapper({
               <p className="text-sm">Шаблон будет заполнен после генерации</p>
             </div>
           ) : (
-            children
+            <>
+              {children}
+
+              {/* Основной текстовый материал для этого блока */}
+              {mainText && (
+                <div className="mt-6 pt-6 border-t border-[#E5E7EB]">
+                  <div className="prose prose-slate max-w-none">
+                    <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                      {mainText}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
