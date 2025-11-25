@@ -91,6 +91,191 @@ function handleDatabaseError(error: any, context: string): { isJwtExpired: boole
   }
 }
 
+// Функция трансформации нового формата AI (плоского) в старый формат (с intro/content/adaptation)
+function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' | 'visual' | 'auditory' | 'kinesthetic'): AdaptationContent {
+  console.log('🔄 [Transform] Transforming new format to legacy format for type:', adaptationType)
+
+  const legacyContent: any = {}
+
+  // Обрабатываем каждый блок (block1-block5)
+  for (let i = 1; i <= 5; i++) {
+    const blockKey = `block${i}`
+    const newBlock = newFormat[blockKey]
+
+    if (!newBlock) {
+      console.warn(`⚠️ [Transform] Block ${blockKey} not found in new format`)
+      continue
+    }
+
+    console.log(`🔄 [Transform] Processing ${blockKey}:`, Object.keys(newBlock))
+
+    // Создаем базовую структуру блока
+    legacyContent[blockKey] = {
+      intro: {
+        text: newBlock.introText || `Блок ${i}`,
+        type: 'intro'
+      },
+      content: {
+        title: `Блок ${i}`,
+        text: newBlock.mainText || '',
+        type: 'text',
+        elements: []
+      },
+      adaptation: {
+        type: adaptationType,
+        element: {
+          type: '', // Будет установлен ниже в зависимости от типа
+          data: {},
+          description: ''
+        }
+      }
+    }
+
+    // Обрабатываем медиа-элементы (общие для всех типов)
+    if (newBlock.media && Array.isArray(newBlock.media)) {
+      legacyContent[blockKey].content.elements = newBlock.media.map((m: any) => ({
+        id: `media-${Date.now()}-${Math.random()}`,
+        type: m.type,
+        content: m.url,
+        caption: m.caption || ''
+      }))
+      console.log(`✅ [Transform] Added ${newBlock.media.length} media elements to ${blockKey}`)
+    }
+
+    // Специфичная трансформация в зависимости от типа адаптации
+    switch (adaptationType) {
+      case 'original':
+        // Блок 1: FlipCards
+        if (i === 1 && newBlock.flipCards) {
+          legacyContent[blockKey].adaptation.element.type = 'flipcards'
+          legacyContent[blockKey].adaptation.element.data = {
+            cards: newBlock.flipCards
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Карточки для запоминания терминов'
+          console.log(`✅ [Transform] Transformed flipCards for ${blockKey}:`, newBlock.flipCards.length, 'cards')
+        }
+        // Блок 2: StructuredText
+        else if (i === 2 && newBlock.structuredText) {
+          legacyContent[blockKey].adaptation.element.type = 'structured'
+          legacyContent[blockKey].adaptation.element.data = {
+            sections: newBlock.structuredText.sections || []
+          }
+          // Используем mainText из structuredText если есть
+          if (newBlock.structuredText.mainText) {
+            legacyContent[blockKey].content.text = newBlock.structuredText.mainText
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Структурированный текст с секциями'
+          console.log(`✅ [Transform] Transformed structuredText for ${blockKey}:`, newBlock.structuredText.sections?.length || 0, 'sections')
+        }
+        // Блоки 3-5: используем structuredText если есть
+        else if (newBlock.structuredText) {
+          legacyContent[blockKey].adaptation.element.type = 'structured'
+          legacyContent[blockKey].adaptation.element.data = {
+            sections: newBlock.structuredText.sections || []
+          }
+          if (newBlock.structuredText.mainText) {
+            legacyContent[blockKey].content.text = newBlock.structuredText.mainText
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Структурированный текст'
+        } else if (newBlock.flipCards) {
+          legacyContent[blockKey].adaptation.element.type = 'flipcards'
+          legacyContent[blockKey].adaptation.element.data = {
+            cards: newBlock.flipCards
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Карточки для запоминания'
+        } else {
+          legacyContent[blockKey].adaptation.element.type = 'text'
+          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
+        }
+        break
+
+      case 'visual':
+        // Блок 1: MermaidDiagram
+        if (i === 1 && newBlock.mermaidDiagram) {
+          legacyContent[blockKey].adaptation.element.type = 'diagram'
+          legacyContent[blockKey].adaptation.element.data = {
+            mermaidCode: newBlock.mermaidDiagram.code || ''
+          }
+          legacyContent[blockKey].adaptation.element.description = newBlock.mermaidDiagram.description || 'Схема взаимосвязей'
+          console.log(`✅ [Transform] Transformed mermaidDiagram for ${blockKey}`)
+        }
+        // Блоки 2-5: ComparisonTable
+        else if (newBlock.comparisonTable) {
+          legacyContent[blockKey].adaptation.element.type = 'table'
+          legacyContent[blockKey].adaptation.element.data = {
+            rows: newBlock.comparisonTable.rows || []
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Таблица сравнения понятий'
+          console.log(`✅ [Transform] Transformed comparisonTable for ${blockKey}:`, newBlock.comparisonTable.rows?.length || 0, 'rows')
+        } else {
+          legacyContent[blockKey].adaptation.element.type = 'text'
+          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
+        }
+        break
+
+      case 'auditory':
+        // Блок 5: AudioUploadBlock
+        if (i === 5 && newBlock.audioUploadBlock) {
+          legacyContent[blockKey].adaptation.element.type = 'audio-upload'
+          legacyContent[blockKey].adaptation.element.data = {
+            title: newBlock.audioUploadBlock.title || '',
+            description: newBlock.audioUploadBlock.description || '',
+            instructions: newBlock.audioUploadBlock.instructions || [],
+            criteria: newBlock.audioUploadBlock.criteria || ''
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Задание на запись аудио-пересказа'
+          console.log(`✅ [Transform] Transformed audioUploadBlock for ${blockKey}`)
+        }
+        // Блоки 1-4: AudioCards
+        else if (newBlock.audioCards) {
+          legacyContent[blockKey].adaptation.element.type = 'audio-cards'
+          legacyContent[blockKey].adaptation.element.data = {
+            audioCards: newBlock.audioCards
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Аудио-карточки с терминами'
+          console.log(`✅ [Transform] Transformed audioCards for ${blockKey}:`, newBlock.audioCards.length, 'cards')
+        } else {
+          legacyContent[blockKey].adaptation.element.type = 'text'
+          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
+        }
+        break
+
+      case 'kinesthetic':
+        // Блок 1: GoalsChecklist
+        if (i === 1 && newBlock.goalsChecklist) {
+          legacyContent[blockKey].adaptation.element.type = 'goals'
+          legacyContent[blockKey].adaptation.element.data = {
+            goals: newBlock.goalsChecklist.goals || []
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Чек-лист целей обучения'
+          console.log(`✅ [Transform] Transformed goalsChecklist for ${blockKey}:`, newBlock.goalsChecklist.goals?.length || 0, 'goals')
+        }
+        // Блоки 2-5: PracticalText
+        else if (newBlock.practicalText) {
+          legacyContent[blockKey].adaptation.element.type = 'practical'
+          legacyContent[blockKey].adaptation.element.data = {
+            title: newBlock.practicalText.title || '',
+            tasks: newBlock.practicalText.tasks || [],
+            criteria: newBlock.practicalText.criteria || ''
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Практические задания'
+          console.log(`✅ [Transform] Transformed practicalText for ${blockKey}:`, newBlock.practicalText.tasks?.length || 0, 'tasks')
+        } else {
+          legacyContent[blockKey].adaptation.element.type = 'text'
+          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
+        }
+        break
+    }
+  }
+
+  console.log('✅ [Transform] Transformation complete, blocks:', Object.keys(legacyContent))
+  return legacyContent as AdaptationContent
+}
+
 // Валидация адаптированного контента
 function validateAdaptationContent(content: any): { valid: boolean; errors: ValidationError[] } {
   const errors: ValidationError[] = []
@@ -1671,6 +1856,11 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ [AI Adaptation] Parsed adapted content successfully')
     console.log('✅ [AI Adaptation] Parsed content blocks:', Object.keys(adaptedContent).filter(k => k.startsWith('block')))
+
+    // Трансформируем новый формат AI в старый формат (с intro/content/adaptation)
+    console.log('🔄 [AI Adaptation] ========== TRANSFORMING FORMAT ==========')
+    adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType)
+    console.log('✅ [AI Adaptation] Format transformation complete')
 
     // Копируем медиа-элементы из оригинальных блоков в адаптированные
     console.log('🔄 [AI Adaptation] Copying media elements from original blocks...')
