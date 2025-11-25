@@ -56,7 +56,6 @@ export function StructuredText({ isEmpty = true, sections, mainText, isEditing =
     <BlockWrapper
       blockNumber={2}
       title="Основы темы"
-      intro="Структурированное изложение основных концепций"
       isEmpty={false}
       mainText={mainText}
       isEditing={isEditing}
