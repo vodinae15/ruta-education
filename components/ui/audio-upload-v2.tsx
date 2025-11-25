@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react"
 import { Button } from "./button"
 import { Card, CardContent } from "./card"
 import { MicIcon, PlayIcon, PauseIcon, UploadIcon, TrashIcon, FileTextIcon, XIcon } from "./icons"
+import { SaveCourseWarningModal } from "./save-course-warning-modal"
 
 interface AudioUploadProps {
   onAudioUpload: (fileId: string, fileUrl: string, fileName: string) => void
@@ -38,6 +39,7 @@ export function AudioUploadV2({
   const [recordingTime, setRecordingTime] = useState(0)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [showSaveWarning, setShowSaveWarning] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -102,7 +104,11 @@ export function AudioUploadV2({
 
     // Проверяем что курс сохранен
     if (!courseId) {
-      setError("Сначала сохраните курс, чтобы загружать файлы")
+      setShowSaveWarning(true)
+      // Очищаем выбор файла
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
       return
     }
 
@@ -381,6 +387,7 @@ export function AudioUploadV2({
           )}
         </div>
       </CardContent>
+      <SaveCourseWarningModal isOpen={showSaveWarning} onClose={() => setShowSaveWarning(false)} />
     </Card>
   )
 }

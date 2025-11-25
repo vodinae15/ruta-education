@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react"
 import { Button } from "./button"
 import { Card, CardContent } from "./card"
 import { UploadIcon, TrashIcon, FileTextIcon, XIcon, DownloadIcon } from "./icons"
+import { SaveCourseWarningModal } from "./save-course-warning-modal"
 
 interface DocumentUploadProps {
   onDocumentUpload: (fileId: string, fileUrl: string, fileName: string) => void
@@ -35,6 +36,7 @@ export function DocumentUpload({
   const [fileName, setFileName] = useState<string>(initialFileName || "")
   const [fileSize, setFileSize] = useState<number>(0)
   const [error, setError] = useState<string | null>(null)
+  const [showSaveWarning, setShowSaveWarning] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -59,7 +61,11 @@ export function DocumentUpload({
 
     // Проверяем что курс сохранен
     if (!courseId) {
-      setError("Сначала сохраните курс, чтобы загружать файлы")
+      setShowSaveWarning(true)
+      // Очищаем выбор файла
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
       return
     }
 
@@ -291,6 +297,7 @@ export function DocumentUpload({
           )}
         </div>
       </CardContent>
+      <SaveCourseWarningModal isOpen={showSaveWarning} onClose={() => setShowSaveWarning(false)} />
     </Card>
   )
 }

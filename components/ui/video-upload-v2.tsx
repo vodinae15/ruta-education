@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react"
 import { Button } from "./button"
 import { Card, CardContent } from "./card"
 import { PlayIcon, PauseIcon, UploadIcon, TrashIcon, VideoIcon, XIcon, LinkIcon } from "./icons"
+import { SaveCourseWarningModal } from "./save-course-warning-modal"
 
 interface VideoUploadProps {
   onVideoUpload: (fileId: string, fileUrl: string, fileName: string, source?: string) => void
@@ -39,6 +40,7 @@ export function VideoUploadV2({
   const [isPlaying, setIsPlaying] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [showSaveWarning, setShowSaveWarning] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -75,7 +77,11 @@ export function VideoUploadV2({
 
     // Проверяем что курс сохранен
     if (!courseId) {
-      setError("Сначала сохраните курс, чтобы загружать файлы")
+      setShowSaveWarning(true)
+      // Очищаем выбор файла
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
       return
     }
 
@@ -426,6 +432,7 @@ export function VideoUploadV2({
           )}
         </div>
       </CardContent>
+      <SaveCourseWarningModal isOpen={showSaveWarning} onClose={() => setShowSaveWarning(false)} />
     </Card>
   )
 }
