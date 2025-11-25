@@ -41,6 +41,12 @@ export function ImageUploadV2({
     const file = event.target.files?.[0]
     if (!file) return
 
+    // Проверяем что курс сохранен
+    if (!courseId) {
+      setError("Сначала сохраните курс, чтобы загружать файлы")
+      return
+    }
+
     // Проверяем тип файла
     if (!file.type.startsWith("image/")) {
       setError("Пожалуйста, выберите изображение")

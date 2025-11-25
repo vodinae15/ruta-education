@@ -100,6 +100,12 @@ export function AudioUploadV2({
     const file = event.target.files?.[0]
     if (!file) return
 
+    // Проверяем что курс сохранен
+    if (!courseId) {
+      setError("Сначала сохраните курс, чтобы загружать файлы")
+      return
+    }
+
     if (!file.type.startsWith("audio/")) {
       setError("Пожалуйста, выберите аудио файл")
       return

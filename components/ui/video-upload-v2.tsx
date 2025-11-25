@@ -73,6 +73,12 @@ export function VideoUploadV2({
     const file = event.target.files?.[0]
     if (!file) return
 
+    // Проверяем что курс сохранен
+    if (!courseId) {
+      setError("Сначала сохраните курс, чтобы загружать файлы")
+      return
+    }
+
     if (!file.type.startsWith("video/")) {
       setError("Пожалуйста, выберите видео файл")
       return
