@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createServerClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 import { courseDatabase } from "@/lib/course-database"
 
 export async function DELETE(
@@ -17,7 +17,7 @@ export async function DELETE(
     }
 
     // Получаем текущего пользователя
-    const supabase = await createServerClient()
+    const supabase = await createClient()
     const {
       data: { user },
       error: userError,
