@@ -141,6 +141,7 @@ export default function CourseAdaptationPage() {
   const [adaptationProgress, setAdaptationProgress] = useState<Record<string, number>>({})
   const [isEditing, setIsEditing] = useState(false)
   const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false)
+  const [editedContent, setEditedContent] = useState<Record<string, AdaptationContent>>({})
 
   const supabase = createClient()
   const { toast } = useToast()
@@ -779,8 +780,28 @@ export default function CourseAdaptationPage() {
     }
   }
 
-  const saveAdaptationChanges = async (adaptationType: AdaptationType, content: AdaptationContent) => {
+  // Обработчик изменений контента при inline-редактировании
+  const handleAdaptedContentChange = (adaptationType: AdaptationType, content: AdaptationContent) => {
+    setEditedContent(prev => ({
+      ...prev,
+      [adaptationType]: content
+    }))
+  }
+
+  // Сохранение изменений адаптации
+  const saveAdaptationChanges = async (adaptationType: AdaptationType, content?: AdaptationContent) => {
     if (!selectedLesson) return
+
+    // Используем переданный content или editedContent
+    const contentToSave = content || editedContent[adaptationType]
+    if (!contentToSave) {
+      toast({
+        title: "Нет изменений",
+        description: "Нет несохраненных изменений для сохранения.",
+        variant: "destructive",
+      })
+      return
+    }
 
     setIsSaving(true)
     try {
@@ -793,7 +814,7 @@ export default function CourseAdaptationPage() {
           lessonId: selectedLesson.id,
           courseId: courseId,
           type: adaptationType,
-          blocks: content
+          blocks: contentToSave
         }),
       })
 
@@ -802,15 +823,24 @@ export default function CourseAdaptationPage() {
           ...prev,
           [adaptationType]: {
             ...prev[adaptationType],
-            content,
+            content: contentToSave,
             status: 'completed'
           }
         }))
+
+        // Очищаем editedContent для этого типа после успешного сохранения
+        setEditedContent(prev => {
+          const { [adaptationType]: _, ...rest } = prev
+          return rest
+        })
 
         toast({
           title: "Изменения сохранены",
           description: `Адаптация для типа «${getAdaptationTypeName(adaptationType)}» успешно сохранена.`,
         })
+
+        // Закрываем режим редактирования после сохранения
+        setIsEditing(false)
       } else {
         const errorData = await response.json().catch(() => ({ error: "Неизвестная ошибка" }))
         toast({
@@ -1119,23 +1149,46 @@ export default function CourseAdaptationPage() {
                     <div className="flex gap-2">
                       {(adaptations[currentMode]?.content || (currentMode === 'original' && (adaptations['original']?.status === 'completed' || adaptations['original']?.status === 'published'))) && (
                         <>
-                          <button
-                            onClick={() => setIsEditing(!isEditing)}
-                            className={`px-6 py-2 border-2 rounded-lg text-sm font-semibold transition-colors duration-200 whitespace-nowrap ${
-                              isEditing
-                                ? "bg-[#659AB8] text-white border-[#659AB8] hover:bg-[#5589a7] hover:border-[#5589a7]"
-                                : "bg-white text-[#659AB8] border-[#659AB8] hover:bg-[#659AB8] hover:text-white"
-                            }`}
-                          >
-                            {isEditing ? 'Закрыть редактор' : 'Редактировать'}
-                          </button>
-                          {!isEditing && adaptations[currentMode]?.status !== 'published' && (
-                            <button
-                              onClick={() => publishAdaptation(currentMode)}
-                              className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
-                            >
-                              Опубликовать
-                            </button>
+                          {isEditing ? (
+                            <>
+                              <button
+                                onClick={() => saveAdaptationChanges(currentMode)}
+                                disabled={isSaving}
+                                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {isSaving ? 'Сохранение...' : 'Сохранить'}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setIsEditing(false)
+                                  // Очищаем несохраненные изменения
+                                  setEditedContent(prev => {
+                                    const { [currentMode]: _, ...rest } = prev
+                                    return rest
+                                  })
+                                }}
+                                className="bg-white text-slate-600 px-6 py-2 border-2 border-slate-300 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-slate-50 whitespace-nowrap"
+                              >
+                                Отмена
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => setIsEditing(true)}
+                                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap"
+                              >
+                                Редактировать
+                              </button>
+                              {adaptations[currentMode]?.status !== 'published' && (
+                                <button
+                                  onClick={() => publishAdaptation(currentMode)}
+                                  className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
+                                >
+                                  Опубликовать
+                                </button>
+                              )}
+                            </>
                           )}
                         </>
                       )}
@@ -1162,30 +1215,20 @@ export default function CourseAdaptationPage() {
                     <div className="space-y-4">
                       {adaptations['original']?.status === 'completed' || adaptations['original']?.status === 'published' ? (
                         <div className="bg-white border-2 border-[#659AB8]/20 rounded-lg p-6">
-                          {isEditing && adaptations['original']?.content ? (
-                            <AdaptationEditor
-                              content={adaptations['original'].content}
-                              onSave={async (editedContent) => {
-                                await saveAdaptationChanges('original', editedContent)
-                                setIsEditing(false)
-                              }}
-                              onCancel={() => setIsEditing(false)}
-                              isSaving={isSaving}
-                            />
-                          ) : (
-                            <UnifiedAdaptation
-                              mode="original"
-                              lessonTitle={selectedLesson.title}
-                              adaptedContent={adaptations['original']?.content}
-                              originalContent={adaptations['original']?.originalContent || {
-                                blocks: selectedLesson.blocks || []
-                              }}
-                              isStudent={false}
-                              courseId={courseId}
-                              lessonId={selectedLesson.id}
-                              materialsAnalysis={materialsAnalysis}
-                            />
-                          )}
+                          <UnifiedAdaptation
+                            mode="original"
+                            lessonTitle={selectedLesson.title}
+                            adaptedContent={adaptations['original']?.content}
+                            originalContent={adaptations['original']?.originalContent || {
+                              blocks: selectedLesson.blocks || []
+                            }}
+                            isStudent={false}
+                            courseId={courseId}
+                            lessonId={selectedLesson.id}
+                            materialsAnalysis={materialsAnalysis}
+                            isEditing={isEditing}
+                            onAdaptedContentChange={(content) => handleAdaptedContentChange('original', content)}
+                          />
                         </div>
                       ) : (
                         <div className="bg-white border-2 border-[#E5E7EB] rounded-lg p-6">
@@ -1207,28 +1250,18 @@ export default function CourseAdaptationPage() {
                     <div className="space-y-4">
                       {adaptations[currentMode]?.status === 'completed' || adaptations[currentMode]?.status === 'published' ? (
                         <div className="bg-white border-2 border-[#659AB8]/20 rounded-lg p-6">
-                          {isEditing && adaptations[currentMode]?.content ? (
-                            <AdaptationEditor
-                              content={adaptations[currentMode].content}
-                              onSave={async (editedContent) => {
-                                await saveAdaptationChanges(currentMode, editedContent)
-                                setIsEditing(false)
-                              }}
-                              onCancel={() => setIsEditing(false)}
-                              isSaving={isSaving}
-                            />
-                          ) : (
-                            <UnifiedAdaptation
-                              mode={currentMode}
-                              lessonTitle={selectedLesson.title}
-                              adaptedContent={adaptations[currentMode]?.content}
-                              originalContent={adaptations[currentMode]?.originalContent}
-                              isStudent={false}
-                              courseId={courseId}
-                              lessonId={selectedLesson.id}
-                              materialsAnalysis={materialsAnalysis}
-                            />
-                          )}
+                          <UnifiedAdaptation
+                            mode={currentMode}
+                            lessonTitle={selectedLesson.title}
+                            adaptedContent={adaptations[currentMode]?.content}
+                            originalContent={adaptations[currentMode]?.originalContent}
+                            isStudent={false}
+                            courseId={courseId}
+                            lessonId={selectedLesson.id}
+                            materialsAnalysis={materialsAnalysis}
+                            isEditing={isEditing}
+                            onAdaptedContentChange={(content) => handleAdaptedContentChange(currentMode, content)}
+                          />
                         </div>
                       ) : adaptations[currentMode]?.status === 'processing' ? (
                         <div className="bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg p-6 text-center">
