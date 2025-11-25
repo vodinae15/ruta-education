@@ -291,7 +291,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
       // Блок 4: Вложения/медиа (общий для всех типов)
       // Медиа уже добавлены в content.elements выше (строка 136)
       legacyContent[blockKey].adaptation.element.type = 'attachments'
-      legacyContent[blockKey].adaptation.element.data = {}
+      legacyContent[blockKey].adaptation.element.data = { attachments: [] }
       legacyContent[blockKey].adaptation.element.description = 'Дополнительные материалы'
       console.log(`✅ [Transform] Block ${blockKey} set as attachments block`)
     } else if (i === 5) {
@@ -864,6 +864,40 @@ function validateElementDataStructure(
           block: blockId,
           field: 'adaptation.element.data.text',
           message: `Для text элемента отсутствует или пусто поле text`
+        })
+      }
+      break
+
+    case 'attachments':
+      // Для attachments данные хранятся в content.elements, а не в adaptation.element.data
+      // Проверяем что есть массив attachments (может быть пустым)
+      if (!Array.isArray(elementData.attachments)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.attachments',
+          message: `Для attachments поле data.attachments должно быть массивом`
+        })
+      }
+      break
+
+    case 'practice':
+      // Для practice проверяем массив tasks
+      if (!Array.isArray(elementData.tasks)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.tasks',
+          message: `Для practice поле data.tasks должно быть массивом`
+        })
+      }
+      break
+
+    case 'test':
+      // Для test проверяем массив questions
+      if (!Array.isArray(elementData.questions)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.questions',
+          message: `Для test поле data.questions должно быть массивом`
         })
       }
       break
