@@ -771,7 +771,9 @@ export default function CourseConstructor() {
 
   // Сохраняем в localStorage для восстановления при перезагрузке
   useEffect(() => {
-    if (courseTitle.trim()) {
+    // НЕ сохраняем в localStorage если данные уже сохранены в БД
+    // Это предотвращает перезапись БД данных локальными после успешного сохранения
+    if (courseTitle.trim() && saveStatus !== "saved") {
       const draftData = {
         title: courseTitle,
         description: courseDescription,
@@ -781,7 +783,7 @@ export default function CourseConstructor() {
       }
       localStorage.setItem("courseConstructorDraft", JSON.stringify(draftData))
     }
-  }, [courseTitle, courseDescription, courseLessons, courseBlocks])
+  }, [courseTitle, courseDescription, courseLessons, courseBlocks, saveStatus])
 
   const checkAuthorProfile = async () => {
     try {
