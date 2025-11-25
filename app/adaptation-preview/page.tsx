@@ -12,6 +12,7 @@ import { PracticalText } from "@/components/adaptation/templates/kinesthetic/Pra
 import { PracticeBlock } from "@/components/adaptation/blocks/PracticeBlock"
 import { AttachmentsBlock } from "@/components/adaptation/blocks/AttachmentsBlock"
 import { TestBlock } from "@/components/adaptation/blocks/TestBlock"
+import { RichTextContent } from "@/components/adaptation/blocks/RichTextContent"
 
 type AdaptationType = "original" | "visual" | "auditory" | "kinesthetic"
 
@@ -171,6 +172,9 @@ export default function AdaptationPreviewPage() {
           {selectedType === "visual" && <ComparisonTable isEmpty={false} rows={sampleComparisonTable.rows} contentText={sampleContentText} />}
           {selectedType === "auditory" && <AudioCards isEmpty={false} cards={sampleAudioCards} contentText={sampleContentText} />}
           {selectedType === "kinesthetic" && <PracticalText isEmpty={false} sections={samplePracticalText.sections} />}
+
+          {/* Блок 2.5 - ОСНОВНОЙ КОНСПЕКТ (одинаковый для всех типов) */}
+          <RichTextContent isEmpty={false} />
 
           {/* Блок 3 - Практика (одинаковый для всех) */}
           <PracticeBlock isEmpty={false} />
