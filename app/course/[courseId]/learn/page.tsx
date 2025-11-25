@@ -546,12 +546,12 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
   if (accessCheck && !accessCheck.hasAccess) {
     return (
       <div className="min-h-screen bg-white">
-        <div className="bg-white border-b-2 border-[#CDE6F9]">
+        <div className="bg-white border-b-2 border-[#E5E7EB]">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-[#1E293B]">{course.title}</h1>
-                <p className="text-lg text-[#64748B] mt-1">Курс</p>
+                <h1 className="text-2xl lg:text-3xl font-bold text-[#111827]">{course.title}</h1>
+                <p className="text-lg text-[#4B5563] mt-1">Курс</p>
               </div>
             </div>
           </div>
@@ -576,13 +576,13 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
   if (lessons.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F3FAFE]">
+      <div className="min-h-screen bg-[#F8FAFB]">
         <div className="bg-white border-b border-[#E5E7EB]">
           <div className="max-w-6xl mx-auto px-8 py-4">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-bold text-[#659AB8]">{course.title}</h1>
-                <p className="text-sm text-slate-600">Курс</p>
+                <p className="text-sm text-[#4B5563]">Курс</p>
               </div>
               <div className="flex items-center gap-4">
                 <Button
@@ -601,16 +601,16 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
         <div className="max-w-6xl mx-auto px-8 py-8">
           <Card className="border-0">
             <CardContent className="text-center py-12">
-              <BookOpenIcon className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">
+              <BookOpenIcon className="w-16 h-16 text-[#659AB8] mx-auto mb-4 opacity-50" />
+              <h2 className="text-xl font-semibold text-[#111827] mb-2">
                 Уроки курса не найдены
               </h2>
-              <p className="text-slate-600 mb-6">
+              <p className="text-[#4B5563] mb-6">
                 В этом курсе пока нет уроков. Обратитесь к преподавателю для получения доступа к контенту.
               </p>
               <Button
                 onClick={() => router.push("/student-dashboard")}
-                className="bg-[#659AB8] hover:bg-[#5a8ba8] text-white"
+                className="bg-[#659AB8] hover:bg-[#5589a7] text-white"
               >
                 Вернуться в профиль
               </Button>
@@ -627,12 +627,12 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-white border-b-2 border-[#CDE6F9]">
+      <div className="bg-white border-b-2 border-[#E5E7EB]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-[#1E293B]">{course.title}</h1>
-              <p className="text-lg text-[#64748B] mt-1">
+              <h1 className="text-2xl lg:text-3xl font-bold text-[#111827]">{course.title}</h1>
+              <p className="text-lg text-[#4B5563] mt-1">
                 Урок {currentLesson + 1} из {lessons.length}
               </p>
             </div>
@@ -649,7 +649,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
               {/* Переключатель режимов адаптации */}
               {studentSession?.student_type && (
                 <div className="hidden sm:flex items-center gap-3">
-                  <span className="text-sm text-[#64748B] font-medium">Режим:</span>
+                  <span className="text-sm text-[#4B5563] font-medium">Режим:</span>
                   <AdaptationModeSwitcher
                     currentMode={currentMode}
                     onModeChange={(mode) => {
@@ -674,17 +674,17 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
           <div className="lg:col-span-1">
-            <Card className="border-2 border-[#CDE6F9] rounded-lg sticky top-8">
+            <Card className="border-2 border-[#E5E7EB] rounded-lg sticky top-8">
               <CardHeader className="pb-4">
-                <h2 className="text-xl font-bold text-[#1E293B]">
+                <h2 className="text-xl font-bold text-[#111827]">
                   Уроки курса
                 </h2>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm text-[#64748B]">
+                  <div className="flex items-center justify-between text-sm text-[#4B5563]">
                     <span>Прогресс</span>
                     <span className="font-medium text-[#659AB8]">{Math.round(progress)}%</span>
                   </div>
-                  <Progress value={progress} className="h-3 bg-[#F3FAFE]" />
+                  <Progress value={progress} className="h-3 bg-[#E5E7EB]" />
                 </div>
               </CardHeader>
               <CardContent className="p-0">
@@ -707,25 +707,25 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                         disabled={!isAccessible}
                         className={`w-full text-left p-4 rounded-lg transition-all duration-200 ${
                           !isAccessible
-                            ? "bg-slate-50 text-slate-400 border-2 border-slate-200 cursor-not-allowed opacity-60"
+                            ? "bg-[#E5E7EB] text-[#4B5563] border-2 border-[#E5E7EB] cursor-not-allowed opacity-60"
                             : isCurrent
                             ? "bg-[#659AB8] text-white"
                             : isCompleted
-                            ? "bg-green-50 text-green-800 border-2 border-green-200 hover:border-green-300"
-                            : "bg-[#F3FAFE] text-[#1E293B] border-2 border-[#CDE6F9] hover:border-[#659AB8]/40 hover:bg-[#CDE6F9]"
+                            ? "bg-[#E8F4FA] text-[#5589a7] border-2 border-[#659AB8] hover:border-[#5589a7]"
+                            : "bg-[#E8F4FA] text-[#111827] border-2 border-[#E5E7EB] hover:border-[#659AB8]/40 hover:bg-[#E5E7EB]"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           {!isAccessible ? (
-                            <LockIcon className="w-5 h-5 text-slate-400" />
+                            <LockIcon className="w-5 h-5 text-[#4B5563] opacity-50" />
                           ) : isCompleted ? (
-                            <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                            <CheckCircleIcon className="w-5 h-5 text-[#659AB8]" />
                           ) : (
                             <div
                               className={`w-5 h-5 rounded-full border-2 ${
                                 isCurrent
                                   ? "border-white"
-                                  : "border-slate-300"
+                                  : "border-[#E5E7EB]"
                               }`}
                             />
                           )}
@@ -733,7 +733,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                             <div className="flex items-center justify-between">
                               <div className="font-medium text-sm">{lesson.title}</div>
                               {!isAccessible && (
-                                <Badge variant="secondary" className="bg-slate-100 text-slate-600 text-xs">
+                                <Badge variant="secondary" className="bg-[#FDF8F3] border border-[#E5E7EB] text-[#4B5563] text-xs">
                                   Скоро
                                 </Badge>
                               )}
@@ -756,15 +756,15 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
           <div className="lg:col-span-3">
             {currentLessonData && (
-              <Card className="border-2 border-[#CDE6F9] rounded-lg">
+              <Card className="border-2 border-[#E5E7EB] rounded-lg">
                 <CardHeader className="pb-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-2xl lg:text-3xl font-bold text-[#1E293B]">
+                      <h2 className="text-2xl lg:text-3xl font-bold text-[#111827]">
                         {currentLessonData.title}
                       </h2>
                       {currentLessonData.description && (
-                        <p className="text-lg text-[#64748B] mt-2 font-medium">{currentLessonData.description}</p>
+                        <p className="text-lg text-[#4B5563] mt-2 font-medium">{currentLessonData.description}</p>
                       )}
                     </div>
                     <Badge
@@ -772,8 +772,8 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                         currentLesson === 0
                           ? "bg-[#659AB8] text-white border-[#659AB8]"
                           : completedLessons.includes(currentLesson)
-                          ? "bg-green-50 text-green-800 border-green-200"
-                          : "bg-[#F3FAFE] text-[#659AB8] border-[#659AB8]"
+                          ? "bg-[#E8F4FA] text-[#5589a7] border-[#659AB8]"
+                          : "bg-[#E8F4FA] text-[#659AB8] border-[#659AB8]"
                       }`}
                     >
                       {currentLesson === 0
@@ -791,14 +791,14 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                       <div className="py-12 text-center">
                         <div className="max-w-md mx-auto">
                           <BookOpenIcon className="w-16 h-16 text-[#659AB8] mx-auto mb-4 opacity-50" />
-                          <h3 className="text-2xl font-bold text-[#1E293B] mb-3">
+                          <h3 className="text-2xl font-bold text-[#111827] mb-3">
                             Урок скоро появится
                           </h3>
-                          <p className="text-[#64748B] mb-6">
+                          <p className="text-[#4B5563] mb-6">
                             Автор курса работает над адаптацией этого урока для режима "{currentMode === 'visual' ? 'Визуал' : currentMode === 'auditory' ? 'Аудиал' : 'Кинестетик'}".
                           </p>
-                          <div className="bg-[#F3FAFE] border-2 border-[#CDE6F9] rounded-lg p-4">
-                            <p className="text-sm text-[#64748B]">
+                          <div className="bg-[#E8F4FA] border-2 border-[#E5E7EB] rounded-lg p-4">
+                            <p className="text-sm text-[#4B5563]">
                               Пожалуйста, вернитесь позже или попробуйте переключить режим отображения выше.
                             </p>
                           </div>
@@ -809,8 +809,8 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                         {/* Переключатель режимов для мобильных устройств */}
                         {studentSession?.student_type && (
                           <div className="sm:hidden mb-4">
-                            <div className="flex flex-col gap-2 p-3 bg-[#F3FAFE] rounded-lg border border-[#CDE6F9]">
-                              <span className="text-sm font-medium text-[#1E293B]">Режим отображения:</span>
+                            <div className="flex flex-col gap-2 p-3 bg-[#E8F4FA] rounded-lg border border-[#E5E7EB]">
+                              <span className="text-sm font-medium text-[#111827]">Режим отображения:</span>
                               <AdaptationModeSwitcher
                                 currentMode={currentMode}
                                 onModeChange={(mode) => {
@@ -830,11 +830,11 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
                         {/* Упрощенная подсказка о текущем режиме */}
                         {studentSession?.student_type && (
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                          <div className="bg-[#E8F4FA] border border-[#E5E7EB] rounded-lg p-3">
                             <div className="flex items-start gap-2">
-                              <LightbulbIcon className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <LightbulbIcon className="w-4 h-4 text-[#5589a7] mt-0.5 flex-shrink-0" />
                               <div className="flex-1">
-                                <p className="text-xs text-blue-700">
+                                <p className="text-xs text-[#4B5563]">
                                   {currentMode === 'visual' && "💡 Вы в визуальном режиме: схемы, диаграммы и структурированная информация."}
                                   {currentMode === 'auditory' && "💡 Вы в аудиальном режиме: истории, диалоги и эмоциональные примеры."}
                                   {currentMode === 'kinesthetic' && "💡 Вы в кинестетическом режиме: практические задания и интерактивные элементы."}
@@ -947,8 +947,8 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                       <StarIcon className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-[#1E293B]">Бонусные материалы</h3>
-                      <p className="text-sm text-slate-600">Дополнительный контент от автора</p>
+                      <h3 className="text-lg font-bold text-[#111827]">Бонусные материалы</h3>
+                      <p className="text-sm text-[#4B5563]">Дополнительный контент от автора</p>
                     </div>
                   </div>
                 </CardHeader>
@@ -957,7 +957,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                     <div className="flex items-center gap-2 mb-3">
                       <Badge className="bg-[#659AB8] text-white text-xs">Автор курса</Badge>
                     </div>
-                    <div className="text-slate-900 whitespace-pre-wrap leading-relaxed">
+                    <div className="text-[#111827] whitespace-pre-wrap leading-relaxed">
                       {purchaseInfo.bonusContent}
                     </div>
                   </div>
@@ -975,8 +975,8 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                         <MessageCircleIcon className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-[#1E293B]">Обратная связь с автором</h3>
-                        <p className="text-sm text-slate-600">Обменивайтесь заметками с автором курса</p>
+                        <h3 className="text-lg font-bold text-[#111827]">Обратная связь с автором</h3>
+                        <p className="text-sm text-[#4B5563]">Обменивайтесь заметками с автором курса</p>
                       </div>
                     </div>
                     <Button
@@ -996,7 +996,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                         : "Вы приобрели тариф с обратной связью от автора."
                       }
                     </p>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-[#4B5563]">
                       Нажмите на кнопку "Открыть заметки", чтобы начать обмен сообщениями с автором курса.
                     </p>
                   </div>
@@ -1004,7 +1004,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
               </Card>
             )}
 
-            <div className="flex items-center justify-between pt-6 border-t-2 border-[#CDE6F9]">
+            <div className="flex items-center justify-between pt-6 border-t-2 border-[#E5E7EB]">
               <Button
                 variant="secondary"
                 onClick={() => setCurrentLesson(Math.max(0, currentLesson - 1))}
@@ -1018,7 +1018,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
               {currentLesson < lessons.length - 1 ? (
                 <Button
                   onClick={() => setCurrentLesson(currentLesson + 1)}
-                  className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#5a8ba8] text-white border-2 border-[#659AB8] transition-colors"
+                  className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#5589a7] text-white border-2 border-[#659AB8] transition-colors"
                 >
                   Следующий урок
                   <ArrowRightIcon className="w-4 h-4" />
@@ -1026,7 +1026,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
               ) : (
                 <Button
                   onClick={() => router.push("/student-dashboard")}
-                  className="flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white border-2 border-[#10B981] transition-colors"
+                  className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#5589a7] text-white border-2 border-[#659AB8] transition-colors"
                 >
                   <CheckCircleIcon className="w-5 h-5" />
                   Завершить курс
