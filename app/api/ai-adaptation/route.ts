@@ -253,8 +253,8 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           legacyContent[blockKey].adaptation.element.description = 'Чек-лист целей обучения'
           console.log(`✅ [Transform] Transformed goalsChecklist for ${blockKey}:`, newBlock.goalsChecklist.goals?.length || 0, 'goals')
         }
-        // Блоки 2-5: PracticalText
-        else if (newBlock.practicalText) {
+        // Блок 2: PracticalText
+        else if (i === 2 && newBlock.practicalText) {
           legacyContent[blockKey].adaptation.element.type = 'practical'
           legacyContent[blockKey].adaptation.element.data = {
             title: newBlock.practicalText.title || '',
@@ -269,6 +269,46 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
         }
         break
+    }
+
+    // Блоки 3-5: общие для всех типов адаптации (переопределяем после switch)
+    if (i === 3) {
+      // Блок 3: Практика (общий для всех типов)
+      if (newBlock.practice || newBlock.tasks) {
+        legacyContent[blockKey].adaptation.element.type = 'practice'
+        legacyContent[blockKey].adaptation.element.data = {
+          tasks: newBlock.practice || newBlock.tasks || []
+        }
+        legacyContent[blockKey].adaptation.element.description = 'Практические задания'
+        console.log(`✅ [Transform] Transformed practice for ${blockKey}:`, (newBlock.practice || newBlock.tasks || []).length, 'tasks')
+      } else {
+        // Пустая практика - будет показан placeholder
+        legacyContent[blockKey].adaptation.element.type = 'practice'
+        legacyContent[blockKey].adaptation.element.data = { tasks: [] }
+        legacyContent[blockKey].adaptation.element.description = 'Блок заполнится после адаптации'
+      }
+    } else if (i === 4) {
+      // Блок 4: Вложения/медиа (общий для всех типов)
+      // Медиа уже добавлены в content.elements выше (строка 136)
+      legacyContent[blockKey].adaptation.element.type = 'attachments'
+      legacyContent[blockKey].adaptation.element.data = {}
+      legacyContent[blockKey].adaptation.element.description = 'Дополнительные материалы'
+      console.log(`✅ [Transform] Block ${blockKey} set as attachments block`)
+    } else if (i === 5) {
+      // Блок 5: Тест (общий для всех типов)
+      if (newBlock.test || newBlock.questions) {
+        legacyContent[blockKey].adaptation.element.type = 'test'
+        legacyContent[blockKey].adaptation.element.data = {
+          questions: newBlock.test || newBlock.questions || []
+        }
+        legacyContent[blockKey].adaptation.element.description = 'Итоговый тест'
+        console.log(`✅ [Transform] Transformed test for ${blockKey}:`, (newBlock.test || newBlock.questions || []).length, 'questions')
+      } else {
+        // Пустой тест - будет показан placeholder
+        legacyContent[blockKey].adaptation.element.type = 'test'
+        legacyContent[blockKey].adaptation.element.data = { questions: [] }
+        legacyContent[blockKey].adaptation.element.description = 'Блок заполнится после адаптации'
+      }
     }
   }
 
@@ -876,6 +916,13 @@ ${allMediaElements.map((el, i) => `${i + 1}. ${el.type.toUpperCase()}: ${el.cont
 ⚠️ ВАЖНО: Эти медиа-элементы нужно сохранить В ТОЧНОСТИ как есть и распределить по блокам.
 ` : ''}
 
+${lessonContent.tests && lessonContent.tests.length > 0 ? `
+ТЕСТЫ ОТ АВТОРА:
+${lessonContent.tests.map((test, i) => `${i + 1}. ${test}`).join('\n')}
+
+⚠️ ВАЖНО: Используй эти тесты в блоке 5. Если тестов нет - ОБЯЗАТЕЛЬНО сгенерируй 10 вопросов самостоятельно!
+` : '⚠️ ВАЖНО: Автор НЕ предоставил тесты. ОБЯЗАТЕЛЬНО сгенерируй 10 вопросов для блока 5 самостоятельно!'}
+
 ЗАДАЧА: Создать структурированную адаптацию урока из 5 блоков.
 `
 
@@ -951,12 +998,34 @@ ${allMediaElements.map((el, i) => `${i + 1}. ${el.type.toUpperCase()}: ${el.cont
 - НЕ добавляй медиа в блоки 1-3! Оставляй "media": []
 - ВСЕ медиа будут добавлены в блок 4 (углубленное изучение)
 
+ПРАВИЛА ДЛЯ БЛОКА 3 (ПРАКТИКА):
+- Блок 3 - это ПРАКТИЧЕСКИЕ ЗАДАНИЯ для закрепления материала
+- Добавь поле "practice": массив из 3-5 практических заданий
+- Каждое задание должно содержать:
+  * "id": уникальный идентификатор
+  * "instruction": чёткая инструкция (что нужно сделать)
+  * "hint": подсказка для выполнения (опционально)
+- ОБЯЗАТЕЛЬНО создай практику на основе изученного материала из блоков 1-2
+- FlipCards и StructuredText тоже добавляй для блока 3
+
+ПРАВИЛА ДЛЯ БЛОКА 5 (ТЕСТ):
+- Блок 5 - это ИТОГОВЫЙ ТЕСТ для проверки знаний
+- Добавь поле "test": массив из 10 вопросов с вариантами ответа
+- Каждый вопрос должен содержать:
+  * "id": уникальный идентификатор
+  * "question": текст вопроса
+  * "options": массив из 4 вариантов ответа
+  * "correctAnswer": индекс правильного ответа (0-3)
+  * "explanation": объяснение правильного ответа
+- ОБЯЗАТЕЛЬНО создай 10 вопросов! Это критическое требование!
+- FlipCards и StructuredText тоже добавляй для блока 5
+
 РАСПРЕДЕЛЕНИЕ КОНТЕНТА ПО БЛОКАМ:
 - БЛОК 1: Введение и обзор (6-8 карточек + 2-3 секции + ПОЛНЫЙ текст)
 - БЛОК 2: Основная теория (8-10 карточек + 3-4 секции + ПОЛНЫЙ текст)
-- БЛОК 3: Практические примеры (6-8 карточек + 2-3 секции + ПОЛНЫЙ текст)
-- БЛОК 4: Углубленное изучение (6-8 карточек + 2-3 секции + ПОЛНЫЙ текст)
-- БЛОК 5: Итоги и проверка (6-8 карточек + 2 секции + ПОЛНЫЙ текст)
+- БЛОК 3: Практическое закрепление (6-8 карточек + 2-3 секции + ПОЛНЫЙ текст + 3-5 практических заданий)
+- БЛОК 4: Углубленное изучение с медиа (6-8 карточек + 2-3 секции + ПОЛНЫЙ текст + ВСЕ медиа)
+- БЛОК 5: Итоги и тест (6-8 карточек + 2 секции + ПОЛНЫЙ текст + 10 вопросов теста)
 
 КРИТИЧЕСКИ ВАЖНО:
 1. НЕ добавляй информацию, которой нет в исходном контенте
@@ -965,15 +1034,16 @@ ${allMediaElements.map((el, i) => `${i + 1}. ${el.type.toUpperCase()}: ${el.cont
 4. Копируй URL медиа ТОЧНО как есть
 5. Верни JSON для ВСЕХ 5 блоков
 6. ИЗЛАГАЙ ПОЛНОСТЬЮ весь текст автора в mainText БЕЗ СОКРАЩЕНИЙ! Это КЛЮЧЕВОЕ требование!
+7. ОБЯЗАТЕЛЬНО создай практику для блока 3 и тест из 10 вопросов для блока 5!
 
 ФОРМАТ ОТВЕТА:
 Верни ТОЛЬКО валидный JSON без комментариев:
 {
   "block1": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] },
   "block2": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] },
-  "block3": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] },
+  "block3": { "introText": "...", "flipCards": [...], "structuredText": {...}, "practice": [...], "media": [] },
   "block4": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [...] },
-  "block5": { "introText": "...", "flipCards": [...], "structuredText": {...}, "media": [] }
+  "block5": { "introText": "...", "flipCards": [...], "structuredText": {...}, "test": [...], "media": [] }
 }
 `
 
@@ -1070,12 +1140,34 @@ graph TD
 - НЕ добавляй медиа в блоки 1-3! Оставляй "media": []
 - ВСЕ медиа будут добавлены в блок 4 (углубленное изучение)
 
+ПРАВИЛА ДЛЯ БЛОКА 3 (ПРАКТИКА):
+- Блок 3 - это ПРАКТИЧЕСКИЕ ЗАДАНИЯ для закрепления материала
+- Добавь поле "practice": массив из 3-5 практических заданий
+- Каждое задание должно содержать:
+  * "id": уникальный идентификатор
+  * "instruction": чёткая инструкция (что нужно сделать)
+  * "hint": подсказка для выполнения (опционально)
+- ОБЯЗАТЕЛЬНО создай практику на основе изученного материала из блоков 1-2
+- ComparisonTable тоже добавляй для блока 3
+
+ПРАВИЛА ДЛЯ БЛОКА 5 (ТЕСТ):
+- Блок 5 - это ИТОГОВЫЙ ТЕСТ для проверки знаний
+- Добавь поле "test": массив из 10 вопросов с вариантами ответа
+- Каждый вопрос должен содержать:
+  * "id": уникальный идентификатор
+  * "question": текст вопроса
+  * "options": массив из 4 вариантов ответа
+  * "correctAnswer": индекс правильного ответа (0-3)
+  * "explanation": объяснение правильного ответа
+- ОБЯЗАТЕЛЬНО создай 10 вопросов! Это критическое требование!
+- ComparisonTable тоже добавляй для блока 5
+
 РАСПРЕДЕЛЕНИЕ КОНТЕНТА ПО БЛОКАМ:
 - БЛОК 1: Обзор темы + Mermaid схема (6-9 узлов) + ПОЛНЫЙ текст
 - БЛОК 2: Основная теория + таблица понятий (8-10 строк) + ПОЛНЫЙ текст
-- БЛОК 3: Практические примеры + таблица примеров (6-8 строк) + ПОЛНЫЙ текст
-- БЛОК 4: Углубленное изучение + таблица деталей (6-8 строк) + ПОЛНЫЙ текст
-- БЛОК 5: Итоги + итоговая таблица (6-8 строк) + ПОЛНЫЙ текст
+- БЛОК 3: Практическое закрепление + таблица примеров (6-8 строк) + ПОЛНЫЙ текст + 3-5 практических заданий
+- БЛОК 4: Углубленное изучение с медиа + таблица деталей (6-8 строк) + ПОЛНЫЙ текст + ВСЕ медиа
+- БЛОК 5: Итоги и тест + итоговая таблица (6-8 строк) + ПОЛНЫЙ текст + 10 вопросов теста
 
 КРИТИЧЕСКИ ВАЖНО:
 1. НЕ добавляй информацию, которой нет в исходном контенте
@@ -1085,15 +1177,16 @@ graph TD
 5. Верни JSON для ВСЕХ 5 блоков
 6. Mermaid code ДОЛЖЕН быть одной строкой с \\n для переносов
 7. ИЗЛАГАЙ ПОЛНОСТЬЮ весь текст автора в mainText БЕЗ СОКРАЩЕНИЙ! Это КЛЮЧЕВОЕ требование!
+8. ОБЯЗАТЕЛЬНО создай практику для блока 3 и тест из 10 вопросов для блока 5!
 
 ФОРМАТ ОТВЕТА:
 Верни ТОЛЬКО валидный JSON без комментариев:
 {
   "block1": { "introText": "...", "mermaidDiagram": {...}, "mainText": "...", "media": [] },
   "block2": { "introText": "...", "comparisonTable": {...}, "mainText": "...", "media": [] },
-  "block3": { "introText": "...", "comparisonTable": {...}, "mainText": "...", "media": [] },
+  "block3": { "introText": "...", "comparisonTable": {...}, "mainText": "...", "practice": [...], "media": [] },
   "block4": { "introText": "...", "comparisonTable": {...}, "mainText": "...", "media": [...] },
-  "block5": { "introText": "...", "comparisonTable": {...}, "mainText": "...", "media": [] }
+  "block5": { "introText": "...", "comparisonTable": {...}, "mainText": "...", "test": [...], "media": [] }
 }
 `
 
