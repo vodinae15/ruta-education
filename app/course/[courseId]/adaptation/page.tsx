@@ -139,6 +139,7 @@ export default function CourseAdaptationPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [materialsAnalysis, setMaterialsAnalysis] = useState<any>(null)
   const [adaptationProgress, setAdaptationProgress] = useState<Record<string, number>>({})
+  const [adaptingTypes, setAdaptingTypes] = useState<string[]>([]) // Типы, которые сейчас адаптируются
   const [isEditing, setIsEditing] = useState(false)
   const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false)
   const [editedContent, setEditedContent] = useState<Record<string, AdaptationContent>>({})
@@ -420,21 +421,39 @@ export default function CourseAdaptationPage() {
     )
   }
 
-  const startAdaptation = async () => {
+  const startAdaptation = async (adaptationType?: string) => {
     if (!selectedLesson) return
+
+    // Определяем типы для адаптации: один конкретный или все
+    const typesToAdapt = adaptationType
+      ? STUDENT_TYPES.filter(t => t.id === adaptationType)
+      : STUDENT_TYPES
+
+    if (typesToAdapt.length === 0) {
+      toast({
+        title: "Ошибка",
+        description: "Неверный тип адаптации",
+        variant: "destructive",
+      })
+      return
+    }
 
     setIsAdapting(true)
     setOverallProgress(0)
-    setAdaptations({})
     setAdaptationProgress({})
+    setAdaptingTypes(typesToAdapt.map(t => t.id)) // Сохраняем типы для отображения в прогрессе
+
+    const typeName = adaptationType
+      ? STUDENT_TYPES.find(t => t.id === adaptationType)?.name || 'выбранного режима'
+      : 'всех режимов'
 
     toast({
       title: "Запущена адаптация урока",
-      description: `Адаптация урока «${selectedLesson.title}» для всех режимов представления материала начата. Это может занять несколько минут.`,
+      description: `Адаптация урока «${selectedLesson.title}» для ${typeName} начата. Это может занять несколько минут.`,
     })
 
     const initialAdaptations: Record<string, AdaptationResult> = {}
-    STUDENT_TYPES.forEach(type => {
+    typesToAdapt.forEach(type => {
       initialAdaptations[type.id] = {
         studentType: type.id,
         content: {
@@ -449,9 +468,9 @@ export default function CourseAdaptationPage() {
       }
       setAdaptationProgress(prev => ({ ...prev, [type.id]: 0 }))
     })
-    setAdaptations(initialAdaptations)
+    setAdaptations(prev => ({ ...prev, ...initialAdaptations }))
 
-    const adaptationPromises = STUDENT_TYPES.map(async (studentType, index) => {
+    const adaptationPromises = typesToAdapt.map(async (studentType, index) => {
       try {
         setAdaptations(prev => ({
           ...prev,
@@ -555,7 +574,7 @@ export default function CourseAdaptationPage() {
           })
         }
 
-        const newProgress = Math.round(((index + 1) / STUDENT_TYPES.length) * 100)
+        const newProgress = Math.round(((index + 1) / typesToAdapt.length) * 100)
         setOverallProgress(newProgress)
 
       } catch (error: any) {
@@ -581,6 +600,7 @@ export default function CourseAdaptationPage() {
     await Promise.all(adaptationPromises)
     setOverallProgress(100)
     setIsAdapting(false)
+    setAdaptingTypes([]) // Очищаем список адаптируемых типов
 
     if (selectedLesson) {
       await loadAdaptationsFromDB(selectedLesson.id)
@@ -592,20 +612,39 @@ export default function CourseAdaptationPage() {
     setShowRegenerateConfirm(true)
   }
 
-  const regenerateAdaptation = async () => {
+  const regenerateAdaptation = async (adaptationType?: string) => {
     if (!selectedLesson) return
+
+    // Определяем типы для адаптации: один конкретный или все
+    const typesToAdapt = adaptationType
+      ? STUDENT_TYPES.filter(t => t.id === adaptationType)
+      : STUDENT_TYPES
+
+    if (typesToAdapt.length === 0) {
+      toast({
+        title: "Ошибка",
+        description: "Неверный тип адаптации",
+        variant: "destructive",
+      })
+      return
+    }
 
     setIsAdapting(true)
     setOverallProgress(0)
     setAdaptationProgress({})
+    setAdaptingTypes(typesToAdapt.map(t => t.id)) // Сохраняем типы для отображения в прогрессе
+
+    const typeName = adaptationType
+      ? STUDENT_TYPES.find(t => t.id === adaptationType)?.name || 'выбранного режима'
+      : 'всех режимов'
 
     toast({
       title: "Перегенерация адаптации урока",
-      description: `Адаптация урока «${selectedLesson.title}» перегенерируется для всех режимов представления материала. Старая версия будет удалена.`,
+      description: `Адаптация урока «${selectedLesson.title}» перегенерируется для ${typeName}. Старая версия будет удалена.`,
     })
 
     const initialAdaptations: Record<string, AdaptationResult> = {}
-    STUDENT_TYPES.forEach(type => {
+    typesToAdapt.forEach(type => {
       initialAdaptations[type.id] = {
         studentType: type.id,
         content: {
@@ -620,9 +659,9 @@ export default function CourseAdaptationPage() {
       }
       setAdaptationProgress(prev => ({ ...prev, [type.id]: 0 }))
     })
-    setAdaptations(initialAdaptations)
+    setAdaptations(prev => ({ ...prev, ...initialAdaptations }))
 
-    const adaptationPromises = STUDENT_TYPES.map(async (studentType, index) => {
+    const adaptationPromises = typesToAdapt.map(async (studentType, index) => {
       try {
         setAdaptations(prev => ({
           ...prev,
@@ -726,7 +765,7 @@ export default function CourseAdaptationPage() {
           })
         }
 
-        const newProgress = Math.round(((index + 1) / STUDENT_TYPES.length) * 100)
+        const newProgress = Math.round(((index + 1) / typesToAdapt.length) * 100)
         setOverallProgress(newProgress)
 
       } catch (error: any) {
@@ -752,6 +791,7 @@ export default function CourseAdaptationPage() {
     await Promise.all(adaptationPromises)
     setOverallProgress(100)
     setIsAdapting(false)
+    setAdaptingTypes([]) // Очищаем список адаптируемых типов
 
     if (selectedLesson) {
       await loadAdaptationsFromDB(selectedLesson.id)
@@ -1034,45 +1074,6 @@ export default function CourseAdaptationPage() {
             </Card>
           )}
 
-          {/* Кнопка запуска/перегенерации адаптации */}
-          {selectedLesson && (
-            <Card className="border">
-              <CardContent className="py-6">
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                    {hasExistingAdaptations() ? 'Перегенерировать адаптацию урока' : 'Запустить адаптацию урока'}
-                  </h3>
-                  <p className="text-sm text-slate-600 mb-4">
-                    {hasExistingAdaptations()
-                      ? `ИИ перегенерирует адаптацию урока «${selectedLesson.title}» для всех режимов представления материала. Старая версия будет удалена.`
-                      : `ИИ адаптирует урок «${selectedLesson.title}» для всех режимов представления материала`
-                    }
-                  </p>
-                  <div className="flex gap-3 justify-center">
-                    {!hasExistingAdaptations() && (
-                      <button
-                        onClick={startAdaptation}
-                        disabled={isAdapting}
-                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isAdapting ? 'Адаптация в процессе...' : 'Запустить адаптацию'}
-                      </button>
-                    )}
-                    {hasExistingAdaptations() && (
-                      <button
-                        onClick={handleRegenerateClick}
-                        disabled={isAdapting}
-                        className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isAdapting ? 'Перегенерация в процессе...' : 'Перегенерировать адаптацию'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           {/* Прогресс-бар */}
           {isAdapting && (
             <Card className="border">
@@ -1092,34 +1093,39 @@ export default function CourseAdaptationPage() {
                   </p>
 
                   {/* Детальный прогресс по типам */}
-                  <div className="space-y-3 pt-4 border-t border-[#E5E7EB]">
-                    <h4 className="text-sm font-semibold text-slate-900">Прогресс по типам:</h4>
-                    {STUDENT_TYPES.map((type) => {
-                      const progress = adaptationProgress[type.id] || 0
-                      const status = adaptations[type.id]?.status || 'pending'
+                  {adaptingTypes.length > 0 && (
+                    <div className="space-y-3 pt-4 border-t border-[#E5E7EB]">
+                      <h4 className="text-sm font-semibold text-slate-900">
+                        {adaptingTypes.length === 1 ? 'Прогресс адаптации:' : 'Прогресс по типам:'}
+                      </h4>
+                      {STUDENT_TYPES.filter(type => adaptingTypes.includes(type.id)).map((type) => {
+                        const progress = adaptationProgress[type.id] || 0
+                        const status = adaptations[type.id]?.status || 'pending'
 
-                      return (
-                        <div key={type.id} className="space-y-1">
-                          <div className="flex items-center justify-between text-sm">
-                            <div className="flex items-center gap-2">
-                              {type.icon}
-                              <span className="text-slate-900">{type.name}</span>
-                              {status === 'processing' && (
-                                <RefreshCwIcon className="w-3 h-3 text-[#659AB8] animate-spin" />
-                              )}
-                              {status === 'completed' && (
-                                <CheckCircleIcon className="w-3 h-3 text-[#659AB8]" />
-                              )}
-                              {status === 'error' && (
-                                <XIcon className="w-3 h-3 text-red-600" />
-                              )}
+                        return (
+                          <div key={type.id} className="space-y-1">
+                            <div className="flex items-center justify-between text-sm">
+                              <div className="flex items-center gap-2">
+                                {type.icon}
+                                <span className="text-slate-900">{type.name}</span>
+                                {status === 'processing' && (
+                                  <RefreshCwIcon className="w-3 h-3 text-[#659AB8] animate-spin" />
+                                )}
+                                {status === 'completed' && (
+                                  <CheckCircleIcon className="w-3 h-3 text-[#659AB8]" />
+                                )}
+                                {status === 'error' && (
+                                  <XIcon className="w-3 h-3 text-red-600" />
+                                )}
+                              </div>
+                              <span className="text-slate-600">{Math.round(progress)}%</span>
                             </div>
-                            <span className="text-slate-600">{Math.round(progress)}%</span>
+                            <Progress value={progress} className="h-2" />
                           </div>
-                          <Progress value={progress} className="h-2" />
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                    </div>
+                  )}
                   </div>
                 </div>
               </CardContent>
@@ -1236,7 +1242,7 @@ export default function CourseAdaptationPage() {
                         <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-6 text-center">
                           <p className="text-slate-900 mb-4">Ошибка при адаптации контента</p>
                           <button
-                            onClick={() => startAdaptation()}
+                            onClick={() => startAdaptation(currentMode)}
                             className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                           >
                             Попробовать снова
@@ -1249,7 +1255,7 @@ export default function CourseAdaptationPage() {
                           </div>
                           <p className="text-slate-600 mb-4">Адаптация ещё не создана</p>
                           <button
-                            onClick={() => startAdaptation()}
+                            onClick={() => startAdaptation(currentMode)}
                             className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
                           >
                             Создать адаптацию
