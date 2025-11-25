@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/client"
 import { canEditCourse } from "@/lib/course-access"
 import type { CourseLesson } from "@/lib/course-constructor-logic"
 import { createDefaultPricing } from "@/lib/course-pricing"
+import { generateUUID } from "@/lib/uuid"
 
 export interface CourseData {
   id: string
@@ -83,7 +84,7 @@ export class CourseDatabase {
   // Создать новый курс
   async createCourse(title: string, description: string, userId: string, authorType?: string): Promise<string | null> {
     try {
-      const tempId = crypto.randomUUID()
+      const tempId = generateUUID()
       const uniqueLink = `${window.location.origin}/course/${tempId}`
 
       const { data: courseData, error: courseError } = await this.supabase

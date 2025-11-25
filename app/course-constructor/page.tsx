@@ -48,6 +48,7 @@ import { Notification } from "@/components/ui/notification"
 import { CourseActionModal } from "@/components/ui/course-action-modal"
 import { CourseCollaboratorsManager } from "@/components/ui/course-collaborators-manager"
 import { TestCreator } from "@/components/test-creator"
+import { generateUUID } from "@/lib/uuid"
 import { PricingEditor } from "@/components/ui/pricing-editor"
 import { toast } from "@/components/ui/use-toast"
 import { createBrowserClient } from "@supabase/ssr"
@@ -1886,7 +1887,7 @@ export default function CourseConstructor() {
 
         setModalState({ isOpen: true, type: "save" })
       } else {
-        const tempId = crypto.randomUUID()
+        const tempId = generateUUID()
         const uniqueLink = `${window.location.origin}/course/${tempId}`
 
         const { data: courseData, error: courseError } = await supabase
@@ -1950,7 +1951,7 @@ export default function CourseConstructor() {
       // Если курс еще не сохранен, сначала создаем его
       if (!courseId) {
         console.log("Course not saved yet, creating new course...")
-        const tempId = crypto.randomUUID()
+        const tempId = generateUUID()
         const uniqueLink = `${window.location.origin}/course/${tempId}`
 
         const { data: courseData, error: courseError } = await supabase
