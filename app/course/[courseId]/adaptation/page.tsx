@@ -160,20 +160,22 @@ export default function CourseAdaptationPage() {
 
       let lessons: any[] = []
 
-      if (courseData?.modules?.lessons && Array.isArray(courseData.modules.lessons) && courseData.modules.lessons.length > 0) {
+      // ВСЕГДА загружаем из course_lessons для получения правильных UUID
+      const { data: lessonsData, error: lessonsError } = await supabase
+        .from("course_lessons")
+        .select("*")
+        .eq("course_id", courseId)
+        .order("order_index", { ascending: true })
+
+      if (!lessonsError && lessonsData && Array.isArray(lessonsData) && lessonsData.length > 0) {
+        console.log("✅ [Adaptation] Loaded lessons from course_lessons table")
+        lessons = lessonsData
+      } else if (courseData?.modules?.lessons && Array.isArray(courseData.modules.lessons) && courseData.modules.lessons.length > 0) {
+        console.log("⚠️ [Adaptation] Fallback to courseData.modules.lessons")
         lessons = courseData.modules.lessons
       } else if (courseData?.course_data?.lessons && Array.isArray(courseData.course_data.lessons) && courseData.course_data.lessons.length > 0) {
+        console.log("⚠️ [Adaptation] Fallback to courseData.course_data.lessons")
         lessons = courseData.course_data.lessons
-      } else {
-        const { data: lessonsData, error: lessonsError } = await supabase
-          .from("course_lessons")
-          .select("*")
-          .eq("course_id", courseId)
-          .order("order_index", { ascending: true })
-
-        if (!lessonsError && lessonsData && Array.isArray(lessonsData) && lessonsData.length > 0) {
-          lessons = lessonsData
-        }
       }
 
       if (lessons.length === 0) {
