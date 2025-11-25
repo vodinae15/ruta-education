@@ -840,6 +840,27 @@ export default function CourseConstructor() {
 
     const urlParams = new URLSearchParams(window.location.search)
     const courseIdFromUrl = urlParams.get("courseId")
+    const modeParam = urlParams.get("mode")
+    const isNewCourse = modeParam === "new"
+
+    // Если создаем новый курс, очищаем localStorage от старых данных
+    if (isNewCourse) {
+      console.log("[v0] Creating new course, clearing localStorage")
+      localStorage.removeItem("currentCourseId")
+      localStorage.removeItem("courseConstructorDraft")
+      setCurrentCourseId(null)
+      // Очищаем состояние
+      setCourseTitle("")
+      setCourseDescription("")
+      setCourseLessons([])
+      setCourseBlocks([])
+      setActiveBlockId("")
+      setActiveLessonId("")
+      setSaveStatus("unsaved")
+      setLastSavedAt(null)
+      return
+    }
+
     const courseIdFromStorage = localStorage.getItem("currentCourseId")
     const courseId = courseIdFromUrl || courseIdFromStorage
 
