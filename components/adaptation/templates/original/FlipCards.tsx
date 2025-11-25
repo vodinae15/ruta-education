@@ -1,23 +1,19 @@
 "use client"
 
 import React, { useState } from "react"
-import { BlockWrapper } from "../../blocks/BlockWrapper"
 import { Trash2, Plus } from "lucide-react"
 
-interface FlipCardData {
+export interface FlipCardData {
   id: string
   front: string
   back: string
 }
 
-interface FlipCardsProps {
+export interface FlipCardsProps {
   isEmpty?: boolean
   cards?: FlipCardData[]
-  introText?: string
-  mainText?: string
   isEditing?: boolean
   onCardsChange?: (cards: FlipCardData[]) => void
-  onMainTextChange?: (text: string) => void
 }
 
 function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmpty: boolean }) {
@@ -68,7 +64,7 @@ function FlipCard({ front, back, isEmpty }: { front: string; back: string; isEmp
   )
 }
 
-export function FlipCards({ isEmpty = true, cards, introText, mainText, isEditing = false, onCardsChange, onMainTextChange }: FlipCardsProps) {
+export function FlipCards({ isEmpty = true, cards, isEditing = false, onCardsChange }: FlipCardsProps) {
   const defaultCards: FlipCardData[] = Array.from({ length: 6 }, (_, i) => ({
     id: `card-${i}`,
     front: "",
@@ -98,28 +94,23 @@ export function FlipCards({ isEmpty = true, cards, introText, mainText, isEditin
   }
 
   const handleRemoveCard = (id: string) => {
+    if (localCards.length <= 1) return // Минимум 1 карточка
     const updated = localCards.filter(card => card.id !== id)
     setLocalCards(updated)
     onCardsChange?.(updated)
   }
 
-  return (
-    <BlockWrapper
-      blockNumber={1}
-      title="Обзор темы"
-      intro={isEmpty ? "Нажмите на карточку, чтобы перевернуть её" : undefined}
-      isEmpty={false}
-      mainText={mainText}
-      isEditing={isEditing}
-      onMainTextChange={onMainTextChange}
-    >
-      {/* Текст от автора */}
-      {introText && (
-        <div className="mb-6 p-4 bg-white border-l-4 border-[#659AB8] rounded-r-lg">
-          <p className="text-sm text-slate-700 leading-relaxed">{introText}</p>
-        </div>
-      )}
+  if (isEmpty) {
+    return (
+      <div className="text-center py-8 text-slate-400">
+        <p className="text-sm">Шаблон: 6 интерактивных флип-карточек с терминами и их объяснениями</p>
+        <p className="text-xs mt-2">После генерации здесь появятся карточки</p>
+      </div>
+    )
+  }
 
+  return (
+    <div>
       {isEditing ? (
         <div className="space-y-4">
           {localCards.map((card, index) => (
@@ -130,6 +121,7 @@ export function FlipCards({ isEmpty = true, cards, introText, mainText, isEditin
                   <button
                     onClick={() => handleRemoveCard(card.id)}
                     className="text-red-600 hover:text-red-700 p-1"
+                    title="Удалить карточку"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -177,19 +169,11 @@ export function FlipCards({ isEmpty = true, cards, introText, mainText, isEditin
               key={card.id}
               front={card.front}
               back={card.back}
-              isEmpty={isEmpty}
+              isEmpty={false}
             />
           ))}
         </div>
       )}
-
-      {isEmpty && !isEditing && (
-        <div className="mt-6 text-center">
-          <p className="text-sm text-slate-400">
-            Шаблон: 6 интерактивных флип-карточек. Нажмите на карточку, чтобы увидеть объяснение.
-          </p>
-        </div>
-      )}
-    </BlockWrapper>
+    </div>
   )
 }
