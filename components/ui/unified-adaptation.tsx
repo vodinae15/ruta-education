@@ -1048,12 +1048,12 @@ export function UnifiedAdaptation({
         {(isExpanded || isEditing) && (
           <CardContent className="pt-0 space-y-6">
             {/* Слой 1: Подводка */}
-            <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+            <div className="mb-6">
               {isEditing ? (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-medium text-blue-800">Подводка (intro)</label>
-                    <EditIcon className="w-3 h-3 text-blue-600" />
+                    <label className="text-xs font-medium text-slate-700">Подводка (intro)</label>
+                    <EditIcon className="w-3 h-3 text-slate-600" />
                   </div>
                   <textarea
                     value={block.intro.text || ''}
@@ -1063,12 +1063,12 @@ export function UnifiedAdaptation({
                         text: e.target.value
                       }
                     })}
-                    className="w-full px-3 py-2 border border-blue-300 rounded text-sm text-blue-800 italic leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[80px]"
                     placeholder="Введите текст подводки к блоку"
                   />
                 </div>
               ) : (
-                <p className="text-blue-800 italic leading-relaxed">{block.intro.text}</p>
+                <p className="text-slate-600 text-lg leading-relaxed">{block.intro.text}</p>
               )}
             </div>
 
@@ -1128,14 +1128,31 @@ export function UnifiedAdaptation({
                         )
                       } else if (element.type === 'video') {
                         return (
-                          <div key={element.id || elementIndex} className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                            <h5 className="text-sm font-semibold text-[#659AB8] mb-2">Видео</h5>
+                          <div key={element.id || elementIndex} className="rounded-lg overflow-hidden">
+                            {element.caption && (
+                              <p className="text-sm text-slate-600 mb-2">{element.caption}</p>
+                            )}
                             {element.content ? (
-                              <a href={element.content} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                                {element.content}
-                              </a>
+                              element.content.includes('youtube.com') || element.content.includes('youtu.be') ? (
+                                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                                  <iframe
+                                    src={element.content.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
+                                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  />
+                                </div>
+                              ) : (
+                                <video
+                                  controls
+                                  className="w-full rounded-lg"
+                                  src={element.content}
+                                >
+                                  Ваш браузер не поддерживает видео.
+                                </video>
+                              )
                             ) : (
-                              <p className="text-slate-500">Видео не добавлено</p>
+                              <p className="text-slate-500 p-4 bg-slate-50 rounded-lg border border-slate-200">Видео не добавлено</p>
                             )}
                           </div>
                         )
@@ -1148,9 +1165,22 @@ export function UnifiedAdaptation({
                         )
                       } else if (element.type === 'image') {
                         return (
-                          <div key={element.id || elementIndex} className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                            <h5 className="text-sm font-semibold text-[#659AB8] mb-2">Изображение</h5>
-                            <p className="text-slate-600">{element.content || 'Изображение не добавлено'}</p>
+                          <div key={element.id || elementIndex} className="rounded-lg overflow-hidden">
+                            {element.content ? (
+                              <>
+                                <img
+                                  src={element.content}
+                                  alt={element.caption || 'Изображение'}
+                                  className="w-full h-auto rounded-lg"
+                                  loading="lazy"
+                                />
+                                {element.caption && (
+                                  <p className="text-sm text-slate-600 mt-2 italic">{element.caption}</p>
+                                )}
+                              </>
+                            ) : (
+                              <p className="text-slate-500 p-4 bg-slate-50 rounded-lg border border-slate-200">Изображение не добавлено</p>
+                            )}
                           </div>
                         )
                       } else if (element.type === 'file') {
