@@ -1126,7 +1126,6 @@ export default function CourseAdaptationPage() {
                       })}
                     </div>
                   )}
-                  </div>
                 </div>
               </CardContent>
             </Card>
