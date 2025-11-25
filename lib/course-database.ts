@@ -168,6 +168,8 @@ export class CourseDatabase {
         .eq("id", courseId)
         .single()
 
+      console.log("[CourseDatabase.deleteCourse] Fetch result:", { course, error: courseError })
+
       if (courseError) {
         console.error("[CourseDatabase.deleteCourse] Error fetching course:", courseError)
         return false
@@ -189,14 +191,39 @@ export class CourseDatabase {
       console.log("[CourseDatabase.deleteCourse] User is author. Proceeding with deletion...")
 
       // Удаляем курс (связанные уроки удалятся каскадно через БД)
-      const { error: deleteError } = await this.supabase
+      const deleteResult = await this.supabase
         .from("courses")
         .delete()
         .eq("id", courseId)
         .eq("author_id", userId) // Дополнительная проверка безопасности
 
-      if (deleteError) {
-        console.error("[CourseDatabase.deleteCourse] Error deleting course:", deleteError)
+      console.log("[CourseDatabase.deleteCourse] Delete result:", {
+        error: deleteResult.error,
+        data: deleteResult.data,
+        status: deleteResult.status,
+        statusText: deleteResult.statusText,
+        count: deleteResult.count
+      })
+
+      if (deleteResult.error) {
+        console.error("[CourseDatabase.deleteCourse] Error deleting course:", deleteResult.error)
+        return false
+      }
+
+      // Проверяем, действительно ли курс удален
+      const { data: checkCourse, error: checkError } = await this.supabase
+        .from("courses")
+        .select("id")
+        .eq("id", courseId)
+        .maybeSingle()
+
+      console.log("[CourseDatabase.deleteCourse] Verification check:", {
+        stillExists: !!checkCourse,
+        error: checkError
+      })
+
+      if (checkCourse) {
+        console.error("[CourseDatabase.deleteCourse] WARNING: Course still exists after delete!")
         return false
       }
 
