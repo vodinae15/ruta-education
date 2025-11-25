@@ -786,130 +786,152 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    {/* Переключатель режимов для мобильных устройств */}
-                    {studentSession?.student_type && (
-                      <div className="sm:hidden mb-4">
-                        <div className="flex flex-col gap-2 p-3 bg-[#F3FAFE] rounded-lg border border-[#CDE6F9]">
-                          <span className="text-sm font-medium text-[#1E293B]">Режим отображения:</span>
-                          <AdaptationModeSwitcher
-                            currentMode={currentMode}
-                            onModeChange={(mode) => {
-                              setCurrentMode(mode)
-                              // Загружаем адаптацию для нового режима
-                              if (mode !== 'original' && currentLessonData) {
-                                loadAdaptationForLesson(currentLessonData)
-                              }
-                            }}
-                            availableModes={['visual', 'auditory', 'kinesthetic', 'original']}
-                            studentType={studentSession.student_type}
-                            showTooltips={true}
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Упрощенная подсказка о текущем режиме */}
-                    {studentSession?.student_type && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                        <div className="flex items-start gap-2">
-                          <LightbulbIcon className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <div className="flex-1">
-                            <p className="text-xs text-blue-700">
-                              {currentMode === 'visual' && "💡 Вы в визуальном режиме: схемы, диаграммы и структурированная информация."}
-                              {currentMode === 'auditory' && "💡 Вы в аудиальном режиме: истории, диалоги и эмоциональные примеры."}
-                              {currentMode === 'kinesthetic' && "💡 Вы в кинестетическом режиме: практические задания и интерактивные элементы."}
-                              {currentMode === 'original' && "💡 Вы в режиме оригинала: контент так, как его создал автор."}
+                    {/* Проверка: если адаптация не опубликована и режим не original, показываем "Скоро" */}
+                    {currentMode !== 'original' && !adaptedContent && !adaptationLoading ? (
+                      <div className="py-12 text-center">
+                        <div className="max-w-md mx-auto">
+                          <BookOpenIcon className="w-16 h-16 text-[#659AB8] mx-auto mb-4 opacity-50" />
+                          <h3 className="text-2xl font-bold text-[#1E293B] mb-3">
+                            Урок скоро появится
+                          </h3>
+                          <p className="text-[#64748B] mb-6">
+                            Автор курса работает над адаптацией этого урока для режима "{currentMode === 'visual' ? 'Визуал' : currentMode === 'auditory' ? 'Аудиал' : 'Кинестетик'}".
+                          </p>
+                          <div className="bg-[#F3FAFE] border-2 border-[#CDE6F9] rounded-lg p-4">
+                            <p className="text-sm text-[#64748B]">
+                              Пожалуйста, вернитесь позже или попробуйте переключить режим отображения выше.
                             </p>
                           </div>
                         </div>
                       </div>
-                    )}
-
-                    {/* Отображение контента */}
-                    {adaptationLoading ? (
-                      <div className="space-y-4">
-                        <Skeleton className="h-8 w-64" />
-                        <Card className="p-6">
-                          <Skeleton className="h-6 w-48 mb-4" />
-                          <Skeleton className="h-4 w-full mb-2" />
-                          <Skeleton className="h-4 w-full mb-2" />
-                          <Skeleton className="h-4 w-3/4 mb-4" />
-                          <Skeleton className="h-32 w-full" />
-                        </Card>
-                        <Card className="p-6">
-                          <Skeleton className="h-6 w-40 mb-4" />
-                          <Skeleton className="h-4 w-full mb-2" />
-                          <Skeleton className="h-4 w-5/6" />
-                        </Card>
-                      </div>
                     ) : (
-                      <div className="bg-white border-2 border-[#659AB8]/20 rounded-lg p-6">
-                        <UnifiedAdaptation
-                          mode={currentMode}
-                          lessonTitle={currentLessonData.title}
-                          adaptedContent={currentMode !== 'original' ? (adaptedContent || undefined) : undefined}
-                          originalContent={originalContent || undefined}
-                          isStudent={true}
-                          courseId={params.courseId}
-                          lessonId={currentLessonData.id}
-                          lessonBlocks={currentLessonData.blocks || []}
-                          materialsAnalysis={materialsAnalysis}
-                          studentType={studentSession?.student_type}
-                          onProgressUpdate={(progress, completedBlocks) => {
-                            console.log("Progress updated:", progress, completedBlocks)
-                          }}
-                          onSaveProgress={async (progressData) => {
-                            try {
-                              const currentLessonData = lessons[currentLesson]
-                              if (!currentLessonData) return
-
-                              const response = await fetch("/api/save-progress", {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                  courseId: params.courseId,
-                                  lessonId: currentLessonData.id || currentLesson.toString(),
-                                  progressData: {
-                                    completedBlocks: progressData.completedBlocks || [],
-                                    testResults: progressData.testResults || {},
-                                    lastUpdated: new Date().toISOString(),
-                                  },
-                                  timeSpent: progressData.timeSpent || 0,
-                                }),
-                              })
-
-                              if (!response.ok) {
-                                const error = await response.json()
-                                console.error("Error saving progress:", error)
-                                return
-                              }
-
-                              const result = await response.json()
-                              console.log("✅ Progress saved:", result)
-                              
-                              // Обновляем сессию студента, если нужно
-                              if (studentSession) {
-                                const updatedSession = {
-                                  ...studentSession,
-                                  progress: {
-                                    ...studentSession.progress,
-                                    [currentLessonData.id || currentLesson.toString()]: {
-                                      completedBlocks: progressData.completedBlocks || [],
-                                      testResults: progressData.testResults || {},
-                                      lastUpdated: new Date().toISOString(),
-                                    }
+                      <>
+                        {/* Переключатель режимов для мобильных устройств */}
+                        {studentSession?.student_type && (
+                          <div className="sm:hidden mb-4">
+                            <div className="flex flex-col gap-2 p-3 bg-[#F3FAFE] rounded-lg border border-[#CDE6F9]">
+                              <span className="text-sm font-medium text-[#1E293B]">Режим отображения:</span>
+                              <AdaptationModeSwitcher
+                                currentMode={currentMode}
+                                onModeChange={(mode) => {
+                                  setCurrentMode(mode)
+                                  // Загружаем адаптацию для нового режима
+                                  if (mode !== 'original' && currentLessonData) {
+                                    loadAdaptationForLesson(currentLessonData)
                                   }
+                                }}
+                                availableModes={['visual', 'auditory', 'kinesthetic', 'original']}
+                                studentType={studentSession.student_type}
+                                showTooltips={true}
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Упрощенная подсказка о текущем режиме */}
+                        {studentSession?.student_type && (
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <div className="flex items-start gap-2">
+                              <LightbulbIcon className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <div className="flex-1">
+                                <p className="text-xs text-blue-700">
+                                  {currentMode === 'visual' && "💡 Вы в визуальном режиме: схемы, диаграммы и структурированная информация."}
+                                  {currentMode === 'auditory' && "💡 Вы в аудиальном режиме: истории, диалоги и эмоциональные примеры."}
+                                  {currentMode === 'kinesthetic' && "💡 Вы в кинестетическом режиме: практические задания и интерактивные элементы."}
+                                  {currentMode === 'original' && "💡 Вы в режиме оригинала: контент так, как его создал автор."}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Отображение контента */}
+                        {adaptationLoading ? (
+                          <div className="space-y-4">
+                            <Skeleton className="h-8 w-64" />
+                            <Card className="p-6">
+                              <Skeleton className="h-6 w-48 mb-4" />
+                              <Skeleton className="h-4 w-full mb-2" />
+                              <Skeleton className="h-4 w-full mb-2" />
+                              <Skeleton className="h-4 w-3/4 mb-4" />
+                              <Skeleton className="h-32 w-full" />
+                            </Card>
+                            <Card className="p-6">
+                              <Skeleton className="h-6 w-40 mb-4" />
+                              <Skeleton className="h-4 w-full mb-2" />
+                              <Skeleton className="h-4 w-5/6" />
+                            </Card>
+                          </div>
+                        ) : (
+                          <div className="bg-white border-2 border-[#659AB8]/20 rounded-lg p-6">
+                            <UnifiedAdaptation
+                              mode={currentMode}
+                              lessonTitle={currentLessonData.title}
+                              adaptedContent={currentMode !== 'original' ? (adaptedContent || undefined) : undefined}
+                              originalContent={originalContent || undefined}
+                              isStudent={true}
+                              courseId={params.courseId}
+                              lessonId={currentLessonData.id}
+                              lessonBlocks={currentLessonData.blocks || []}
+                              materialsAnalysis={materialsAnalysis}
+                              studentType={studentSession?.student_type}
+                              onProgressUpdate={(progress, completedBlocks) => {
+                                console.log("Progress updated:", progress, completedBlocks)
+                              }}
+                              onSaveProgress={async (progressData) => {
+                                try {
+                                  const currentLessonData = lessons[currentLesson]
+                                  if (!currentLessonData) return
+
+                                  const response = await fetch("/api/save-progress", {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                      courseId: params.courseId,
+                                      lessonId: currentLessonData.id || currentLesson.toString(),
+                                      progressData: {
+                                        completedBlocks: progressData.completedBlocks || [],
+                                        testResults: progressData.testResults || {},
+                                        lastUpdated: new Date().toISOString(),
+                                      },
+                                      timeSpent: progressData.timeSpent || 0,
+                                    }),
+                                  })
+
+                                  if (!response.ok) {
+                                    const error = await response.json()
+                                    console.error("Error saving progress:", error)
+                                    return
+                                  }
+
+                                  const result = await response.json()
+                                  console.log("✅ Progress saved:", result)
+
+                                  // Обновляем сессию студента, если нужно
+                                  if (studentSession) {
+                                    const updatedSession = {
+                                      ...studentSession,
+                                      progress: {
+                                        ...studentSession.progress,
+                                        [currentLessonData.id || currentLesson.toString()]: {
+                                          completedBlocks: progressData.completedBlocks || [],
+                                          testResults: progressData.testResults || {},
+                                          lastUpdated: new Date().toISOString(),
+                                        }
+                                      }
+                                    }
+                                    setStudentSession(updatedSession)
+                                  }
+                                } catch (error) {
+                                  console.error("Error saving progress:", error)
                                 }
-                                setStudentSession(updatedSession)
-                              }
-                            } catch (error) {
-                              console.error("Error saving progress:", error)
-                            }
-                          }}
-                        />
-                      </div>
+                              }}
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </CardContent>
