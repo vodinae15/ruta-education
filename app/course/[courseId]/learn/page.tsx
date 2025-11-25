@@ -636,16 +636,15 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                 Урок {currentLesson + 1} из {lessons.length}
               </p>
             </div>
-            <div className="flex flex-col items-end gap-3">
+            <div className="flex flex-col items-end gap-4">
               {/* Кнопка дашборда - выводим над переключателем */}
-              <Button
-                variant="secondary"
+              <button
                 onClick={() => router.push("/student-dashboard")}
-                className="flex items-center gap-2 border-2 border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8] hover:text-white transition-colors"
+                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center gap-2"
               >
                 <UserIcon className="w-4 h-4" />
                 Профиль
-              </Button>
+              </button>
               {/* Переключатель режимов адаптации */}
               {studentSession?.student_type && (
                 <div className="hidden sm:flex items-center gap-3">
