@@ -1203,6 +1203,19 @@ export default function CourseAdaptationPage() {
                               >
                                 Редактировать
                               </button>
+                              <button
+                                onClick={() => {
+                                  setRegenerateConfirmModal({
+                                    isOpen: true,
+                                    adaptationType: currentMode
+                                  })
+                                }}
+                                disabled={isAdapting}
+                                className="bg-white text-amber-600 px-6 py-2 border-2 border-amber-600 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-amber-50 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                              >
+                                <RefreshCwIcon className="w-4 h-4" />
+                                Перегенерировать
+                              </button>
                               {adaptations[currentMode]?.status !== 'published' && (
                                 <button
                                   onClick={() => publishAdaptation(currentMode)}
