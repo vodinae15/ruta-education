@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Checkbox } from "@/components/ui/checkbox"
-import { 
-  ChevronDownIcon, 
-  ChevronUpIcon, 
-  PlayIcon, 
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PlayIcon,
   PauseIcon,
   CheckIcon,
   XIcon,
@@ -22,7 +22,10 @@ import {
   TargetIcon,
   UsersIcon,
   ClockIcon,
-  StarIcon
+  StarIcon,
+  EditIcon,
+  PlusIcon,
+  TrashIcon
 } from "@/components/ui/icons"
 import { 
   AdaptationContent, 
@@ -63,6 +66,8 @@ interface UnifiedAdaptationProps {
     }>
   }
   studentType?: string // Для автоподстановки режима представления материала (старый пропс, оставляем для совместимости)
+  isEditing?: boolean // Режим inline-редактирования
+  onAdaptedContentChange?: (content: AdaptationContent) => void // Callback для изменений контента
 }
 
 interface StudentProgress {
@@ -72,9 +77,9 @@ interface StudentProgress {
   lastSaved: Date
 }
 
-export function UnifiedAdaptation({ 
+export function UnifiedAdaptation({
   mode,
-  lessonTitle, 
+  lessonTitle,
   adaptedContent,
   originalContent,
   isStudent = false,
@@ -84,7 +89,9 @@ export function UnifiedAdaptation({
   onProgressUpdate,
   onSaveProgress,
   materialsAnalysis,
-  studentType // Для совместимости со старым кодом
+  studentType, // Для совместимости со старым кодом
+  isEditing = false, // Режим inline-редактирования
+  onAdaptedContentChange // Callback для изменений контента
 }: UnifiedAdaptationProps) {
   const [expandedBlocks, setExpandedBlocks] = useState<string[]>(['block1'])
   const [completedBlocks, setCompletedBlocks] = useState<string[]>([])
@@ -99,7 +106,33 @@ export function UnifiedAdaptation({
   const [blockViewTimes, setBlockViewTimes] = useState<Record<string, number>>({})
   const [completedInteractiveElements, setCompletedInteractiveElements] = useState<Set<string>>(new Set())
   const [interactiveElementResults, setInteractiveElementResults] = useState<Record<string, any>>({})
-  
+
+  // Локальная копия контента для inline-редактирования
+  const [localAdaptedContent, setLocalAdaptedContent] = useState<AdaptationContent | undefined>(adaptedContent)
+
+  // Синхронизация с внешним контентом
+  useEffect(() => {
+    if (adaptedContent) {
+      setLocalAdaptedContent(adaptedContent)
+    }
+  }, [adaptedContent])
+
+  // Обработчик изменений контента блока
+  const handleBlockContentChange = useCallback((blockId: keyof AdaptationContent, updates: Partial<AdaptationBlock>) => {
+    if (!localAdaptedContent) return
+
+    const updatedContent = {
+      ...localAdaptedContent,
+      [blockId]: {
+        ...localAdaptedContent[blockId],
+        ...updates
+      }
+    }
+
+    setLocalAdaptedContent(updatedContent)
+    onAdaptedContentChange?.(updatedContent)
+  }, [localAdaptedContent, onAdaptedContentChange])
+
   // Refs для отслеживания блоков и времени просмотра
   const trackedBlocksRef = useRef<Set<string>>(new Set())
   const blockViewTimesRef = useRef<Record<string, number>>({})
@@ -774,32 +807,50 @@ export function UnifiedAdaptation({
   const renderAdaptationBlock = (blockId: string, block: AdaptationBlock, blockNumber: number) => {
     const isExpanded = expandedBlocks.includes(blockId)
     const isCompleted = completedBlocks.includes(blockId)
-    
+
     return (
-      <Card 
-        key={blockId} 
+      <Card
+        key={blockId}
         className={`border-2 transition-all duration-200 ${
-          isCompleted 
-            ? 'border-[#10B981] bg-green-50' 
+          isCompleted
+            ? 'border-[#10B981] bg-green-50'
+            : isEditing
+            ? 'border-[#659AB8] bg-[#F8FAFB]'
             : 'border-[#659AB8]/20 hover:border-[#659AB8]/40'
         }`}
       >
-        <CardHeader 
-          className="cursor-pointer"
-          onClick={() => toggleBlockExpansion(blockId)}
+        <CardHeader
+          className={!isEditing ? "cursor-pointer" : ""}
+          onClick={() => !isEditing && toggleBlockExpansion(blockId)}
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-1">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
                 isCompleted ? 'bg-[#10B981]' : 'bg-[#659AB8]'
               }`}>
                 {isCompleted ? <CheckIcon className="w-4 h-4" /> : blockNumber}
               </div>
-              <div>
-                <CardTitle className="text-lg text-[#1E293B]">
-                  {block.content.title}
-                </CardTitle>
-                {isStudent && (
+              <div className="flex-1">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={block.content.title || ''}
+                    onChange={(e) => handleBlockContentChange(blockId as keyof AdaptationContent, {
+                      content: {
+                        ...block.content,
+                        title: e.target.value
+                      }
+                    })}
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    placeholder="Заголовок блока"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ) : (
+                  <CardTitle className="text-lg text-[#1E293B]">
+                    {block.content.title}
+                  </CardTitle>
+                )}
+                {isStudent && !isEditing && (
                   <div className="flex items-center gap-2 mt-1">
                     <Checkbox
                       checked={isCompleted}
@@ -813,27 +864,69 @@ export function UnifiedAdaptation({
                 )}
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-[#659AB8] hover:text-[#5a8ba8]"
-            >
-              {isExpanded ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
-            </Button>
+            {!isEditing && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[#659AB8] hover:text-[#5a8ba8]"
+              >
+                {isExpanded ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
+              </Button>
+            )}
           </div>
         </CardHeader>
-        
-        {isExpanded && (
+
+        {(isExpanded || isEditing) && (
           <CardContent className="pt-0 space-y-6">
             {/* Слой 1: Подводка */}
             <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-              <p className="text-blue-800 italic leading-relaxed">{block.intro.text}</p>
+              {isEditing ? (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-medium text-blue-800">Подводка (intro)</label>
+                    <EditIcon className="w-3 h-3 text-blue-600" />
+                  </div>
+                  <textarea
+                    value={block.intro.text || ''}
+                    onChange={(e) => handleBlockContentChange(blockId as keyof AdaptationContent, {
+                      intro: {
+                        ...block.intro,
+                        text: e.target.value
+                      }
+                    })}
+                    className="w-full px-3 py-2 border border-blue-300 rounded text-sm text-blue-800 italic leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                    placeholder="Введите текст подводки к блоку"
+                  />
+                </div>
+              ) : (
+                <p className="text-blue-800 italic leading-relaxed">{block.intro.text}</p>
+              )}
             </div>
 
             {/* Слой 2: Улучшенная текстовая версия */}
             <div className="space-y-4">
               <div className="prose prose-slate max-w-none">
-                <p className="text-[#1E293B] leading-relaxed whitespace-pre-wrap">{block.content.text}</p>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-medium text-slate-700">Основной текст (mainText) - поддерживается Markdown</label>
+                      <EditIcon className="w-3 h-3 text-slate-600" />
+                    </div>
+                    <textarea
+                      value={block.content.text || ''}
+                      onChange={(e) => handleBlockContentChange(blockId as keyof AdaptationContent, {
+                        content: {
+                          ...block.content,
+                          text: e.target.value
+                        }
+                      })}
+                      className="w-full px-4 py-3 border-2 border-[#659AB8] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[200px] font-mono"
+                      placeholder="Введите основной текст блока (поддерживается Markdown: ##заголовки, **жирный**, *курсив*, списки, > цитаты)"
+                    />
+                  </div>
+                ) : (
+                  <p className="text-[#1E293B] leading-relaxed whitespace-pre-wrap">{block.content.text}</p>
+                )}
                 
                 {block.content.sections && block.content.sections.map((section, index) => (
                   <div key={index} className="mt-4">
@@ -1664,40 +1757,44 @@ export function UnifiedAdaptation({
   }
 
   // Определяем, что показывать
+  // Используем localAdaptedContent для inline-редактирования, иначе adaptedContent
+  const contentToDisplay = isEditing ? localAdaptedContent : adaptedContent
+
   // Для режима 'original' показываем адаптацию (5 блоков), если она есть, иначе показываем исходные блоки
   // Проверяем, что адаптация существует И что хотя бы один блок не пустой
-  const hasValidAdaptedContent = adaptedContent && (
-    isBlockValid(adaptedContent.block1) || 
-    isBlockValid(adaptedContent.block2) || 
-    isBlockValid(adaptedContent.block3) || 
-    isBlockValid(adaptedContent.block4) || 
-    isBlockValid(adaptedContent.block5)
+  const hasValidAdaptedContent = contentToDisplay && (
+    isBlockValid(contentToDisplay.block1) ||
+    isBlockValid(contentToDisplay.block2) ||
+    isBlockValid(contentToDisplay.block3) ||
+    isBlockValid(contentToDisplay.block4) ||
+    isBlockValid(contentToDisplay.block5)
   )
-  
+
   // Для автора (не студента) показываем адаптацию, даже если блоки пустые, чтобы он мог видеть структуру
   const showAdaptedContent = !!(
-    (hasValidAdaptedContent || (!isStudent && adaptedContent)) && 
+    (hasValidAdaptedContent || (!isStudent && contentToDisplay)) &&
     !showBasicContent
   ) // Показываем адаптацию, если она есть и не нужно базовое отображение
-  
+
   const showOriginalContent = mode === 'original' && !hasValidAdaptedContent && originalContent && !showBasicContent // Для 'original' без адаптации показываем исходные блоки
   // showBasicContent уже определен выше через shouldShowBasicContent()
-  
+
   // Логирование для отладки (только в режиме разработки)
-  if (process.env.NODE_ENV === 'development' && adaptedContent) {
+  if (process.env.NODE_ENV === 'development' && contentToDisplay) {
     console.log('🔍 [UnifiedAdaptation] Content check:', {
       mode,
       isStudent,
-      hasAdaptedContent: !!adaptedContent,
+      isEditing,
+      hasAdaptedContent: !!contentToDisplay,
       hasValidAdaptedContent,
       showAdaptedContent,
       showOriginalContent,
       showBasicContent,
-      block1Valid: isBlockValid(adaptedContent.block1),
-      block2Valid: isBlockValid(adaptedContent.block2),
-      block3Valid: isBlockValid(adaptedContent.block3),
-      block4Valid: isBlockValid(adaptedContent.block4),
-      block5Valid: isBlockValid(adaptedContent.block5),
+      block1Valid: isBlockValid(contentToDisplay.block1),
+      block2Valid: isBlockValid(contentToDisplay.block2),
+      block3Valid: isBlockValid(contentToDisplay.block3),
+      block4Valid: isBlockValid(contentToDisplay.block4),
+      block5Valid: isBlockValid(contentToDisplay.block5),
       hasOriginalContent: !!originalContent,
       originalBlocksCount: originalContent?.blocks?.length || 0
     })
@@ -1766,15 +1863,16 @@ export function UnifiedAdaptation({
 
       {/* Блоки контента */}
       {/* Приоритет: адаптированный контент > базовый контент при недостатке материалов > оригинальный контент */}
-      {showAdaptedContent ? (
+      {showAdaptedContent && contentToDisplay ? (
         <div className="space-y-4">
-          {isBlockValid(adaptedContent.block1) && renderAdaptationBlock('block1', adaptedContent.block1, 1)}
-          {isBlockValid(adaptedContent.block2) && renderAdaptationBlock('block2', adaptedContent.block2, 2)}
-          {isBlockValid(adaptedContent.block3) && renderAdaptationBlock('block3', adaptedContent.block3, 3)}
-          {isBlockValid(adaptedContent.block4) && renderAdaptationBlock('block4', adaptedContent.block4, 4)}
-          {isBlockValid(adaptedContent.block5) && renderAdaptationBlock('block5', adaptedContent.block5, 5)}
-          {/* Если все блоки пустые, показываем сообщение */}
-          {!isBlockValid(adaptedContent.block1) && !isBlockValid(adaptedContent.block2) && !isBlockValid(adaptedContent.block3) && !isBlockValid(adaptedContent.block4) && !isBlockValid(adaptedContent.block5) && (
+          {/* В режиме редактирования показываем все блоки, даже пустые */}
+          {(isEditing || isBlockValid(contentToDisplay.block1)) && renderAdaptationBlock('block1', contentToDisplay.block1, 1)}
+          {(isEditing || isBlockValid(contentToDisplay.block2)) && renderAdaptationBlock('block2', contentToDisplay.block2, 2)}
+          {(isEditing || isBlockValid(contentToDisplay.block3)) && renderAdaptationBlock('block3', contentToDisplay.block3, 3)}
+          {(isEditing || isBlockValid(contentToDisplay.block4)) && renderAdaptationBlock('block4', contentToDisplay.block4, 4)}
+          {(isEditing || isBlockValid(contentToDisplay.block5)) && renderAdaptationBlock('block5', contentToDisplay.block5, 5)}
+          {/* Если все блоки пустые и не в режиме редактирования, показываем сообщение */}
+          {!isEditing && !isBlockValid(contentToDisplay.block1) && !isBlockValid(contentToDisplay.block2) && !isBlockValid(contentToDisplay.block3) && !isBlockValid(contentToDisplay.block4) && !isBlockValid(contentToDisplay.block5) && (
             <div className="p-8 text-center text-gray-500">
               <BookOpenIcon className="w-12 h-12 mx-auto mb-4 text-gray-400" />
               <p className="text-lg font-semibold mb-2">Адаптация создана, но контент пуст</p>
