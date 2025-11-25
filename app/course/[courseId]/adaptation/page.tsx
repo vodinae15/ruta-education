@@ -1211,42 +1211,6 @@ export default function CourseAdaptationPage() {
                   })()}
 
                   {/* Отображение адаптации */}
-                  {currentMode === 'original' ? (
-                    <div className="space-y-4">
-                      {adaptations['original']?.status === 'completed' || adaptations['original']?.status === 'published' ? (
-                        <div className="bg-white border-2 border-[#659AB8]/20 rounded-lg p-6">
-                          <UnifiedAdaptation
-                            mode="original"
-                            lessonTitle={selectedLesson.title}
-                            adaptedContent={adaptations['original']?.content}
-                            originalContent={adaptations['original']?.originalContent || {
-                              blocks: selectedLesson.blocks || []
-                            }}
-                            isStudent={false}
-                            courseId={courseId}
-                            lessonId={selectedLesson.id}
-                            materialsAnalysis={materialsAnalysis}
-                            isEditing={isEditing}
-                            onAdaptedContentChange={(content) => handleAdaptedContentChange('original', content)}
-                          />
-                        </div>
-                      ) : (
-                        <div className="bg-white border-2 border-[#E5E7EB] rounded-lg p-6">
-                          <UnifiedAdaptation
-                            mode="original"
-                            lessonTitle={selectedLesson.title}
-                            originalContent={{
-                              blocks: selectedLesson.blocks || []
-                            }}
-                            isStudent={false}
-                            courseId={courseId}
-                            lessonId={selectedLesson.id}
-                            materialsAnalysis={materialsAnalysis}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  ) : (
                     <div className="space-y-4">
                       {adaptations[currentMode]?.status === 'completed' || adaptations[currentMode]?.status === 'published' ? (
                         <div className="bg-white border-2 border-[#659AB8]/20 rounded-lg p-6">
@@ -1293,7 +1257,6 @@ export default function CourseAdaptationPage() {
                         </div>
                       )}
                     </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
