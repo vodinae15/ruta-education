@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { courseDatabase } from "@/lib/course-database"
+import { CourseDatabase } from "@/lib/course-database"
 
 export async function DELETE(
   request: NextRequest,
@@ -29,6 +29,9 @@ export async function DELETE(
     }
 
     console.log("[DELETE Course] User:", user.id, "deleting course:", courseId)
+
+    // Создаем экземпляр CourseDatabase с серверным клиентом
+    const courseDatabase = new CourseDatabase(supabase)
 
     // Удаляем курс через CourseDatabase (там проверяется доступ)
     const success = await courseDatabase.deleteCourse(courseId, user.id)

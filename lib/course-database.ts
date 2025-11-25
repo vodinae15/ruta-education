@@ -31,7 +31,12 @@ export interface LessonData {
 }
 
 export class CourseDatabase {
-  private supabase = createClient()
+  private supabase: any
+
+  // Создать экземпляр с кастомным клиентом (для серверного использования)
+  constructor(customClient?: any) {
+    this.supabase = customClient || createClient()
+  }
 
   // Получить курс с уроками
   async getCourseWithLessons(courseId: string, userId: string): Promise<CourseData | null> {
@@ -154,24 +159,51 @@ export class CourseDatabase {
   // Удалить курс
   async deleteCourse(courseId: string, userId: string): Promise<boolean> {
     try {
-      // Проверяем доступ к редактированию (автор или соавтор)
-      const hasAccess = await canEditCourse(courseId, userId)
-      if (!hasAccess) {
-        console.error("User does not have access to delete this course")
+      console.log("[CourseDatabase.deleteCourse] Starting deletion for course:", courseId, "user:", userId)
+
+      // Сначала проверяем, что курс существует и пользователь - автор
+      const { data: course, error: courseError } = await this.supabase
+        .from("courses")
+        .select("id, author_id")
+        .eq("id", courseId)
+        .single()
+
+      if (courseError) {
+        console.error("[CourseDatabase.deleteCourse] Error fetching course:", courseError)
         return false
       }
+
+      if (!course) {
+        console.error("[CourseDatabase.deleteCourse] Course not found:", courseId)
+        return false
+      }
+
+      console.log("[CourseDatabase.deleteCourse] Course found. Author:", course.author_id, "Current user:", userId)
+
+      // Проверяем, является ли пользователь автором
+      if (course.author_id !== userId) {
+        console.error("[CourseDatabase.deleteCourse] User is not the author. Access denied.")
+        return false
+      }
+
+      console.log("[CourseDatabase.deleteCourse] User is author. Proceeding with deletion...")
 
       // Удаляем курс (связанные уроки удалятся каскадно через БД)
-      const { error } = await this.supabase.from("courses").delete().eq("id", courseId)
+      const { error: deleteError } = await this.supabase
+        .from("courses")
+        .delete()
+        .eq("id", courseId)
+        .eq("author_id", userId) // Дополнительная проверка безопасности
 
-      if (error) {
-        console.error("Error deleting course:", error)
+      if (deleteError) {
+        console.error("[CourseDatabase.deleteCourse] Error deleting course:", deleteError)
         return false
       }
 
+      console.log("[CourseDatabase.deleteCourse] Course successfully deleted:", courseId)
       return true
     } catch (error) {
-      console.error("Error in deleteCourse:", error)
+      console.error("[CourseDatabase.deleteCourse] Exception:", error)
       return false
     }
   }
@@ -422,5 +454,5 @@ export class CourseDatabase {
   }
 }
 
-// Экспортируем singleton instance
+// Экспортируем singleton instance для клиентского использования
 export const courseDatabase = new CourseDatabase()
