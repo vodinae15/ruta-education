@@ -96,28 +96,28 @@ const STUDENT_TYPES: StudentType[] = [
     name: 'Оригинал',
     description: 'Оригинальный контент автора, отформатированный для удобного чтения',
     icon: <BookOpenIcon className="w-5 h-5" />,
-    color: 'bg-[#FDF8F3] text-slate-900 border border-[#E5E7EB]'
+    color: 'bg-amber-50 text-amber-900 border border-amber-200'
   },
   {
     id: 'visual',
     name: 'Визуал',
     description: 'Любит схемы, диаграммы, структурированную информацию',
     icon: <EyeIcon className="w-5 h-5" />,
-    color: 'bg-[#E8F4FA] text-[#5589a7] border border-[#CDE6F9]'
+    color: 'bg-amber-50 text-amber-900 border border-amber-200'
   },
   {
     id: 'auditory',
     name: 'Аудиал',
     description: 'Любит истории, диалоги, эмоциональные примеры',
     icon: <EarIcon className="w-5 h-5" />,
-    color: 'bg-[#E8F4FA] text-[#5589a7] border border-[#CDE6F9]'
+    color: 'bg-amber-50 text-amber-900 border border-amber-200'
   },
   {
     id: 'kinesthetic',
     name: 'Кинестетик',
     description: 'Любит практику, действия, интерактивные элементы',
     icon: <HandIcon className="w-5 h-5" />,
-    color: 'bg-[#E8F4FA] text-[#5589a7] border border-[#CDE6F9]'
+    color: 'bg-amber-50 text-amber-900 border border-amber-200'
   }
 ]
 
@@ -142,6 +142,7 @@ export default function CourseAdaptationPage() {
   const [adaptingTypes, setAdaptingTypes] = useState<string[]>([]) // Типы, которые сейчас адаптируются
   const [isEditing, setIsEditing] = useState(false)
   const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false)
+  const [regenerateType, setRegenerateType] = useState<string | undefined>(undefined) // Тип для перегенерации
   const [editedContent, setEditedContent] = useState<Record<string, AdaptationContent>>({})
 
   const supabase = createClient()
@@ -1205,10 +1206,8 @@ export default function CourseAdaptationPage() {
                               </button>
                               <button
                                 onClick={() => {
-                                  setRegenerateConfirmModal({
-                                    isOpen: true,
-                                    adaptationType: currentMode
-                                  })
+                                  setRegenerateType(currentMode)
+                                  setShowRegenerateConfirm(true)
                                 }}
                                 disabled={isAdapting}
                                 className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
@@ -1305,10 +1304,17 @@ export default function CourseAdaptationPage() {
       {selectedLesson && (
         <ConfirmationModal
           isOpen={showRegenerateConfirm}
-          onClose={() => setShowRegenerateConfirm(false)}
-          onConfirm={regenerateAdaptation}
+          onClose={() => {
+            setShowRegenerateConfirm(false)
+            setRegenerateType(undefined)
+          }}
+          onConfirm={() => {
+            regenerateAdaptation(regenerateType)
+            setShowRegenerateConfirm(false)
+            setRegenerateType(undefined)
+          }}
           title="Перегенерировать адаптацию?"
-          message={`Вы уверены, что хотите перегенерировать адаптацию урока «${selectedLesson.title}»? Старая версия будет удалена, и будет создана новая версия.`}
+          message={`Вы уверены, что хотите перегенерировать адаптацию урока «${selectedLesson.title}»${regenerateType ? ` для режима «${STUDENT_TYPES.find(t => t.id === regenerateType)?.name}»` : ''}? Старая версия будет удалена, и будет создана новая версия.`}
           confirmText="Перегенерировать"
           cancelText="Отмена"
           confirmVariant="default"
