@@ -230,7 +230,7 @@ export default function StudentDashboardPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen bg-[#F8FAFB]">
+      <div className="min-h-screen bg-cream">
         <MainNavigation user={user} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
           <div className="space-y-6">
@@ -252,10 +252,10 @@ export default function StudentDashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#F8FAFB] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-cream flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-white border border-[#E5E7EB]">
           <CardContent className="text-center py-8">
-            <p className="text-[#111827] mb-4">{error}</p>
+            <p className="text-slate-900 mb-4">{error}</p>
             <button
               onClick={() => router.push("/auth")}
               className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
@@ -269,14 +269,14 @@ export default function StudentDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFB]">
+    <div className="min-h-screen bg-cream">
       <MainNavigation user={user} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-[#111827] mb-2">Личный кабинет</h1>
-          <p className="text-lg text-[#4B5563]">Добро пожаловать в Ruta.Education</p>
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Личный кабинет</h1>
+          <p className="text-lg text-slate-600">Добро пожаловать в Ruta.Education</p>
         </div>
         {/* Student Profile Section */}
         <div className="mb-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -290,7 +290,7 @@ export default function StudentDashboardPage() {
                 <h2 className="text-lg text-[#5589a7] font-bold mb-1">
                   {student?.email || user?.email}
                 </h2>
-                <p className="text-sm text-[#4B5563] mb-4">Ученик Ruta.Education</p>
+                <p className="text-sm text-slate-600 mb-4">Ученик Ruta.Education</p>
 
                 {student?.test_results && student.test_results.test_version === "3.0" && (
                   <button
@@ -315,7 +315,7 @@ export default function StudentDashboardPage() {
                   <h3 className="text-lg text-[#5589a7] font-bold mb-4">
                     Профиль настроен
                   </h3>
-                  <p className="text-sm text-[#4B5563] leading-relaxed">
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     {(() => {
                       try {
                         const result = determineStudentType(student.test_results.answers as StudentTestAnswers)
@@ -328,13 +328,13 @@ export default function StudentDashboardPage() {
                 </div>
               ) : (
                 <div className="text-center">
-                  <div className="w-14 h-14 bg-[#E5E7EB] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <UserIcon className="w-7 h-7 text-[#4B5563] opacity-50" />
+                  <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <UserIcon className="w-7 h-7 text-slate-400" />
                   </div>
-                  <h3 className="text-lg text-[#4B5563] font-bold mb-2">
+                  <h3 className="text-lg text-slate-600 font-bold mb-2">
                     Профиль не настроен
                   </h3>
-                  <p className="text-sm text-[#4B5563] mb-4 opacity-75">
+                  <p className="text-sm text-slate-500 mb-4">
                     Пройдите тест для персонализации обучения
                   </p>
                   <button
@@ -351,7 +351,7 @@ export default function StudentDashboardPage() {
 
         {/* Courses Section */}
         <div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-[#111827] mb-8">Ваши курсы</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-8">Ваши курсы</h2>
 
           {courses.length === 0 ? (
             <Card className="bg-white border border-[#E5E7EB]">
@@ -362,7 +362,7 @@ export default function StudentDashboardPage() {
                 <h3 className="text-lg text-[#5589a7] font-bold mb-2">
                   У вас пока нет доступных курсов
                 </h3>
-                <p className="text-sm text-[#4B5563] mb-6 max-w-md mx-auto">
+                <p className="text-sm text-slate-600 mb-6 max-w-md mx-auto">
                   Получите ссылку на курс от автора, чтобы начать обучение
                 </p>
                 <Button
@@ -386,15 +386,15 @@ export default function StudentDashboardPage() {
                         <CardTitle className="text-lg text-[#5589a7] font-bold mb-2 leading-tight">
                           {courseAccess.courses.title || "Без названия"}
                         </CardTitle>
-                        <CardDescription className="text-sm text-[#4B5563] leading-relaxed">
+                        <CardDescription className="text-sm text-slate-600 leading-relaxed">
                           {courseAccess.courses.description || "Описание курса не добавлено"}
                         </CardDescription>
                       </div>
                       <Badge
                         className={
                           courseAccess.courses.is_published
-                            ? "bg-[#FDF8F3] text-[#111827] border border-[#E5E7EB]"
-                            : "bg-[#FDF8F3] text-[#111827] border border-[#E5E7EB]"
+                            ? "bg-[#FDF8F3] text-slate-900 border border-[#E5E7EB]"
+                            : "bg-[#FDF8F3] text-slate-900 border border-[#E5E7EB]"
                         }
                       >
                         {courseAccess.courses.is_published ? "Доступен" : "В разработке"}
@@ -403,11 +403,11 @@ export default function StudentDashboardPage() {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="space-y-3 mb-6">
-                      <div className="text-sm text-[#4B5563]">
+                      <div className="text-sm text-slate-600">
                         <span className="font-medium">Добавлен:</span>{" "}
                         {new Date(courseAccess.first_accessed_at).toLocaleDateString("ru-RU")}
                       </div>
-                      <div className="text-sm text-[#4B5563]">
+                      <div className="text-sm text-slate-600">
                         <span className="font-medium">Последний доступ:</span>{" "}
                         {new Date(courseAccess.last_accessed_at).toLocaleDateString("ru-RU")}
                       </div>
@@ -449,7 +449,7 @@ export default function StudentDashboardPage() {
                       ) : (
                         <button
                           disabled
-                          className="w-full bg-[#FDF8F3] text-[#4B5563] px-6 py-3 border border-[#E5E7EB] rounded-lg font-semibold cursor-not-allowed"
+                          className="w-full bg-[#FDF8F3] text-slate-600 px-6 py-3 border border-[#E5E7EB] rounded-lg font-semibold cursor-not-allowed"
                         >
                           Курс в разработке
                         </button>
