@@ -18,9 +18,11 @@ interface TestBlockProps {
   isEmpty?: boolean
   mainText?: string
   questions?: TestQuestion[]
+  isEditing?: boolean
+  onQuestionsChange?: (questions: TestQuestion[]) => void
 }
 
-export function TestBlock({ isEmpty = true, mainText, questions = [] }: TestBlockProps) {
+export function TestBlock({ isEmpty = true, mainText, questions = [], isEditing = false, onQuestionsChange }: TestBlockProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>(new Array(questions.length).fill(null))
   const [showResults, setShowResults] = useState(false)

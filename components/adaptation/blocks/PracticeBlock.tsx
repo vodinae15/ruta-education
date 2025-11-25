@@ -15,9 +15,11 @@ interface PracticeBlockProps {
   isEmpty?: boolean
   mainText?: string
   tasks?: PracticeTask[]
+  isEditing?: boolean
+  onTasksChange?: (tasks: PracticeTask[]) => void
 }
 
-export function PracticeBlock({ isEmpty = true, mainText, tasks = [] }: PracticeBlockProps) {
+export function PracticeBlock({ isEmpty = true, mainText, tasks = [], isEditing = false, onTasksChange }: PracticeBlockProps) {
   const [showNotes, setShowNotes] = useState(false)
   const [notes, setNotes] = useState("")
   const [isSaving, setIsSaving] = useState(false)

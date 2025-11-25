@@ -928,11 +928,12 @@ export function UnifiedAdaptation({
     }
 
     // Блоки 3-5: общие для всех типов
-    // Эти блоки НЕ используют BlockWrapper, поэтому им не нужны intro/mainText
+    // Эти блоки используют BlockWrapper и получают mainText из block.content.text
     if (blockNumber === 3) {
       return (
         <PracticeBlock
           isEmpty={!data.tasks || data.tasks.length === 0}
+          mainText={block.content?.text}
           tasks={data.tasks}
           isEditing={isEditing}
           onTasksChange={(tasks) => handleDataChange({ ...data, tasks })}
@@ -944,7 +945,11 @@ export function UnifiedAdaptation({
       return (
         <AttachmentsBlock
           isEmpty={!data.attachments || data.attachments.length === 0}
+          mainText={block.content?.text}
           attachments={data.attachments}
+          mediaElements={(block.content?.elements || []).filter(el =>
+            el.type === 'video' || el.type === 'audio' || el.type === 'image' || el.type === 'file'
+          ) as any[]}
           isEditing={isEditing}
           onAttachmentsChange={(attachments) => handleDataChange({ ...data, attachments })}
           courseId={courseId}
@@ -957,6 +962,7 @@ export function UnifiedAdaptation({
       return (
         <TestBlock
           isEmpty={!data.questions || data.questions.length === 0}
+          mainText={block.content?.text}
           questions={data.questions}
           isEditing={isEditing}
           onQuestionsChange={(questions) => handleDataChange({ ...data, questions })}
