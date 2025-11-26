@@ -180,7 +180,9 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           legacyContent[blockKey].adaptation.element.description = 'Карточки для запоминания'
         } else {
           legacyContent[blockKey].adaptation.element.type = 'text'
-          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.data = {
+            text: newBlock.mainText || legacyContent[blockKey].content.text
+          }
           legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
         }
         break
@@ -205,7 +207,9 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           console.log(`✅ [Transform] Transformed comparisonTable for ${blockKey}:`, newBlock.comparisonTable.rows?.length || 0, 'rows')
         } else {
           legacyContent[blockKey].adaptation.element.type = 'text'
-          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.data = {
+            text: newBlock.mainText || legacyContent[blockKey].content.text
+          }
           legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
         }
         break
@@ -233,7 +237,9 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           console.log(`✅ [Transform] Transformed audioCards for ${blockKey}:`, newBlock.audioCards.length, 'cards')
         } else {
           legacyContent[blockKey].adaptation.element.type = 'text'
-          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.data = {
+            text: newBlock.mainText || legacyContent[blockKey].content.text
+          }
           legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
         }
         break
@@ -260,7 +266,9 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           console.log(`✅ [Transform] Transformed practicalText for ${blockKey}:`, newBlock.practicalText.tasks?.length || 0, 'tasks')
         } else {
           legacyContent[blockKey].adaptation.element.type = 'text'
-          legacyContent[blockKey].adaptation.element.data = {}
+          legacyContent[blockKey].adaptation.element.data = {
+            text: newBlock.mainText || legacyContent[blockKey].content.text
+          }
           legacyContent[blockKey].adaptation.element.description = 'Текстовый контент'
         }
         break
