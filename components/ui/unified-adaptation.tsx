@@ -865,13 +865,11 @@ export function UnifiedAdaptation({
           )
         case 'auditory':
           return (
-            <AudioUploadBlock
-              isEmpty={!data.audioUrl}
-              audioUrl={data.audioUrl}
+            <AudioCards
+              isEmpty={!data.audioCards || data.audioCards.length === 0}
+              audioCards={data.audioCards}
               isEditing={isEditing}
-              onAudioUrlChange={(url) => handleDataChange({ ...data, audioUrl: url })}
-              courseId={courseId}
-              lessonId={lessonId}
+              onAudioCardsChange={(audioCards) => handleDataChange({ ...data, audioCards })}
             />
           )
         case 'kinesthetic':
@@ -918,10 +916,12 @@ export function UnifiedAdaptation({
         case 'kinesthetic':
           return (
             <PracticalText
-              isEmpty={!data.sections || data.sections.length === 0}
-              sections={data.sections}
+              isEmpty={!data.tasks || data.tasks.length === 0}
+              title={data.title}
+              tasks={data.tasks}
+              criteria={data.criteria}
               isEditing={isEditing}
-              onSectionsChange={(sections) => handleDataChange({ ...data, sections })}
+              onDataChange={(newData) => handleDataChange({ ...data, ...newData })}
             />
           )
       }

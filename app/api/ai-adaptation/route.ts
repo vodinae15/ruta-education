@@ -563,8 +563,17 @@ function validateElementDataStructure(
       break
 
     case 'diagram':
-      // Валидация диаграммы: нужны nodes и connections (или layers для многослойных)
-      if (elementData.layers && Array.isArray(elementData.layers)) {
+      // Валидация диаграммы: поддерживаем mermaidCode (для visual типа) или nodes/connections (для других)
+      if (elementData.mermaidCode) {
+        // Mermaid диаграмма (используется в visual типе)
+        if (typeof elementData.mermaidCode !== 'string' || elementData.mermaidCode.trim().length === 0) {
+          errors.push({
+            block: blockId,
+            field: 'adaptation.element.data.mermaidCode',
+            message: `Для Mermaid диаграммы поле mermaidCode должно быть непустой строкой`
+          })
+        }
+      } else if (elementData.layers && Array.isArray(elementData.layers)) {
         // Многослойная диаграмма
         if (elementData.layers.length === 0) {
           errors.push({
@@ -591,7 +600,7 @@ function validateElementDataStructure(
           })
         }
       } else {
-        // Обычная диаграмма
+        // Обычная диаграмма с nodes
         if (!Array.isArray(elementData.nodes) || elementData.nodes.length === 0) {
           errors.push({
             block: blockId,
@@ -934,6 +943,94 @@ function validateElementDataStructure(
           block: blockId,
           field: 'adaptation.element.data.questions',
           message: `Для test поле data.questions должно быть массивом`
+        })
+      }
+      break
+
+    case 'audio-cards':
+      // Для audio-cards проверяем массив audioCards
+      if (!Array.isArray(elementData.audioCards)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.audioCards',
+          message: `Для audio-cards поле data.audioCards должно быть массивом`
+        })
+      } else {
+        elementData.audioCards.forEach((card: any, index: number) => {
+          if (!card.id || !card.term) {
+            errors.push({
+              block: blockId,
+              field: `adaptation.element.data.audioCards[${index}]`,
+              message: `Аудио-карточка audioCards[${index}] должна содержать поля id и term`
+            })
+          }
+        })
+      }
+      break
+
+    case 'audio-upload':
+      // Для audio-upload проверяем обязательные поля
+      if (!elementData.title || typeof elementData.title !== 'string') {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.title',
+          message: `Для audio-upload поле data.title должно быть строкой`
+        })
+      }
+      if (!Array.isArray(elementData.instructions)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.instructions',
+          message: `Для audio-upload поле data.instructions должно быть массивом`
+        })
+      }
+      break
+
+    case 'goals':
+      // Для goals проверяем массив goals
+      if (!Array.isArray(elementData.goals)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.goals',
+          message: `Для goals поле data.goals должно быть массивом`
+        })
+      } else {
+        elementData.goals.forEach((goal: any, index: number) => {
+          if (!goal.id || !goal.goal) {
+            errors.push({
+              block: blockId,
+              field: `adaptation.element.data.goals[${index}]`,
+              message: `Цель goals[${index}] должна содержать поля id и goal`
+            })
+          }
+        })
+      }
+      break
+
+    case 'practical':
+      // Для practical проверяем обязательные поля
+      if (!elementData.title || typeof elementData.title !== 'string') {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.title',
+          message: `Для practical поле data.title должно быть строкой`
+        })
+      }
+      if (!Array.isArray(elementData.tasks)) {
+        errors.push({
+          block: blockId,
+          field: 'adaptation.element.data.tasks',
+          message: `Для practical поле data.tasks должно быть массивом`
+        })
+      } else {
+        elementData.tasks.forEach((task: any, index: number) => {
+          if (!task.id || !task.instruction) {
+            errors.push({
+              block: blockId,
+              field: `adaptation.element.data.tasks[${index}]`,
+              message: `Задание tasks[${index}] должно содержать поля id и instruction`
+            })
+          }
         })
       }
       break
