@@ -942,14 +942,19 @@ export function UnifiedAdaptation({
     }
 
     if (blockNumber === 4) {
+      const mediaElements = (block.content?.elements || []).filter(el =>
+        el.type === 'video' || el.type === 'audio' || el.type === 'image' || el.type === 'file'
+      )
+
       return (
         <AttachmentsBlock
-          isEmpty={!data.attachments || data.attachments.length === 0}
+          isEmpty={
+            (!data.attachments || data.attachments.length === 0) &&
+            mediaElements.length === 0
+          }
           mainText={block.content?.text}
           attachments={data.attachments}
-          mediaElements={(block.content?.elements || []).filter(el =>
-            el.type === 'video' || el.type === 'audio' || el.type === 'image' || el.type === 'file'
-          ) as any[]}
+          mediaElements={mediaElements as any[]}
           isEditing={isEditing}
           onAttachmentsChange={(attachments) => handleDataChange({ ...data, attachments })}
           courseId={courseId}
