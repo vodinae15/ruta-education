@@ -874,6 +874,8 @@ export function UnifiedAdaptation({
               audioCards={data.audioCards}
               isEditing={isEditing}
               onAudioCardsChange={(audioCards) => handleDataChange({ ...data, audioCards })}
+              courseId={courseId}
+              lessonId={lessonId}
             />
           )
         case 'kinesthetic':
@@ -915,6 +917,8 @@ export function UnifiedAdaptation({
               audioCards={data.audioCards}
               isEditing={isEditing}
               onAudioCardsChange={(audioCards) => handleDataChange({ ...data, audioCards })}
+              courseId={courseId}
+              lessonId={lessonId}
             />
           )
         case 'kinesthetic':
@@ -1158,9 +1162,16 @@ export function UnifiedAdaptation({
                 ))}
 
                 {/* Элементы контента (текст, видео, аудио, изображения, файлы, задания, тесты) */}
+                {/* Для блока 4 медиа рендерится в AttachmentsBlock, пропускаем их здесь */}
+                {/* Для блока 3 медиа не нужно - оно должно быть в блоке 4 */}
                 {block.content.elements && block.content.elements.length > 0 && (
                   <div className="mt-6 space-y-4">
                     {block.content.elements.map((element, elementIndex) => {
+                      // Пропускаем медиа-элементы для блоков 3 и 4, чтобы избежать дублирования
+                      const isMediaElement = ['video', 'audio', 'image', 'file'].includes(element.type)
+                      if (isMediaElement && (blockNumber === 3 || blockNumber === 4)) {
+                        return null
+                      }
                       if (element.type === 'text') {
                         return (
                           <div key={element.id || elementIndex} className="p-4 bg-slate-50 rounded-lg border border-slate-200">

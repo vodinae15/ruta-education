@@ -1,24 +1,30 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { BlockWrapper } from "../../blocks/BlockWrapper"
 import { Play, Pause, Volume2, Trash2, Plus } from "lucide-react"
+import { AudioUploadV2 } from "@/components/ui/audio-upload-v2"
 
 interface AudioCardData {
   id: string
   term: string
   audioUrl: string
+  audioFileId?: string
   duration?: number
 }
 
 interface AudioCardsProps {
   isEmpty?: boolean
   cards?: AudioCardData[]
+  audioCards?: AudioCardData[] // Альтернативное имя для совместимости
   contentText?: string
   mainText?: string
   isEditing?: boolean
   onCardsChange?: (cards: AudioCardData[]) => void
+  onAudioCardsChange?: (cards: AudioCardData[]) => void // Альтернативное имя для совместимости
   onMainTextChange?: (text: string) => void
+  courseId?: string
+  lessonId?: string
 }
 
 function AudioCard({
@@ -32,6 +38,42 @@ function AudioCard({
 }) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
+
+  const handlePlayPause = () => {
+    if (!audioUrl || isEmpty) return
+
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+      } else {
+        audioRef.current.play()
+      }
+    }
+  }
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime)
+      if (audioRef.current.duration) {
+        setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100)
+      }
+    }
+  }
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration)
+    }
+  }
 
   return (
     <div className="bg-white border border-[#659AB8] rounded-lg p-4">
@@ -49,8 +91,9 @@ function AudioCard({
       <div className="bg-[#F8FAFB] rounded-lg p-3">
         <div className="flex items-center gap-3">
           <button
+            onClick={handlePlayPause}
             className="w-10 h-10 bg-[#659AB8] rounded-full flex items-center justify-center hover:bg-[#5589a7] transition-colors duration-200"
-            disabled={isEmpty}
+            disabled={isEmpty || !audioUrl}
           >
             {isPlaying ? (
               <Pause className="w-5 h-5 text-white" />
@@ -69,16 +112,33 @@ function AudioCard({
             </div>
             <div className="flex justify-between mt-1">
               <span className="text-xs text-slate-600">
-                {isEmpty ? "0:00" : "0:00"}
+                {formatTime(currentTime)}
               </span>
               <span className="text-xs text-slate-600">
-                {isEmpty ? "0:00" : "2:30"}
+                {duration > 0 ? formatTime(duration) : "0:00"}
               </span>
             </div>
           </div>
         </div>
 
-        {isEmpty && (
+        {audioUrl && (
+          <audio
+            ref={audioRef}
+            src={audioUrl}
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={handleLoadedMetadata}
+            onEnded={() => {
+              setIsPlaying(false)
+              setProgress(0)
+              setCurrentTime(0)
+            }}
+            onPause={() => setIsPlaying(false)}
+            onPlay={() => setIsPlaying(true)}
+            className="hidden"
+          />
+        )}
+
+        {isEmpty && !audioUrl && (
           <p className="text-xs text-slate-400 mt-2 text-center">
             Аудио-объяснение термина
           </p>
@@ -88,7 +148,19 @@ function AudioCard({
   )
 }
 
-export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEditing = false, onCardsChange, onMainTextChange }: AudioCardsProps) {
+export function AudioCards({
+  isEmpty = true,
+  cards,
+  audioCards,
+  contentText,
+  mainText,
+  isEditing = false,
+  onCardsChange,
+  onAudioCardsChange,
+  onMainTextChange,
+  courseId = "",
+  lessonId = ""
+}: AudioCardsProps) {
   const defaultCards: AudioCardData[] = Array.from({ length: 6 }, (_, i) => ({
     id: `audio-card-${i}`,
     term: "",
@@ -96,7 +168,11 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
     duration: 0,
   }))
 
-  const displayCards = cards && cards.length > 0 ? cards : defaultCards
+  // Поддержка обоих имен пропсов
+  const initialCards = cards || audioCards
+  const handleCardsChange = onCardsChange || onAudioCardsChange
+
+  const displayCards = initialCards && initialCards.length > 0 ? initialCards : defaultCards
   const [localCards, setLocalCards] = useState<AudioCardData[]>(displayCards)
 
   const handleCardChange = (id: string, field: keyof AudioCardData, value: string | number) => {
@@ -104,7 +180,15 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
       card.id === id ? { ...card, [field]: value } : card
     )
     setLocalCards(updated)
-    onCardsChange?.(updated)
+    handleCardsChange?.(updated)
+  }
+
+  const handleAudioUpload = (cardId: string, fileId: string, fileUrl: string, fileName: string) => {
+    const updated = localCards.map(card =>
+      card.id === cardId ? { ...card, audioUrl: fileUrl, audioFileId: fileId } : card
+    )
+    setLocalCards(updated)
+    handleCardsChange?.(updated)
   }
 
   const handleAddCard = () => {
@@ -116,13 +200,13 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
     }
     const updated = [...localCards, newCard]
     setLocalCards(updated)
-    onCardsChange?.(updated)
+    handleCardsChange?.(updated)
   }
 
   const handleRemoveCard = (id: string) => {
     const updated = localCards.filter(card => card.id !== id)
     setLocalCards(updated)
-    onCardsChange?.(updated)
+    handleCardsChange?.(updated)
   }
 
   return (
@@ -172,15 +256,30 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-1">
-                    URL аудиофайла
+                    Аудиофайл
                   </label>
-                  <input
-                    type="text"
-                    value={card.audioUrl}
-                    onChange={(e) => handleCardChange(card.id, 'audioUrl', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
-                    placeholder="https://... или путь к файлу"
-                  />
+                  {card.audioUrl ? (
+                    <div className="space-y-2">
+                      <audio controls className="w-full" src={card.audioUrl}>
+                        Ваш браузер не поддерживает аудио.
+                      </audio>
+                      <button
+                        onClick={() => handleCardChange(card.id, 'audioUrl', '')}
+                        className="text-sm text-[#659AB8] hover:text-[#5589a7] flex items-center gap-1"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        Удалить аудио
+                      </button>
+                    </div>
+                  ) : (
+                    <AudioUploadV2
+                      onAudioUpload={(fileId, fileUrl, fileName) => handleAudioUpload(card.id, fileId, fileUrl, fileName)}
+                      courseId={courseId}
+                      lessonId={lessonId}
+                      blockId="audio-cards"
+                      elementId={card.id}
+                    />
+                  )}
                 </div>
               </div>
             </div>
