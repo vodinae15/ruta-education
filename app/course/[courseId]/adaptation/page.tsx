@@ -365,11 +365,6 @@ export default function CourseAdaptationPage() {
 
         setUser(currentUser)
 
-        if (currentUser.user_metadata?.user_type !== "teacher") {
-          router.push("/student-dashboard")
-          return
-        }
-
         const { data: courseData, error: courseError } = await supabase
           .from("courses")
           .select("id, title, description, status, author_id, course_data, modules")
