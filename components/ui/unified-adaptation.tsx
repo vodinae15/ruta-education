@@ -996,8 +996,6 @@ export function UnifiedAdaptation({
         className={`border ${
           isCompleted
             ? 'border-[#10B981] bg-green-50'
-            : isEditing
-            ? 'border-[#E5E7EB] bg-[#FDF8F3]'
             : 'border-[#E5E7EB]'
         }`}
       >
