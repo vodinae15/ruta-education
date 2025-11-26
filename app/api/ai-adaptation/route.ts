@@ -2339,31 +2339,35 @@ export async function POST(request: NextRequest) {
       } else {
         console.log('⚠️ [AI Adaptation] Adaptation already exists and forceRegenerate is false, skipping save')
       }
-      
-      // Обновляем статус генерации в метаданных
-      const { error: metadataError } = await supabase
-        .from('lesson_adaptation_metadata')
-        .upsert({
-          lesson_id: lessonId,
-          adaptation_type: normalizedType,
-          ai_generation_status: 'completed',
-          ai_generation_timestamp: new Date().toISOString(),
-          ai_generation_error: null,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'lesson_id,adaptation_type'
-        })
 
-      if (metadataError) {
-        console.error('❌ [AI Adaptation] Failed to update metadata:', metadataError)
-        const jwtCheck = handleDatabaseError(metadataError, 'updating metadata')
-        if (jwtCheck.isJwtExpired) {
-          // Это не критично для процесса, но логируем
-          console.warn('⚠️ [AI Adaptation] JWT expired during metadata update, continuing anyway')
+      // Обновляем статус генерации в метаданных (только для типов адаптации, не для original)
+      if (normalizedType !== 'original') {
+        const { error: metadataError } = await supabase
+          .from('lesson_adaptation_metadata')
+          .upsert({
+            lesson_id: lessonId,
+            adaptation_type: normalizedType,
+            ai_generation_status: 'completed',
+            ai_generation_timestamp: new Date().toISOString(),
+            ai_generation_error: null,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'lesson_id,adaptation_type'
+          })
+
+        if (metadataError) {
+          console.error('❌ [AI Adaptation] Failed to update metadata:', metadataError)
+          const jwtCheck = handleDatabaseError(metadataError, 'updating metadata')
+          if (jwtCheck.isJwtExpired) {
+            // Это не критично для процесса, но логируем
+            console.warn('⚠️ [AI Adaptation] JWT expired during metadata update, continuing anyway')
+          }
+          // Не критично, продолжаем
+        } else {
+          console.log('✅ [AI Adaptation] Metadata updated successfully')
         }
-        // Не критично, продолжаем
       } else {
-        console.log('✅ [AI Adaptation] Metadata updated successfully')
+        console.log('ℹ️ [AI Adaptation] Skipping metadata update for original type')
       }
     } catch (saveError: any) {
       console.error('❌ [AI Adaptation] Error saving adaptation:', saveError)
