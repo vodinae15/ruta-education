@@ -1105,8 +1105,11 @@ export function UnifiedAdaptation({
                         }
                       })}
                       className="w-full px-4 py-3 border border-[#E5E7EB] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:border-[#E5E7EB] min-h-[200px] font-mono"
-                      placeholder="Введите основной текст блока (поддерживается Markdown: ##заголовки, **жирный**, *курсив*, списки, > цитаты)"
+                      placeholder="Введите основной текст блока"
                     />
+                    <div className="text-xs text-slate-500 mt-2">
+                      Markdown: используйте ## для заголовков, **текст** для жирного, *текст* для курсива, - для списков, {'>'} для цитат
+                    </div>
                   </div>
                 ) : (
                   <div className="prose prose-slate max-w-none">

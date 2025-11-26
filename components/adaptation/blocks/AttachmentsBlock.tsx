@@ -51,17 +51,20 @@ export function AttachmentsBlock({
   const [localAttachments, setLocalAttachments] = useState<Attachment[]>(defaultAttachments)
   const [uploadingType, setUploadingType] = useState<string | null>(null)
 
-  // Объединяем attachments и mediaElements для отображения
-  const allMedia = [
-    ...localAttachments,
-    ...(mediaElements || []).map(el => ({
-      id: el.id,
-      type: el.type === 'file' ? 'document' as const : el.type,
-      fileUrl: el.content,
-      fileName: el.caption || `${el.type} файл`,
-      caption: el.caption
-    }))
-  ]
+  // Объединяем attachments и mediaElements для отображения (с дедупликацией по URL)
+  const mediaFromElements = (mediaElements || []).map(el => ({
+    id: el.id,
+    type: el.type === 'file' ? 'document' as const : el.type,
+    fileUrl: el.content,
+    fileName: el.caption || `${el.type} файл`,
+    caption: el.caption
+  }))
+
+  // Фильтруем mediaElements, чтобы не показывать дубликаты (если URL уже есть в attachments)
+  const attachmentUrls = new Set(localAttachments.map(a => a.fileUrl))
+  const uniqueMediaFromElements = mediaFromElements.filter(m => !attachmentUrls.has(m.fileUrl))
+
+  const allMedia = [...localAttachments, ...uniqueMediaFromElements]
 
   const handleAddAttachment = (type: "video" | "audio" | "document" | "image") => {
     setUploadingType(type)
