@@ -11,19 +11,19 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", loading, children, disabled, asChild, ...props }, ref) => {
     const baseStyles =
-      "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      "inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
 
     const variants = {
-      primary: "bg-ruta-primary text-white hover:bg-[#5A8BAD] focus:ring-[#659AB8] shadow-ruta-sm hover:shadow-ruta-md",
+      primary: "bg-ruta-primary text-white hover:bg-[#5A8BAD] shadow-ruta-sm hover:shadow-ruta-md",
       secondary:
-        "border-2 border-ruta-primary text-ruta-primary bg-transparent hover:bg-ruta-primary-light hover:text-ruta-primary focus:ring-[#659AB8]",
+        "border-2 border-ruta-primary text-ruta-primary bg-transparent hover:bg-ruta-primary-light hover:text-ruta-primary",
       outline:
-        "border-2 border-ruta-primary text-ruta-primary bg-transparent hover:bg-ruta-primary-light hover:text-ruta-primary focus:ring-[#659AB8]",
-      text: "text-ruta-primary hover:text-[#4A7A9A] hover:bg-ruta-primary-light/50 focus:ring-[#659AB8]",
-      ghost: "text-ruta-primary hover:bg-ruta-primary-light/50 hover:text-ruta-primary focus:ring-[#659AB8]",
-      success: "bg-green-500 text-white hover:bg-green-600 focus:ring-green-500",
-      warning: "bg-amber-500 text-white hover:bg-amber-600 focus:ring-amber-500",
-      error: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500",
+        "border-2 border-ruta-primary text-ruta-primary bg-transparent hover:bg-ruta-primary-light hover:text-ruta-primary",
+      text: "text-ruta-primary hover:text-[#4A7A9A] hover:bg-ruta-primary-light/50",
+      ghost: "text-ruta-primary hover:bg-ruta-primary-light/50 hover:text-ruta-primary",
+      success: "bg-green-500 text-white hover:bg-green-600",
+      warning: "bg-amber-500 text-white hover:bg-amber-600",
+      error: "bg-red-500 text-white hover:bg-red-600",
     }
 
     const sizes = {

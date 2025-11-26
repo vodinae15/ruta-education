@@ -113,7 +113,7 @@ export function MermaidDiagram({ isEmpty = true, mermaidCode, introText, mainTex
             <textarea
               value={localMermaidCode}
               onChange={(e) => handleMermaidCodeChange(e.target.value)}
-              className="w-full min-h-[300px] px-3 py-2 border border-[#659AB8] rounded text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+              className="w-full min-h-[300px] px-3 py-2 border border-[#659AB8] rounded text-sm font-mono focus:outline-none focus:border-[#5589a7]"
               placeholder="graph TD&#10;    A[Начало] --> B[Конец]"
             />
             <div className="mt-2 text-xs text-slate-500">

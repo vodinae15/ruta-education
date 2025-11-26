@@ -166,7 +166,7 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
                     type="text"
                     value={card.term}
                     onChange={(e) => handleCardChange(card.id, 'term', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
                     placeholder="Введите термин"
                   />
                 </div>
@@ -178,7 +178,7 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
                     type="text"
                     value={card.audioUrl}
                     onChange={(e) => handleCardChange(card.id, 'audioUrl', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
                     placeholder="https://... или путь к файлу"
                   />
                 </div>

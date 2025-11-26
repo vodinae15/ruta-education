@@ -96,7 +96,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText, mainText, i
                     type="text"
                     value={row.concept}
                     onChange={(e) => handleRowChange(row.id, 'concept', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
                     placeholder="Введите понятие"
                   />
                 </div>
@@ -105,7 +105,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText, mainText, i
                   <textarea
                     value={row.definition}
                     onChange={(e) => handleRowChange(row.id, 'definition', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[60px]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7] min-h-[60px]"
                     placeholder="Введите определение"
                   />
                 </div>
@@ -114,7 +114,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText, mainText, i
                   <textarea
                     value={row.signs}
                     onChange={(e) => handleRowChange(row.id, 'signs', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[60px]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7] min-h-[60px]"
                     placeholder="Введите ключевые признаки"
                   />
                 </div>
@@ -123,7 +123,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText, mainText, i
                   <textarea
                     value={row.example}
                     onChange={(e) => handleRowChange(row.id, 'example', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[60px]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7] min-h-[60px]"
                     placeholder="Введите пример"
                   />
                 </div>

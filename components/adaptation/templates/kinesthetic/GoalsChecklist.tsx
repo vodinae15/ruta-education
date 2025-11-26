@@ -110,7 +110,7 @@ export function GoalsChecklist({ isEmpty = true, goals, introText, mainText, isE
                   type="text"
                   value={goal.goal}
                   onChange={(e) => handleGoalChange(goal.id, e.target.value)}
-                  className="flex-1 px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                  className="flex-1 px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
                   placeholder="Введите цель обучения"
                 />
                 {goalsState.length > 1 && (

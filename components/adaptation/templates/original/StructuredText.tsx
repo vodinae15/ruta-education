@@ -85,7 +85,7 @@ export function StructuredText({ isEmpty = true, sections, mainText, isEditing =
                     type="text"
                     value={section.title}
                     onChange={(e) => handleSectionChange(section.id, 'title', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
                     placeholder="Введите заголовок"
                   />
                 </div>
@@ -96,7 +96,7 @@ export function StructuredText({ isEmpty = true, sections, mainText, isEditing =
                   <textarea
                     value={section.content}
                     onChange={(e) => handleSectionChange(section.id, 'content', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[100px]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7] min-h-[100px]"
                     placeholder="Введите содержание раздела"
                   />
                 </div>

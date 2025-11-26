@@ -343,7 +343,7 @@ export function VideoUploadV2({
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-[#659AB8]"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleUrlSubmit()
                   }}

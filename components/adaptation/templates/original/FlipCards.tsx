@@ -136,7 +136,7 @@ export function FlipCards({ isEmpty = true, cards, isEditing = false, onCardsCha
                     type="text"
                     value={card.front}
                     onChange={(e) => handleCardChange(card.id, 'front', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7]"
                     placeholder="Введите термин или вопрос"
                   />
                 </div>
@@ -147,7 +147,7 @@ export function FlipCards({ isEmpty = true, cards, isEditing = false, onCardsCha
                   <textarea
                     value={card.back}
                     onChange={(e) => handleCardChange(card.id, 'back', e.target.value)}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[80px]"
+                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm focus:outline-none focus:border-[#5589a7] min-h-[80px]"
                     placeholder="Введите объяснение или ответ"
                   />
                 </div>

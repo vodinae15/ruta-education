@@ -15,10 +15,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           className={cn(
             "flex min-h-[120px] w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-base",
-            "placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
+            "placeholder:text-slate-400 focus:border-primary focus:outline-none",
             "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-slate-50",
-            "transition-all duration-200 resize-vertical",
-            error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+            "resize-vertical",
+            error && "border-red-500 focus:border-red-500",
             className,
           )}
           ref={ref}
