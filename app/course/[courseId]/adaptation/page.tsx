@@ -144,6 +144,7 @@ export default function CourseAdaptationPage() {
   const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false)
   const [regenerateType, setRegenerateType] = useState<string | undefined>(undefined) // Тип для перегенерации
   const [editedContent, setEditedContent] = useState<Record<string, AdaptationContent>>({})
+  const [isAuthor, setIsAuthor] = useState(true) // По умолчанию true, обновится после проверки
 
   const supabase = createClient()
   const { toast } = useToast()
@@ -224,7 +225,7 @@ export default function CourseAdaptationPage() {
   }
 
   // Загрузка адаптаций из БД
-  const loadAdaptationsFromDB = async (lessonId: string) => {
+  const loadAdaptationsFromDB = async (lessonId: string, includeUnpublished: boolean = true) => {
     if (!lessonId) return
 
     try {
@@ -233,7 +234,7 @@ export default function CourseAdaptationPage() {
 
       for (const type of adaptationTypes) {
         try {
-          const response = await fetch(`/api/lesson-adaptation?lessonId=${encodeURIComponent(lessonId)}&courseId=${courseId}&type=${type}&includeUnpublished=true`)
+          const response = await fetch(`/api/lesson-adaptation?lessonId=${encodeURIComponent(lessonId)}&courseId=${courseId}&type=${type}&includeUnpublished=${includeUnpublished}`)
           if (response.ok) {
             const data = await response.json()
             if (data.success && data.adaptation) {
@@ -380,8 +381,12 @@ export default function CourseAdaptationPage() {
           return
         }
 
-        const isAuthor = courseData.author_id === currentUser.id
-        if (!isAuthor) {
+        // Проверяем, является ли пользователь автором
+        let userIsAuthor = courseData.author_id === currentUser.id
+        let hasAccess = userIsAuthor
+
+        if (!userIsAuthor) {
+          // Проверяем, является ли пользователь соавтором
           const { data: collaborator } = await supabase
             .from("course_collaborators")
             .select("id")
@@ -389,12 +394,49 @@ export default function CourseAdaptationPage() {
             .eq("collaborator_user_id", currentUser.id)
             .maybeSingle()
 
-          if (!collaborator) {
-            setError("У вас нет прав доступа к этому курсу")
-            return
+          if (collaborator) {
+            hasAccess = true
+            userIsAuthor = true // Соавтор имеет права редактирования
+          } else {
+            // Проверяем, является ли пользователь студентом с доступом к курсу
+            const { data: student } = await supabase
+              .from("students")
+              .select("id")
+              .eq("email", currentUser.email)
+              .maybeSingle()
+
+            if (student) {
+              // Проверяем бесплатный доступ
+              const { data: freeAccess } = await supabase
+                .from("student_course_access")
+                .select("id")
+                .eq("student_id", student.id)
+                .eq("course_id", courseId)
+                .maybeSingle()
+
+              // Проверяем покупку
+              const { data: purchase } = await supabase
+                .from("course_purchases")
+                .select("id")
+                .eq("student_id", student.id)
+                .eq("course_id", courseId)
+                .eq("purchase_status", "completed")
+                .maybeSingle()
+
+              if (freeAccess || purchase) {
+                hasAccess = true
+                // userIsAuthor остаётся false - студент только просматривает
+              }
+            }
           }
         }
 
+        if (!hasAccess) {
+          setError("У вас нет прав доступа к этому курсу")
+          return
+        }
+
+        setIsAuthor(userIsAuthor)
         setCourse(courseData)
 
         const loadedLessons = await loadLessonsFromDB(courseId, courseData)
@@ -403,7 +445,7 @@ export default function CourseAdaptationPage() {
         if (loadedLessons.length > 0) {
           const firstLesson = loadedLessons[0]
           setSelectedLesson(firstLesson)
-          await loadAdaptationsFromDB(firstLesson.id)
+          await loadAdaptationsFromDB(firstLesson.id, userIsAuthor)
           await loadOriginalContent(firstLesson.id)
         }
       } catch (err) {
@@ -421,10 +463,10 @@ export default function CourseAdaptationPage() {
 
   useEffect(() => {
     if (selectedLesson) {
-      loadAdaptationsFromDB(selectedLesson.id)
+      loadAdaptationsFromDB(selectedLesson.id, isAuthor)
       loadOriginalContent(selectedLesson.id)
     }
-  }, [selectedLesson])
+  }, [selectedLesson, isAuthor])
 
   const hasExistingAdaptations = () => {
     if (!selectedLesson) return false
@@ -551,7 +593,7 @@ export default function CourseAdaptationPage() {
         const result = await response.json()
 
         if (result.success) {
-          await loadAdaptationsFromDB(selectedLesson.id)
+          await loadAdaptationsFromDB(selectedLesson.id, isAuthor)
 
           setAdaptations(prev => ({
             ...prev,
@@ -615,7 +657,7 @@ export default function CourseAdaptationPage() {
     setAdaptingTypes([]) // Очищаем список адаптируемых типов
 
     if (selectedLesson) {
-      await loadAdaptationsFromDB(selectedLesson.id)
+      await loadAdaptationsFromDB(selectedLesson.id, isAuthor)
     }
   }
 
@@ -742,7 +784,7 @@ export default function CourseAdaptationPage() {
         const result = await response.json()
 
         if (result.success) {
-          await loadAdaptationsFromDB(selectedLesson.id)
+          await loadAdaptationsFromDB(selectedLesson.id, isAuthor)
 
           setAdaptations(prev => ({
             ...prev,
@@ -1056,7 +1098,7 @@ export default function CourseAdaptationPage() {
             <Card className="border">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg text-[#5589a7]">
-                  Выберите урок для адаптации
+                  {isAuthor ? 'Выберите урок для адаптации' : 'Выберите урок'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -1155,10 +1197,13 @@ export default function CourseAdaptationPage() {
             <Card className="border">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg text-[#5589a7]">
-                  Просмотр адаптации урока
+                  {isAuthor ? 'Просмотр адаптации урока' : 'Материалы урока'}
                 </CardTitle>
                 <CardDescription className="text-slate-600">
-                  Посмотрите, как ваш урок будет восприниматься разными режимами представления материала
+                  {isAuthor
+                    ? 'Посмотрите, как ваш урок будет восприниматься разными режимами представления материала'
+                    : 'Выберите режим представления материала, который вам больше подходит'
+                  }
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -1170,68 +1215,71 @@ export default function CourseAdaptationPage() {
                       onModeChange={setCurrentMode}
                       availableModes={['visual', 'auditory', 'kinesthetic', 'original']}
                     />
-                    <div className="flex gap-2">
-                      {(adaptations[currentMode]?.content || (currentMode === 'original' && (adaptations['original']?.status === 'completed' || adaptations['original']?.status === 'published'))) && (
-                        <>
-                          {isEditing ? (
-                            <>
-                              <button
-                                onClick={() => saveAdaptationChanges(currentMode)}
-                                disabled={isSaving}
-                                className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                {isSaving ? 'Сохранение...' : 'Сохранить'}
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setIsEditing(false)
-                                  // Очищаем несохраненные изменения
-                                  setEditedContent(prev => {
-                                    const { [currentMode]: _, ...rest } = prev
-                                    return rest
-                                  })
-                                }}
-                                className="bg-white text-slate-600 px-6 py-2 border-2 border-slate-300 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-slate-50 whitespace-nowrap"
-                              >
-                                Отмена
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                onClick={() => setIsEditing(true)}
-                                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap"
-                              >
-                                Редактировать
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setRegenerateType(currentMode)
-                                  setShowRegenerateConfirm(true)
-                                }}
-                                disabled={isAdapting}
-                                className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                              >
-                                <RefreshCwIcon className="w-4 h-4" />
-                                Перегенерировать
-                              </button>
-                              {adaptations[currentMode]?.status !== 'published' && (
+                    {/* Кнопки редактирования - только для авторов */}
+                    {isAuthor && (
+                      <div className="flex gap-2">
+                        {(adaptations[currentMode]?.content || (currentMode === 'original' && (adaptations['original']?.status === 'completed' || adaptations['original']?.status === 'published'))) && (
+                          <>
+                            {isEditing ? (
+                              <>
                                 <button
-                                  onClick={() => publishAdaptation(currentMode)}
-                                  className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
+                                  onClick={() => saveAdaptationChanges(currentMode)}
+                                  disabled={isSaving}
+                                  className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                  Опубликовать
+                                  {isSaving ? 'Сохранение...' : 'Сохранить'}
                                 </button>
-                              )}
-                            </>
-                          )}
-                        </>
-                      )}
-                    </div>
+                                <button
+                                  onClick={() => {
+                                    setIsEditing(false)
+                                    // Очищаем несохраненные изменения
+                                    setEditedContent(prev => {
+                                      const { [currentMode]: _, ...rest } = prev
+                                      return rest
+                                    })
+                                  }}
+                                  className="bg-white text-slate-600 px-6 py-2 border-2 border-slate-300 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-slate-50 whitespace-nowrap"
+                                >
+                                  Отмена
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => setIsEditing(true)}
+                                  className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap"
+                                >
+                                  Редактировать
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setRegenerateType(currentMode)
+                                    setShowRegenerateConfirm(true)
+                                  }}
+                                  disabled={isAdapting}
+                                  className="bg-white text-[#659AB8] px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#659AB8] hover:text-white whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                  <RefreshCwIcon className="w-4 h-4" />
+                                  Перегенерировать
+                                </button>
+                                {adaptations[currentMode]?.status !== 'published' && (
+                                  <button
+                                    onClick={() => publishAdaptation(currentMode)}
+                                    className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
+                                  >
+                                    Опубликовать
+                                  </button>
+                                )}
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Подсказки о недостающих материалах для текущего режима */}
-                  {materialsAnalysis && selectedLesson && currentMode !== 'original' && (() => {
+                  {/* Подсказки о недостающих материалах для текущего режима - только для авторов */}
+                  {isAuthor && materialsAnalysis && selectedLesson && currentMode !== 'original' && (() => {
                     const missingMaterials = getMissingMaterialsForAdaptationType(
                       materialsAnalysis as MaterialsAnalysis,
                       currentMode as AdaptationType
@@ -1254,12 +1302,12 @@ export default function CourseAdaptationPage() {
                             lessonTitle={selectedLesson.title}
                             adaptedContent={adaptations[currentMode]?.content}
                             originalContent={adaptations[currentMode]?.originalContent}
-                            isStudent={false}
+                            isStudent={!isAuthor}
                             courseId={courseId}
                             lessonId={selectedLesson.id}
                             materialsAnalysis={materialsAnalysis}
-                            isEditing={isEditing}
-                            onAdaptedContentChange={(content) => handleAdaptedContentChange(currentMode, content)}
+                            isEditing={isAuthor && isEditing}
+                            onAdaptedContentChange={isAuthor ? (content) => handleAdaptedContentChange(currentMode, content) : undefined}
                           />
                         </div>
                       ) : adaptations[currentMode]?.status === 'processing' ? (
@@ -1269,26 +1317,38 @@ export default function CourseAdaptationPage() {
                         </div>
                       ) : adaptations[currentMode]?.status === 'error' ? (
                         <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-6 text-center">
-                          <p className="text-slate-900 mb-4">Ошибка при адаптации контента</p>
-                          <button
-                            onClick={() => startAdaptation(currentMode)}
-                            className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
-                          >
-                            Попробовать снова
-                          </button>
+                          <p className="text-slate-900 mb-4">
+                            {isAuthor ? 'Ошибка при адаптации контента' : 'Адаптация временно недоступна'}
+                          </p>
+                          {isAuthor && (
+                            <button
+                              onClick={() => startAdaptation(currentMode)}
+                              className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                            >
+                              Попробовать снова
+                            </button>
+                          )}
                         </div>
                       ) : (
                         <div className="bg-white border-2 border-[#E5E7EB] rounded-lg p-6 text-center">
                           <div className="w-16 h-16 bg-[#659AB8] rounded-full flex items-center justify-center mx-auto mb-4">
                             <BookOpenIcon className="w-8 h-8 text-white" />
                           </div>
-                          <p className="text-slate-600 mb-4">Адаптация ещё не создана</p>
-                          <button
-                            onClick={() => startAdaptation(currentMode)}
-                            className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
-                          >
-                            Создать адаптацию
-                          </button>
+                          <p className="text-slate-600 mb-4">
+                            {isAuthor ? 'Адаптация ещё не создана' : 'Урок скоро появится'}
+                          </p>
+                          {isAuthor ? (
+                            <button
+                              onClick={() => startAdaptation(currentMode)}
+                              className="bg-[#659AB8] text-white px-8 py-3 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7]"
+                            >
+                              Создать адаптацию
+                            </button>
+                          ) : (
+                            <p className="text-sm text-slate-500">
+                              Автор курса работает над адаптацией этого урока. Пожалуйста, вернитесь позже.
+                            </p>
+                          )}
                         </div>
                       )}
                     </div>
