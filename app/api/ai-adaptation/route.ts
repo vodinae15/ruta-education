@@ -188,7 +188,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
         break
 
       case 'visual':
-        // Блок 1: MermaidDiagram
+        // Блок 1: MermaidDiagram (приоритет для block1)
         if (i === 1 && newBlock.mermaidDiagram) {
           legacyContent[blockKey].adaptation.element.type = 'diagram'
           legacyContent[blockKey].adaptation.element.data = {
@@ -197,7 +197,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           legacyContent[blockKey].adaptation.element.description = newBlock.mermaidDiagram.description || 'Схема взаимосвязей'
           console.log(`✅ [Transform] Transformed mermaidDiagram for ${blockKey}`)
         }
-        // Блоки 2-5: ComparisonTable
+        // Блоки 2-5: ComparisonTable (используем для всех остальных блоков если есть)
         else if (newBlock.comparisonTable) {
           legacyContent[blockKey].adaptation.element.type = 'table'
           legacyContent[blockKey].adaptation.element.data = {
@@ -205,7 +205,17 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           }
           legacyContent[blockKey].adaptation.element.description = 'Таблица сравнения понятий'
           console.log(`✅ [Transform] Transformed comparisonTable for ${blockKey}:`, newBlock.comparisonTable.rows?.length || 0, 'rows')
-        } else {
+        }
+        // Fallback: если нет ни diagram ни table - используем MermaidDiagram если есть
+        else if (newBlock.mermaidDiagram) {
+          legacyContent[blockKey].adaptation.element.type = 'diagram'
+          legacyContent[blockKey].adaptation.element.data = {
+            mermaidCode: newBlock.mermaidDiagram.code || ''
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Схема взаимосвязей'
+          console.log(`✅ [Transform] Transformed mermaidDiagram for ${blockKey} (fallback)`)
+        }
+        else {
           legacyContent[blockKey].adaptation.element.type = 'text'
           legacyContent[blockKey].adaptation.element.data = {
             text: newBlock.mainText || legacyContent[blockKey].content.text
@@ -215,7 +225,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
         break
 
       case 'auditory':
-        // Блок 5: AudioUploadBlock
+        // Блок 5: AudioUploadBlock (приоритет для block5)
         if (i === 5 && newBlock.audioUploadBlock) {
           legacyContent[blockKey].adaptation.element.type = 'audio-upload'
           legacyContent[blockKey].adaptation.element.data = {
@@ -227,7 +237,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           legacyContent[blockKey].adaptation.element.description = 'Задание на запись аудио-пересказа'
           console.log(`✅ [Transform] Transformed audioUploadBlock for ${blockKey}`)
         }
-        // Блоки 1-4: AudioCards
+        // Блоки 1-4: AudioCards (используем для всех остальных блоков если есть)
         else if (newBlock.audioCards) {
           legacyContent[blockKey].adaptation.element.type = 'audio-cards'
           legacyContent[blockKey].adaptation.element.data = {
@@ -235,7 +245,20 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           }
           legacyContent[blockKey].adaptation.element.description = 'Аудио-карточки с терминами'
           console.log(`✅ [Transform] Transformed audioCards for ${blockKey}:`, newBlock.audioCards.length, 'cards')
-        } else {
+        }
+        // Fallback: если нет ни audioUploadBlock ни audioCards - используем AudioUploadBlock если есть
+        else if (newBlock.audioUploadBlock) {
+          legacyContent[blockKey].adaptation.element.type = 'audio-upload'
+          legacyContent[blockKey].adaptation.element.data = {
+            title: newBlock.audioUploadBlock.title || '',
+            description: newBlock.audioUploadBlock.description || '',
+            instructions: newBlock.audioUploadBlock.instructions || [],
+            criteria: newBlock.audioUploadBlock.criteria || ''
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Задание на запись аудио-пересказа'
+          console.log(`✅ [Transform] Transformed audioUploadBlock for ${blockKey} (fallback)`)
+        }
+        else {
           legacyContent[blockKey].adaptation.element.type = 'text'
           legacyContent[blockKey].adaptation.element.data = {
             text: newBlock.mainText || legacyContent[blockKey].content.text
@@ -245,7 +268,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
         break
 
       case 'kinesthetic':
-        // Блок 1: GoalsChecklist
+        // Блок 1: GoalsChecklist (приоритет для block1)
         if (i === 1 && newBlock.goalsChecklist) {
           legacyContent[blockKey].adaptation.element.type = 'goals'
           legacyContent[blockKey].adaptation.element.data = {
@@ -254,8 +277,8 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           legacyContent[blockKey].adaptation.element.description = 'Чек-лист целей обучения'
           console.log(`✅ [Transform] Transformed goalsChecklist for ${blockKey}:`, newBlock.goalsChecklist.goals?.length || 0, 'goals')
         }
-        // Блок 2: PracticalText
-        else if (i === 2 && newBlock.practicalText) {
+        // Блоки 2-5: PracticalText (используем для всех остальных блоков если есть)
+        else if (newBlock.practicalText) {
           legacyContent[blockKey].adaptation.element.type = 'practical'
           legacyContent[blockKey].adaptation.element.data = {
             title: newBlock.practicalText.title || '',
@@ -264,7 +287,17 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
           }
           legacyContent[blockKey].adaptation.element.description = 'Практические задания'
           console.log(`✅ [Transform] Transformed practicalText for ${blockKey}:`, newBlock.practicalText.tasks?.length || 0, 'tasks')
-        } else {
+        }
+        // Fallback: если нет ни goals ни practicalText - используем GoalsChecklist если есть
+        else if (newBlock.goalsChecklist) {
+          legacyContent[blockKey].adaptation.element.type = 'goals'
+          legacyContent[blockKey].adaptation.element.data = {
+            goals: newBlock.goalsChecklist.goals || []
+          }
+          legacyContent[blockKey].adaptation.element.description = 'Чек-лист целей обучения'
+          console.log(`✅ [Transform] Transformed goalsChecklist for ${blockKey} (fallback)`)
+        }
+        else {
           legacyContent[blockKey].adaptation.element.type = 'text'
           legacyContent[blockKey].adaptation.element.data = {
             text: newBlock.mainText || legacyContent[blockKey].content.text
