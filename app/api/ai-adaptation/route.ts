@@ -2074,48 +2074,56 @@ export async function POST(request: NextRequest) {
     adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType)
     console.log('✅ [AI Adaptation] Format transformation complete')
 
-    // Копируем медиа-элементы из оригинальных блоков в адаптированные
-    console.log('🔄 [AI Adaptation] Copying media elements from original blocks...')
+    // Собираем ВСЕ медиа-элементы из оригинальных блоков и помещаем ТОЛЬКО в block4
+    console.log('🔄 [AI Adaptation] Copying ALL media elements to block4...')
+    const allMediaElements: any[] = []
+
     lessonContent.blocks.forEach((originalBlock, index) => {
-      const blockKey = `block${index + 1}` as keyof typeof adaptedContent
-      if (adaptedContent[blockKey] && originalBlock.elements && originalBlock.elements.length > 0) {
+      if (originalBlock.elements && originalBlock.elements.length > 0) {
         const mediaElements = originalBlock.elements.filter(el =>
           ['video', 'audio', 'image', 'file'].includes(el.type)
         )
         if (mediaElements.length > 0) {
-          if (!adaptedContent[blockKey].content.elements) {
-            adaptedContent[blockKey].content.elements = []
-          }
-          // Добавляем медиа-элементы которых еще нет
-          mediaElements.forEach(mediaEl => {
-            const exists = adaptedContent[blockKey].content.elements?.some(
-              (el: any) => el.id === mediaEl.id
-            )
-            if (!exists) {
-              // Парсим content если это JSON строка
-              let parsedContent = mediaEl.content
-              if (typeof mediaEl.content === 'string') {
-                try {
-                  const parsed = JSON.parse(mediaEl.content)
-                  // Если в JSON есть fileUrl - используем его
-                  if (parsed.fileUrl) {
-                    parsedContent = parsed.fileUrl
-                  }
-                } catch (e) {
-                  // Если не JSON - используем как есть
-                }
-              }
-
-              adaptedContent[blockKey].content.elements!.push({
-                ...mediaEl,
-                content: parsedContent
-              })
-              console.log(`✅ [AI Adaptation] Added ${mediaEl.type} element to ${blockKey}`)
-            }
-          })
+          console.log(`📦 [AI Adaptation] Found ${mediaElements.length} media elements in block${index + 1}`)
+          allMediaElements.push(...mediaElements)
         }
       }
     })
+
+    // Добавляем все медиа ТОЛЬКО в block4
+    if (allMediaElements.length > 0 && adaptedContent.block4) {
+      if (!adaptedContent.block4.content.elements) {
+        adaptedContent.block4.content.elements = []
+      }
+
+      allMediaElements.forEach(mediaEl => {
+        const exists = adaptedContent.block4.content.elements?.some(
+          (el: any) => el.id === mediaEl.id
+        )
+        if (!exists) {
+          // Парсим content если это JSON строка
+          let parsedContent = mediaEl.content
+          if (typeof mediaEl.content === 'string') {
+            try {
+              const parsed = JSON.parse(mediaEl.content)
+              // Если в JSON есть fileUrl - используем его
+              if (parsed.fileUrl) {
+                parsedContent = parsed.fileUrl
+              }
+            } catch (e) {
+              // Если не JSON - используем как есть
+            }
+          }
+
+          adaptedContent.block4.content.elements!.push({
+            ...mediaEl,
+            content: parsedContent
+          })
+          console.log(`✅ [AI Adaptation] Added ${mediaEl.type} element to block4`)
+        }
+      })
+      console.log(`✅ [AI Adaptation] Total ${adaptedContent.block4.content.elements.length} media elements in block4`)
+    }
 
     // Проверяем наличие всех блоков перед валидацией
     const foundBlocks = Object.keys(adaptedContent).filter(k => k.startsWith('block')).sort()
