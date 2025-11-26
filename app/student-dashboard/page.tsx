@@ -213,7 +213,7 @@ export default function StudentDashboardPage() {
   }, [router, user, authLoading])
 
   const handleStartLearning = (courseId: string) => {
-    router.push(`/course/${courseId}/learn`)
+    router.push(`/course/${courseId}/adaptation`)
   }
 
   const handleOpenNotes = (courseId: string) => {

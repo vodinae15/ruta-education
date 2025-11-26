@@ -172,7 +172,7 @@ export default function CoursePricingPage() {
 
       // Редирект через 2 секунды
       setTimeout(() => {
-        router.push(`/course/${courseId}/learn`)
+        router.push(`/course/${courseId}/adaptation`)
       }, 2000)
     } catch (error) {
       console.error("Error purchasing:", error)

@@ -235,7 +235,7 @@ function StudentTestResultsContent({ result, onRetakeTest }: StudentTestResultsP
   const handleGoToCourses = () => {
     const courseId = searchParams.get("courseId")
     if (courseId) {
-      router.push(`/course/${courseId}/learn`)
+      router.push(`/course/${courseId}/adaptation`)
     } else {
       router.push("/student-dashboard")
     }

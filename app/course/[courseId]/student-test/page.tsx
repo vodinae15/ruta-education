@@ -65,7 +65,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
               setStudentTypeResult(result)
               setShowResults(true)
             } else {
-              router.push(`/course/${params.courseId}/learn`)
+              router.push(`/course/${params.courseId}/adaptation`)
             }
           }
         } catch (err) {
@@ -210,7 +210,7 @@ export default function StudentTestPage({ params }: { params: { courseId: string
                   </p>
                   <div className="flex gap-4 justify-center">
                     <Button 
-                      onClick={() => router.push(`/course/${params.courseId}/learn`)} 
+                      onClick={() => router.push(`/course/${params.courseId}/adaptation`)} 
                       className="flex items-center gap-2 bg-[#659AB8] hover:bg-[#659AB8]/90 text-white"
                     >
                       Начать обучение

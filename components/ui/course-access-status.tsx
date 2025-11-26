@@ -36,7 +36,7 @@ export function CourseAccessStatus({
               </div>
             </div>
             <Button
-              onClick={() => router.push(`/course/${courseId}/learn`)}
+              onClick={() => router.push(`/course/${courseId}/adaptation`)}
               className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
             >
               Перейти к курсу

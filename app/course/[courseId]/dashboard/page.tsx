@@ -98,7 +98,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
-                onClick={() => router.push(`/course/${params.courseId}/learn`)}
+                onClick={() => router.push(`/course/${params.courseId}/adaptation`)}
                 className="h-10 px-3"
               >
                 <ArrowLeftIcon className="w-4 h-4 mr-2" />К курсу
@@ -192,7 +192,7 @@ export default function StudentDashboard({ params }: { params: { courseId: strin
                 </div>
 
                 <div className="pt-4 border-t border-slate-200">
-                  <Button onClick={() => router.push(`/course/${params.courseId}/learn`)} className="w-full h-10">
+                  <Button onClick={() => router.push(`/course/${params.courseId}/adaptation`)} className="w-full h-10">
                     Продолжить обучение
                   </Button>
                 </div>
