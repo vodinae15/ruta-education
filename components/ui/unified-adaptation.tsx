@@ -774,8 +774,8 @@ export function UnifiedAdaptation({
       return {
         name: 'Оригинал',
         icon: <BookOpenIcon className="w-5 h-5" />,
-        color: 'bg-gray-600 text-white',
-        bgColor: 'bg-gray-50',
+        color: 'bg-[#5589a7] text-white',
+        bgColor: 'bg-[#FDF8F3]',
         description: 'Оригинальный контент автора'
       }
     }
@@ -993,12 +993,12 @@ export function UnifiedAdaptation({
     return (
       <Card
         key={blockId}
-        className={`border-2 transition-all duration-200 ${
+        className={`border ${
           isCompleted
             ? 'border-[#10B981] bg-green-50'
             : isEditing
-            ? 'border-[#659AB8] bg-[#F8FAFB]'
-            : 'border-[#659AB8]/20 hover:border-[#659AB8]/40'
+            ? 'border-[#E5E7EB] bg-[#FDF8F3]'
+            : 'border-[#E5E7EB]'
         }`}
       >
         <CardHeader
@@ -1688,12 +1688,12 @@ export function UnifiedAdaptation({
     const isCompleted = completedBlocks.includes(blockId)
     
     return (
-      <Card 
-        key={blockId} 
-        className={`border-2 transition-all duration-200 ${
-          isCompleted 
-            ? 'border-[#10B981] bg-green-50' 
-            : 'border-[#659AB8]/20 hover:border-[#659AB8]/40'
+      <Card
+        key={blockId}
+        className={`border ${
+          isCompleted
+            ? 'border-[#10B981] bg-green-50'
+            : 'border-[#E5E7EB]'
         }`}
       >
         <CardHeader 
@@ -2217,7 +2217,7 @@ function ConceptMatching({
               key={`left-${index}`}
               onClick={() => handleLeftSelection(left)}
               disabled={isMatched(left)}
-              className={`w-full p-3 text-left rounded-lg border-2 transition-all ${
+              className={`w-full p-3 text-left rounded-lg border-2 transition-colors duration-200 ${
                 getLeftButtonClass(left)
               }`}
             >
@@ -2234,7 +2234,7 @@ function ConceptMatching({
               key={`right-${index}`}
               onClick={() => handleRightSelection(right)}
               disabled={isRightMatched(right)}
-              className={`w-full p-3 text-left rounded-lg border-2 transition-all ${
+              className={`w-full p-3 text-left rounded-lg border-2 transition-colors duration-200 ${
                 getRightButtonClass(right)
               }`}
             >
