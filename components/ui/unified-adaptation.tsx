@@ -184,13 +184,17 @@ export function UnifiedAdaptation({
   }
 
   // Проверяем, нужно ли показывать базовый контент при недостатке материалов
+  // ВАЖНО: Показываем базовый контент ТОЛЬКО если нет адаптированного контента
   const shouldShowBasicContent = (): boolean => {
+    // Если есть адаптированный контент - всегда показываем его, не базовый
+    if (adaptedContent) return false
+
     if (!materialsAnalysis || mode === 'original') return false
-    
+
     if (mode === 'auditory' && !materialsAnalysis.has_audio) return true
     if (mode === 'visual' && !materialsAnalysis.has_diagrams && !materialsAnalysis.has_images) return true
     if (mode === 'kinesthetic' && !materialsAnalysis.has_practice) return true
-    
+
     return false
   }
 
