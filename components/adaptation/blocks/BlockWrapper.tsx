@@ -73,7 +73,7 @@ export function BlockWrapper({
                           setLocalMainText(e.target.value)
                           onMainTextChange?.(e.target.value)
                         }}
-                        className="w-full min-h-[200px] p-4 border-2 border-[#659AB8] rounded-lg text-sm text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-[#659AB8] focus:border-transparent"
+                        className="w-full min-h-[200px] p-4 border border-[#E5E7EB] rounded-lg text-sm text-slate-700 font-mono focus:outline-none focus:border-[#E5E7EB]"
                         placeholder="Введите основной текст для этого блока (поддерживается Markdown: ## заголовки, **жирный**, *курсив*, списки, > цитаты)"
                       />
                       <div className="text-xs text-slate-500">

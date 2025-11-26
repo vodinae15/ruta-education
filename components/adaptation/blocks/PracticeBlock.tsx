@@ -93,7 +93,7 @@ export function PracticeBlock({ isEmpty = true, mainText, tasks = [], isEditing 
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Запишите свои мысли, решения и наблюдения по практическим заданиям..."
-                  className="min-h-[150px] border-slate-300 focus:border-[#659AB8] focus:ring-[#659AB8]"
+                  className="min-h-[150px] border-slate-300 focus:border-slate-300 focus:outline-none"
                 />
                 <Button
                   onClick={handleSaveNotes}

@@ -1021,7 +1021,7 @@ export function UnifiedAdaptation({
                         title: e.target.value
                       }
                     })}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#659AB8]"
+                    className="w-full px-3 py-2 border border-[#E5E7EB] rounded text-base font-semibold focus:outline-none focus:border-[#E5E7EB]"
                     placeholder="Заголовок блока"
                     onClick={(e) => e.stopPropagation()}
                   />
@@ -1074,7 +1074,7 @@ export function UnifiedAdaptation({
                         text: e.target.value
                       }
                     })}
-                    className="w-full px-3 py-2 border border-[#659AB8] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[80px]"
+                    className="w-full px-3 py-2 border border-[#E5E7EB] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:border-[#E5E7EB] min-h-[80px]"
                     placeholder="Введите текст подводки к блоку"
                   />
                 </div>
@@ -1100,7 +1100,7 @@ export function UnifiedAdaptation({
                           text: e.target.value
                         }
                       })}
-                      className="w-full px-4 py-3 border-2 border-[#659AB8] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#659AB8] min-h-[200px] font-mono"
+                      className="w-full px-4 py-3 border border-[#E5E7EB] rounded text-sm text-slate-700 leading-relaxed focus:outline-none focus:border-[#E5E7EB] min-h-[200px] font-mono"
                       placeholder="Введите основной текст блока (поддерживается Markdown: ##заголовки, **жирный**, *курсив*, списки, > цитаты)"
                     />
                   </div>
