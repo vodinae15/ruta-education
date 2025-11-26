@@ -212,7 +212,7 @@ export function TestBlock({ isEmpty = true, mainText, questions = [], isEditing 
                     key={optionIndex}
                     onClick={() => !showExplanation && handleAnswerSelect(optionIndex)}
                     disabled={showExplanation}
-                    className={`w-full text-left p-4 border-2 rounded-lg transition-all duration-200 ${
+                    className={`w-full text-left p-4 border rounded-lg ${
                       showCorrectness
                         ? isCorrect
                           ? "border-green-500 bg-green-50"
@@ -220,8 +220,8 @@ export function TestBlock({ isEmpty = true, mainText, questions = [], isEditing 
                           ? "border-red-500 bg-red-50"
                           : "border-[#E5E7EB]"
                         : isSelected
-                        ? "border-[#659AB8] bg-[#E8F4FA] shadow-md"
-                        : "border-[#E5E7EB] hover:border-[#659AB8] hover:bg-[#F8FAFB]"
+                        ? "border-[#659AB8] bg-[#E8F4FA]"
+                        : "border-[#E5E7EB]"
                     } ${showExplanation ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                   >
                     <div className="flex items-center justify-between">

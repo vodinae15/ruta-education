@@ -1405,7 +1405,7 @@ export function UnifiedAdaptation({
       return (
         <div className="space-y-6">
           {originalContent.blocks.map((block, index) => (
-            <Card key={index} className="border-2 border-gray-200">
+            <Card key={index} className="border border-gray-200">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1E293B]">{block.title}</CardTitle>
               </CardHeader>
@@ -1456,7 +1456,7 @@ export function UnifiedAdaptation({
       return (
         <div className="space-y-6">
           {originalContent.blocks.map((block, index) => (
-            <Card key={index} className="border-2 border-gray-200">
+            <Card key={index} className="border border-gray-200">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1E293B]">{block.title}</CardTitle>
               </CardHeader>
@@ -1476,7 +1476,7 @@ export function UnifiedAdaptation({
       return (
         <div className="space-y-6">
           {originalContent.blocks.map((block, index) => (
-            <Card key={index} className="border-2 border-gray-200">
+            <Card key={index} className="border border-gray-200">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1E293B]">{block.title}</CardTitle>
               </CardHeader>
