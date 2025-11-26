@@ -70,7 +70,7 @@ export function StructuredText({ isEmpty = true, sections, mainText, isEditing =
                 {localSections.length > 1 && (
                   <button
                     onClick={() => handleRemoveSection(section.id)}
-                    className="text-red-600 hover:text-red-700 p-1"
+                    className="text-[#659AB8] hover:text-[#5589a7] p-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

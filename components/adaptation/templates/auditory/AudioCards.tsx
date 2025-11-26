@@ -34,7 +34,7 @@ function AudioCard({
   const [progress, setProgress] = useState(0)
 
   return (
-    <div className="bg-white border border-[#E5E7EB] rounded-lg p-4 hover:border-[#659AB8] transition-colors duration-200">
+    <div className="bg-white border border-[#659AB8] rounded-lg p-4">
       {/* Термин */}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 bg-[#E8F4FA] rounded-full flex items-center justify-center">
@@ -151,7 +151,7 @@ export function AudioCards({ isEmpty = true, cards, contentText, mainText, isEdi
                 {localCards.length > 1 && (
                   <button
                     onClick={() => handleRemoveCard(card.id)}
-                    className="text-red-600 hover:text-red-700 p-1"
+                    className="text-[#659AB8] hover:text-[#5589a7] p-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

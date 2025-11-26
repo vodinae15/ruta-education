@@ -83,7 +83,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText, mainText, i
                 {localRows.length > 1 && (
                   <button
                     onClick={() => handleRemoveRow(row.id)}
-                    className="text-red-600 hover:text-red-700 p-1"
+                    className="text-[#659AB8] hover:text-[#5589a7] p-1"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -191,7 +191,7 @@ export function ComparisonTable({ isEmpty = true, rows, contentText, mainText, i
           {/* Мобильная версия - карточки */}
           <div className="lg:hidden space-y-3">
             {displayRows.map((row, index) => (
-              <div key={row.id} className="bg-white border border-[#E5E7EB] rounded-lg p-3">
+              <div key={row.id} className="bg-white border border-[#659AB8] rounded-lg p-3">
                 <div className="mb-2">
                   <span className="text-xs font-semibold text-[#5589a7] uppercase">Понятие</span>
                   <p className="text-sm text-slate-600 mt-1">

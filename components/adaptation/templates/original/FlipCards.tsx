@@ -120,7 +120,7 @@ export function FlipCards({ isEmpty = true, cards, isEditing = false, onCardsCha
                 {localCards.length > 1 && (
                   <button
                     onClick={() => handleRemoveCard(card.id)}
-                    className="text-red-600 hover:text-red-700 p-1"
+                    className="text-[#659AB8] hover:text-[#5589a7] p-1"
                     title="Удалить карточку"
                   >
                     <Trash2 className="w-4 h-4" />

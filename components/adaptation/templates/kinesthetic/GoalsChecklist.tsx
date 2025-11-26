@@ -116,7 +116,7 @@ export function GoalsChecklist({ isEmpty = true, goals, introText, mainText, isE
                 {goalsState.length > 1 && (
                   <button
                     onClick={() => handleRemoveGoal(goal.id)}
-                    className="text-red-600 hover:text-red-700 p-1 flex-shrink-0"
+                    className="text-[#659AB8] hover:text-[#5589a7] p-1 flex-shrink-0"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -137,7 +137,7 @@ export function GoalsChecklist({ isEmpty = true, goals, introText, mainText, isE
               <div
                 key={goal.id}
                 className={`flex items-start gap-3 p-3 rounded-lg transition-colors duration-200 cursor-pointer ${
-                  goal.completed ? "bg-[#E8F4FA]" : "bg-white hover:bg-[#F8FAFB] border border-[#E5E7EB]"
+                  goal.completed ? "bg-[#E8F4FA] border border-[#659AB8]" : "bg-white border border-[#659AB8]"
                 }`}
                 onClick={() => !isEmpty && toggleGoal(goal.id)}
               >
