@@ -131,15 +131,10 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
       }
     }
 
-    // Обрабатываем медиа-элементы (общие для всех типов)
-    if (newBlock.media && Array.isArray(newBlock.media)) {
-      legacyContent[blockKey].content.elements = newBlock.media.map((m: any) => ({
-        id: `media-${Date.now()}-${Math.random()}`,
-        type: m.type,
-        content: m.url,
-        caption: m.caption || ''
-      }))
-      console.log(`✅ [Transform] Added ${newBlock.media.length} media elements to ${blockKey}`)
+    // Обрабатываем медиа-элементы от AI (НЕ используем - медиа копируются из оригинала)
+    // Медиа из оригинальных блоков будут скопированы позже в block4
+    if (newBlock.media && Array.isArray(newBlock.media) && newBlock.media.length > 0) {
+      console.log(`ℹ️ [Transform] AI generated ${newBlock.media.length} media for ${blockKey}, but we use media from original blocks instead`)
     }
 
     // Специфичная трансформация в зависимости от типа адаптации
