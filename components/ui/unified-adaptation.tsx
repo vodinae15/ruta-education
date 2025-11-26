@@ -797,16 +797,16 @@ export function UnifiedAdaptation({
         return {
           name: 'Аудиал',
           icon: <EarIcon className="w-5 h-5" />,
-          color: 'bg-[#10B981] text-white',
-          bgColor: 'bg-green-50',
+          color: 'bg-[#659AB8] text-white',
+          bgColor: 'bg-[#E8F4FA]',
           description: 'Истории и диалоги для лучшего восприятия'
         }
       case 'kinesthetic':
         return {
           name: 'Кинестетик',
           icon: <HandIcon className="w-5 h-5" />,
-          color: 'bg-[#F59E0B] text-white',
-          bgColor: 'bg-orange-50',
+          color: 'bg-[#659AB8] text-white',
+          bgColor: 'bg-[#E8F4FA]',
           description: 'Практические задания и интерактивные элементы'
         }
       default:
