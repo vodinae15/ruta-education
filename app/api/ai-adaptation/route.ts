@@ -2092,7 +2092,24 @@ export async function POST(request: NextRequest) {
               (el: any) => el.id === mediaEl.id
             )
             if (!exists) {
-              adaptedContent[blockKey].content.elements!.push(mediaEl)
+              // Парсим content если это JSON строка
+              let parsedContent = mediaEl.content
+              if (typeof mediaEl.content === 'string') {
+                try {
+                  const parsed = JSON.parse(mediaEl.content)
+                  // Если в JSON есть fileUrl - используем его
+                  if (parsed.fileUrl) {
+                    parsedContent = parsed.fileUrl
+                  }
+                } catch (e) {
+                  // Если не JSON - используем как есть
+                }
+              }
+
+              adaptedContent[blockKey].content.elements!.push({
+                ...mediaEl,
+                content: parsedContent
+              })
               console.log(`✅ [AI Adaptation] Added ${mediaEl.type} element to ${blockKey}`)
             }
           })
