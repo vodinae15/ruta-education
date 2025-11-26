@@ -380,37 +380,59 @@ export default function CourseAdaptationPage() {
         let userIsAuthor = courseData.author_id === currentUser.id
         let hasAccess = userIsAuthor
 
+        console.log("🔍 [Adaptation Page] Access check:", {
+          userId: currentUser.id,
+          userEmail: currentUser.email,
+          courseAuthorId: courseData.author_id,
+          isAuthor: userIsAuthor
+        })
+
         if (!userIsAuthor) {
           // Проверяем, является ли пользователь соавтором
-          const { data: collaborator } = await supabase
+          const { data: collaborator, error: collabError } = await supabase
             .from("course_collaborators")
             .select("id")
             .eq("course_id", courseId)
             .eq("collaborator_user_id", currentUser.id)
             .maybeSingle()
 
+          console.log("🔍 [Adaptation Page] Collaborator check:", { collaborator, collabError })
+
           if (collaborator) {
             hasAccess = true
             userIsAuthor = true // Соавтор имеет права редактирования
           } else {
             // Проверяем, является ли пользователь студентом с доступом к курсу
-            const { data: student } = await supabase
+            const { data: student, error: studentError } = await supabase
               .from("students")
               .select("id")
               .eq("email", currentUser.email)
               .maybeSingle()
 
+            console.log("🔍 [Adaptation Page] Student lookup:", {
+              email: currentUser.email,
+              student,
+              studentError
+            })
+
             if (student) {
               // Проверяем бесплатный доступ
-              const { data: freeAccess } = await supabase
+              const { data: freeAccess, error: freeAccessError } = await supabase
                 .from("student_course_access")
                 .select("id")
                 .eq("student_id", student.id)
                 .eq("course_id", courseId)
                 .maybeSingle()
 
+              console.log("🔍 [Adaptation Page] Free access check:", {
+                studentId: student.id,
+                courseId,
+                freeAccess,
+                freeAccessError
+              })
+
               // Проверяем покупку
-              const { data: purchase } = await supabase
+              const { data: purchase, error: purchaseError } = await supabase
                 .from("course_purchases")
                 .select("id")
                 .eq("student_id", student.id)
@@ -418,13 +440,27 @@ export default function CourseAdaptationPage() {
                 .eq("purchase_status", "completed")
                 .maybeSingle()
 
+              console.log("🔍 [Adaptation Page] Purchase check:", {
+                studentId: student.id,
+                courseId,
+                purchase,
+                purchaseError
+              })
+
               if (freeAccess || purchase) {
                 hasAccess = true
+                console.log("✅ [Adaptation Page] Student has access via:", freeAccess ? "free access" : "purchase")
                 // userIsAuthor остаётся false - студент только просматривает
+              } else {
+                console.log("❌ [Adaptation Page] Student has no access (no free access or purchase)")
               }
+            } else {
+              console.log("❌ [Adaptation Page] No student record found for email:", currentUser.email)
             }
           }
         }
+
+        console.log("🔍 [Adaptation Page] Final access decision:", { hasAccess, userIsAuthor })
 
         if (!hasAccess) {
           setError("У вас нет прав доступа к этому курсу")
