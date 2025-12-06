@@ -916,12 +916,12 @@ export default function CourseAdaptationPage() {
   const saveAdaptationChanges = async (adaptationType: AdaptationType, content?: AdaptationContent) => {
     if (!selectedLesson) return
 
-    // Используем переданный content или editedContent
-    const contentToSave = content || editedContent[adaptationType]
+    // Используем переданный content, editedContent, или текущий контент адаптации
+    const contentToSave = content || editedContent[adaptationType] || adaptations[adaptationType]?.content
     if (!contentToSave) {
       toast({
-        title: "Нет изменений",
-        description: "Нет несохраненных изменений для сохранения.",
+        title: "Нет контента",
+        description: "Нет контента для сохранения. Сначала создайте адаптацию.",
         variant: "destructive",
       })
       return
@@ -1158,69 +1158,6 @@ export default function CourseAdaptationPage() {
             </Card>
           )}
 
-          {/* Прогресс-бар */}
-          {isAdapting && (
-            <Card className="border">
-              <CardContent className="py-6">
-                <div className="space-y-6">
-                  {adaptingTypes.length > 1 && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-slate-900">
-                          Общий прогресс
-                        </h3>
-                        <span className="text-sm text-slate-600 font-semibold">
-                          {Math.round(overallProgress)}%
-                        </span>
-                      </div>
-                      <Progress value={overallProgress} className="h-3" showLabel />
-                    </>
-                  )}
-
-                  {adaptingTypes.length === 1 && (
-                    <p className="text-sm text-slate-600">
-                      Адаптация контента может занять несколько минут...
-                    </p>
-                  )}
-
-                  {/* Детальный прогресс по типам */}
-                  {adaptingTypes.length > 0 && (
-                    <div className={`space-y-3 ${adaptingTypes.length > 1 ? 'pt-4 border-t border-[#E5E7EB]' : ''}`}>
-                      <h4 className="text-sm font-semibold text-slate-900">
-                        {adaptingTypes.length === 1 ? 'Прогресс адаптации' : 'Прогресс по типам:'}
-                      </h4>
-                      {STUDENT_TYPES.filter(type => adaptingTypes.includes(type.id)).map((type) => {
-                        const progress = adaptationProgress[type.id] || 0
-                        const status = adaptations[type.id]?.status || 'pending'
-
-                        return (
-                          <div key={type.id} className="space-y-1">
-                            <div className="flex items-center justify-between text-sm">
-                              <div className="flex items-center gap-2">
-                                {type.icon}
-                                <span className="text-slate-900">{type.name}</span>
-                                {status === 'processing' && (
-                                  <RefreshCwIcon className="w-3 h-3 text-[#659AB8] animate-spin" />
-                                )}
-                                {status === 'completed' && (
-                                  <CheckCircleIcon className="w-3 h-3 text-[#659AB8]" />
-                                )}
-                                {status === 'error' && (
-                                  <XIcon className="w-3 h-3 text-red-600" />
-                                )}
-                              </div>
-                              <span className="text-slate-600">{Math.round(progress)}%</span>
-                            </div>
-                            <Progress value={progress} className="h-2" />
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Шаблоны адаптации */}
           {selectedLesson && (
