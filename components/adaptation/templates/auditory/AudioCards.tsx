@@ -27,6 +27,16 @@ interface AudioCardsProps {
   lessonId?: string
 }
 
+// Проверяет, является ли URL валидным (не плейсхолдер)
+function isValidAudioUrl(url: string): boolean {
+  if (!url) return false
+  // Фильтруем плейсхолдерные URL
+  if (url.includes('example.com')) return false
+  if (url.includes('placeholder')) return false
+  // Проверяем, что это настоящий URL
+  return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:')
+}
+
 function AudioCard({
   term,
   audioUrl,
@@ -42,6 +52,9 @@ function AudioCard({
   const [duration, setDuration] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
 
+  // Проверяем валидность URL
+  const hasValidAudio = isValidAudioUrl(audioUrl)
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = Math.floor(seconds % 60)
@@ -49,7 +62,7 @@ function AudioCard({
   }
 
   const handlePlayPause = () => {
-    if (!audioUrl || isEmpty) return
+    if (!hasValidAudio || isEmpty) return
 
     if (audioRef.current) {
       if (isPlaying) {
@@ -93,7 +106,7 @@ function AudioCard({
           <button
             onClick={handlePlayPause}
             className="w-10 h-10 bg-[#659AB8] rounded-full flex items-center justify-center hover:bg-[#5589a7] transition-colors duration-200"
-            disabled={isEmpty || !audioUrl}
+            disabled={isEmpty || !hasValidAudio}
           >
             {isPlaying ? (
               <Pause className="w-5 h-5 text-white" />
@@ -121,7 +134,7 @@ function AudioCard({
           </div>
         </div>
 
-        {audioUrl && (
+        {hasValidAudio && (
           <audio
             ref={audioRef}
             src={audioUrl}
@@ -138,7 +151,7 @@ function AudioCard({
           />
         )}
 
-        {isEmpty && !audioUrl && (
+        {(isEmpty || !hasValidAudio) && (
           <p className="text-xs text-slate-400 mt-2 text-center">
             Аудио-объяснение термина
           </p>
