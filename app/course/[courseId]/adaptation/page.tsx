@@ -692,11 +692,6 @@ export default function CourseAdaptationPage() {
     }
   }
 
-  const handleRegenerateClick = () => {
-    if (!selectedLesson) return
-    setShowRegenerateConfirm(true)
-  }
-
   const regenerateAdaptation = async (adaptationType?: string) => {
     if (!selectedLesson) return
 
@@ -882,26 +877,30 @@ export default function CourseAdaptationPage() {
       await loadAdaptationsFromDB(selectedLesson.id)
     }
 
-    const updatedAdaptations = adaptations
-    const successCount = Object.values(updatedAdaptations).filter(a => a.status === 'completed' || a.status === 'published').length
-    const errorCount = Object.values(updatedAdaptations).filter(a => a.status === 'error').length
+    // Показываем итоговый тост только при перегенерации ВСЕХ типов
+    // (для одного типа тост уже показан выше)
+    if (!adaptationType) {
+      const updatedAdaptations = adaptations
+      const successCount = Object.values(updatedAdaptations).filter(a => a.status === 'completed' || a.status === 'published').length
+      const errorCount = Object.values(updatedAdaptations).filter(a => a.status === 'error').length
 
-    if (errorCount === 0 && successCount === STUDENT_TYPES.length) {
-      toast({
-        title: "Адаптация завершена успешно",
-        description: `Все ${STUDENT_TYPES.length} адаптации созданы успешно. Теперь вы можете просмотреть и отредактировать их.`,
-      })
-    } else if (errorCount > 0) {
-      toast({
-        title: "Адаптация завершена с ошибками",
-        description: `Создано адаптаций: ${successCount}, ошибок: ${errorCount}. Проверьте детали для каждого типа.`,
-        variant: "destructive",
-      })
-    } else {
-      toast({
-        title: "Адаптация завершена",
-        description: `Создано адаптаций: ${successCount} из ${STUDENT_TYPES.length}.`,
-      })
+      if (errorCount === 0 && successCount === STUDENT_TYPES.length) {
+        toast({
+          title: "Адаптация завершена успешно",
+          description: `Все ${STUDENT_TYPES.length} адаптации созданы успешно. Теперь вы можете просмотреть и отредактировать их.`,
+        })
+      } else if (errorCount > 0) {
+        toast({
+          title: "Адаптация завершена с ошибками",
+          description: `Создано адаптаций: ${successCount}, ошибок: ${errorCount}. Проверьте детали для каждого типа.`,
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Адаптация завершена",
+          description: `Создано адаптаций: ${successCount} из ${STUDENT_TYPES.length}.`,
+        })
+      }
     }
   }
 
@@ -1293,7 +1292,7 @@ export default function CourseAdaptationPage() {
                                   <RefreshCwIcon className="w-4 h-4" />
                                   Перегенерировать
                                 </button>
-                                {adaptations[currentMode]?.status !== 'published' && (
+                                {adaptations[currentMode]?.status === 'completed' && (
                                   <button
                                     onClick={() => publishAdaptation(currentMode)}
                                     className="bg-[#659AB8] text-white px-6 py-2 border-2 border-[#659AB8] rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] whitespace-nowrap"
