@@ -877,26 +877,30 @@ export default function CourseAdaptationPage() {
       await loadAdaptationsFromDB(selectedLesson.id)
     }
 
-    const updatedAdaptations = adaptations
-    const successCount = Object.values(updatedAdaptations).filter(a => a.status === 'completed' || a.status === 'published').length
-    const errorCount = Object.values(updatedAdaptations).filter(a => a.status === 'error').length
+    // Показываем итоговый тост только при перегенерации ВСЕХ типов
+    // (для одного типа тост уже показан выше)
+    if (!adaptationType) {
+      const updatedAdaptations = adaptations
+      const successCount = Object.values(updatedAdaptations).filter(a => a.status === 'completed' || a.status === 'published').length
+      const errorCount = Object.values(updatedAdaptations).filter(a => a.status === 'error').length
 
-    if (errorCount === 0 && successCount === STUDENT_TYPES.length) {
-      toast({
-        title: "Адаптация завершена успешно",
-        description: `Все ${STUDENT_TYPES.length} адаптации созданы успешно. Теперь вы можете просмотреть и отредактировать их.`,
-      })
-    } else if (errorCount > 0) {
-      toast({
-        title: "Адаптация завершена с ошибками",
-        description: `Создано адаптаций: ${successCount}, ошибок: ${errorCount}. Проверьте детали для каждого типа.`,
-        variant: "destructive",
-      })
-    } else {
-      toast({
-        title: "Адаптация завершена",
-        description: `Создано адаптаций: ${successCount} из ${STUDENT_TYPES.length}.`,
-      })
+      if (errorCount === 0 && successCount === STUDENT_TYPES.length) {
+        toast({
+          title: "Адаптация завершена успешно",
+          description: `Все ${STUDENT_TYPES.length} адаптации созданы успешно. Теперь вы можете просмотреть и отредактировать их.`,
+        })
+      } else if (errorCount > 0) {
+        toast({
+          title: "Адаптация завершена с ошибками",
+          description: `Создано адаптаций: ${successCount}, ошибок: ${errorCount}. Проверьте детали для каждого типа.`,
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Адаптация завершена",
+          description: `Создано адаптаций: ${successCount} из ${STUDENT_TYPES.length}.`,
+        })
+      }
     }
   }
 
