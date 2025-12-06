@@ -1938,6 +1938,67 @@ export default function CourseConstructor() {
     }
   }
 
+  // Функция синхронизации уроков в таблицу course_lessons
+  const syncLessonsToCourseTable = async (courseId: string, lessons: CourseLesson[]) => {
+    console.log(`🔄 [Sync] Starting sync of ${lessons.length} lessons to course_lessons...`)
+
+    for (let i = 0; i < lessons.length; i++) {
+      const lesson = lessons[i]
+      const legacyId = lesson.id // Сохраняем оригинальный ID как legacy_id
+
+      try {
+        // Проверяем, есть ли уже урок с таким legacy_id
+        const { data: existingLesson } = await supabase
+          .from("course_lessons")
+          .select("id")
+          .eq("course_id", courseId)
+          .eq("legacy_id", legacyId)
+          .maybeSingle()
+
+        const lessonData = {
+          course_id: courseId,
+          title: lesson.title || `Урок ${i + 1}`,
+          description: lesson.description || "",
+          blocks: lesson.blocks || [],
+          order_index: i,
+          is_published: true,
+          legacy_id: legacyId
+        }
+
+        if (existingLesson) {
+          // Обновляем существующий урок
+          const { error: updateError } = await supabase
+            .from("course_lessons")
+            .update(lessonData)
+            .eq("id", existingLesson.id)
+
+          if (updateError) {
+            console.error(`❌ [Sync] Error updating lesson "${lesson.title}":`, updateError)
+          } else {
+            console.log(`✅ [Sync] Updated: "${lesson.title}" (${existingLesson.id})`)
+          }
+        } else {
+          // Создаём новый урок с UUID
+          const { data: newLesson, error: insertError } = await supabase
+            .from("course_lessons")
+            .insert(lessonData)
+            .select("id")
+            .single()
+
+          if (insertError) {
+            console.error(`❌ [Sync] Error creating lesson "${lesson.title}":`, insertError)
+          } else {
+            console.log(`✅ [Sync] Created: "${lesson.title}" (${legacyId} → ${newLesson.id})`)
+          }
+        }
+      } catch (err) {
+        console.error(`❌ [Sync] Error syncing lesson "${lesson.title}":`, err)
+      }
+    }
+
+    console.log(`✅ [Sync] Sync complete for ${lessons.length} lessons`)
+  }
+
   const publishCourse = async () => {
     if (!courseTitle.trim()) {
       setModalState({ isOpen: true, type: "save" })
@@ -2004,6 +2065,10 @@ export default function CourseConstructor() {
         // RLS политики проверяют доступ (автор или соавтор)
 
       if (updateError) throw updateError
+
+      // Синхронизируем уроки в таблицу course_lessons с UUID
+      console.log("Syncing lessons to course_lessons table...")
+      await syncLessonsToCourseTable(courseId!, courseLessons)
 
       console.log("Course published successfully:", courseId)
       const courseLink = `${window.location.origin}/course/${courseId}`
