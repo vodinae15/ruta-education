@@ -56,6 +56,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Ошибка при обновлении черновика" }, { status: 500 })
       }
 
+      // Синхронизируем уроки в course_lessons (для работы адаптаций)
+      if (lessons && Array.isArray(lessons) && lessons.length > 0) {
+        await syncLessonsToCourseTable(supabase, courseId, lessons)
+      }
+
       return NextResponse.json({
         success: true,
         courseId: data.id,
@@ -89,6 +94,11 @@ export async function POST(request: NextRequest) {
       const actualUniqueLink = `${request.nextUrl.origin}/course/${savedCourseId}`
       await supabase.from("courses").update({ unique_link: actualUniqueLink }).eq("id", savedCourseId)
 
+      // Синхронизируем уроки в course_lessons (для работы адаптаций)
+      if (lessons && Array.isArray(lessons) && lessons.length > 0) {
+        await syncLessonsToCourseTable(supabase, savedCourseId, lessons)
+      }
+
       return NextResponse.json({
         success: true,
         courseId: savedCourseId,
@@ -99,4 +109,51 @@ export async function POST(request: NextRequest) {
     console.error("Error in draft save API:", error)
     return NextResponse.json({ error: "Внутренняя ошибка сервера" }, { status: 500 })
   }
+}
+
+// Функция синхронизации уроков в таблицу course_lessons
+async function syncLessonsToCourseTable(supabase: any, courseId: string, lessons: any[]) {
+  console.log(`🔄 [Sync] Syncing ${lessons.length} lessons to course_lessons...`)
+
+  for (let i = 0; i < lessons.length; i++) {
+    const lesson = lessons[i]
+    const legacyId = lesson.id || `lesson-${i}` // Сохраняем оригинальный ID
+
+    try {
+      // Проверяем, есть ли уже урок с таким legacy_id
+      const { data: existingLesson } = await supabase
+        .from("course_lessons")
+        .select("id")
+        .eq("course_id", courseId)
+        .eq("legacy_id", legacyId)
+        .maybeSingle()
+
+      const lessonData = {
+        course_id: courseId,
+        title: lesson.title || `Урок ${i + 1}`,
+        description: lesson.description || "",
+        blocks: lesson.blocks || [],
+        order_index: lesson.order ?? i,
+        is_published: false, // По умолчанию не опубликован
+        legacy_id: legacyId
+      }
+
+      if (existingLesson) {
+        // Обновляем существующий урок
+        await supabase
+          .from("course_lessons")
+          .update(lessonData)
+          .eq("id", existingLesson.id)
+      } else {
+        // Создаём новый урок с UUID
+        await supabase
+          .from("course_lessons")
+          .insert(lessonData)
+      }
+    } catch (err) {
+      console.error(`❌ [Sync] Error syncing lesson "${lesson.title}":`, err)
+    }
+  }
+
+  console.log(`✅ [Sync] Sync complete`)
 }
