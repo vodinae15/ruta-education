@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { normalizeLessonId, isValidUUID } from '@/lib/lesson-id-utils'
 
 /**
  * API endpoint для обновления времени просмотра блока
@@ -76,9 +77,18 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Student not found' }, { status: 404 })
     }
 
+    // Нормализуем lessonId для поиска в БД
+    // Если lessonId не UUID, пробуем нормализовать его
+    let actualLessonId = lessonId
+    if (!isValidUUID(lessonId)) {
+      actualLessonId = normalizeLessonId(lessonId, courseId)
+      console.log('🔄 [API] Нормализованный lessonId:', { original: lessonId, normalized: actualLessonId })
+    }
+
     // Находим последнюю запись просмотра блока для этого студента
     // Обновляем запись с самым поздним viewed_at для данного блока
-    const { data: viewRecords, error: viewError } = await supabase
+    // Пробуем сначала с переданным lessonId, потом с нормализованным
+    let { data: viewRecords, error: viewError } = await supabase
       .from('lesson_block_views')
       .select('id, time_spent, viewed_at')
       .eq('student_id', student.id)
@@ -88,13 +98,32 @@ export async function PUT(request: NextRequest) {
       .order('viewed_at', { ascending: false })
       .limit(1)
 
+    // Если не найдено и ID был не UUID, пробуем с нормализованным
+    if ((!viewRecords || viewRecords.length === 0) && actualLessonId !== lessonId) {
+      console.log('🔄 [API] Пробуем найти с нормализованным lessonId')
+      const { data: normalizedRecords, error: normalizedError } = await supabase
+        .from('lesson_block_views')
+        .select('id, time_spent, viewed_at')
+        .eq('student_id', student.id)
+        .eq('course_id', courseId)
+        .eq('lesson_id', actualLessonId)
+        .eq('block_id', blockId)
+        .order('viewed_at', { ascending: false })
+        .limit(1)
+
+      if (!normalizedError && normalizedRecords && normalizedRecords.length > 0) {
+        viewRecords = normalizedRecords
+        viewError = null
+      }
+    }
+
     if (viewError) {
       console.error('❌ [API] Ошибка поиска записи просмотра:', viewError)
       return NextResponse.json({ error: 'Failed to find view record' }, { status: 500 })
     }
 
     if (!viewRecords || viewRecords.length === 0) {
-      console.error('❌ [API] Запись просмотра не найдена')
+      console.error('❌ [API] Запись просмотра не найдена:', { lessonId, actualLessonId, blockId })
       return NextResponse.json({ error: 'View record not found' }, { status: 404 })
     }
 
