@@ -339,46 +339,36 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
       setCourse(courseData)
 
-      // Загружаем уроки курса из поля modules.lessons
+      // ВСЕГДА загружаем уроки из course_lessons для получения правильных UUID
+      // Это критично для работы API track-block-view и других endpoint'ов
       console.log("📚 Course data structure:", courseData)
-      
-      let lessons = []
-      
-      // Проверяем поле modules.lessons
-      if (courseData.modules?.lessons && Array.isArray(courseData.modules.lessons)) {
-        lessons = courseData.modules.lessons
-        console.log("📚 Loading lessons from modules.lessons:", lessons)
-      }
-      // Fallback: проверяем course_data.lessons
-      else if (courseData.course_data?.lessons && Array.isArray(courseData.course_data.lessons)) {
-        lessons = courseData.course_data.lessons
-        console.log("📚 Loading lessons from course_data.lessons:", lessons)
-      }
-      // Fallback: проверяем course_data.blocks (но это блоки, не уроки)
-      else if (courseData.course_data?.blocks && Array.isArray(courseData.course_data.blocks)) {
-        console.log("⚠️ Found blocks instead of lessons, this is incorrect structure")
-        // Не загружаем блоки как уроки - это неправильно
-        lessons = []
-      }
-      // Fallback: проверяем отдельную таблицу course_lessons
-      else {
-        const { data: lessonsData, error: lessonsError } = await supabase
-          .from("course_lessons")
-          .select(`
-            *,
-            lesson_adaptations(
-              id,
-              adaptation_type,
-              status
-            )
-          `)
-          .eq("course_id", params.courseId)
-          .eq("is_published", true) // Студенты видят только опубликованные уроки
-          .order("order_index")
 
-        if (!lessonsError && lessonsData) {
-          lessons = lessonsData
-          console.log("📚 Loading lessons from course_lessons table with adaptations:", lessons)
+      let lessons: any[] = []
+
+      const { data: lessonsData, error: lessonsError } = await supabase
+        .from("course_lessons")
+        .select(`
+          *,
+          lesson_adaptations(
+            id,
+            adaptation_type,
+            status
+          )
+        `)
+        .eq("course_id", params.courseId)
+        .eq("is_published", true) // Студенты видят только опубликованные уроки
+        .order("order_index")
+
+      if (!lessonsError && lessonsData && lessonsData.length > 0) {
+        lessons = lessonsData
+        console.log("📚 Loading lessons from course_lessons table with UUID:", lessons.length, "lessons")
+        console.log("📚 First lesson ID (UUID):", lessonsData[0]?.id)
+      } else {
+        console.log("⚠️ [Learn] No lessons in course_lessons table, error:", lessonsError)
+        // Fallback: проверяем modules.lessons (но это может вызвать проблемы с track-block-view)
+        if (courseData.modules?.lessons && Array.isArray(courseData.modules.lessons)) {
+          console.log("⚠️ [Learn] Fallback to modules.lessons (tracking may not work)")
+          lessons = courseData.modules.lessons
         }
       }
 

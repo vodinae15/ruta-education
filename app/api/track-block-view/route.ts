@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { normalizeLessonId, isValidUUID } from '@/lib/lesson-id-utils'
 
 /**
  * API endpoint для отслеживания просмотров блоков уроков
@@ -92,14 +93,32 @@ export async function POST(request: NextRequest) {
     }
 
     // Проверяем, существует ли урок
-    const { data: lesson, error: lessonError } = await supabase
+    // Сначала пробуем найти по переданному ID
+    let { data: lesson, error: lessonError } = await supabase
       .from('course_lessons')
       .select('id, course_id')
       .eq('id', lessonId)
       .single()
 
+    // Если урок не найден и ID не является UUID, пробуем нормализовать ID
+    if ((lessonError || !lesson) && !isValidUUID(lessonId)) {
+      const normalizedId = normalizeLessonId(lessonId, courseId)
+      console.log('🔄 [API] Пробуем нормализованный ID:', { original: lessonId, normalized: normalizedId })
+
+      const { data: normalizedLesson, error: normalizedError } = await supabase
+        .from('course_lessons')
+        .select('id, course_id')
+        .eq('id', normalizedId)
+        .single()
+
+      if (!normalizedError && normalizedLesson) {
+        lesson = normalizedLesson
+        lessonError = null
+      }
+    }
+
     if (lessonError || !lesson) {
-      console.error('❌ [API] Урок не найден:', lessonError)
+      console.error('❌ [API] Урок не найден:', lessonError, { lessonId, courseId })
       return NextResponse.json({ error: 'Lesson not found' }, { status: 404 })
     }
 
@@ -108,6 +127,9 @@ export async function POST(request: NextRequest) {
       console.error('❌ [API] Урок не принадлежит курсу:', { lessonId, courseId, lessonCourseId: lesson.course_id })
       return NextResponse.json({ error: 'Lesson does not belong to course' }, { status: 400 })
     }
+
+    // Используем правильный ID урока для сохранения
+    const actualLessonId = lesson.id
 
     // Проверяем, существует ли доступ студента к курсу
     const { data: access, error: accessError } = await supabase
@@ -128,10 +150,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Подготавливаем данные для вставки
+    // Используем actualLessonId (UUID из course_lessons) для консистентности
     const viewData: any = {
       student_id: student.id,
       course_id: courseId,
-      lesson_id: lessonId,
+      lesson_id: actualLessonId,
       block_id: blockId,
       block_type: blockType,
       viewed_at: new Date().toISOString(),
