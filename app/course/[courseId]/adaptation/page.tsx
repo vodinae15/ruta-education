@@ -916,12 +916,12 @@ export default function CourseAdaptationPage() {
   const saveAdaptationChanges = async (adaptationType: AdaptationType, content?: AdaptationContent) => {
     if (!selectedLesson) return
 
-    // Используем переданный content или editedContent
-    const contentToSave = content || editedContent[adaptationType]
+    // Используем переданный content, editedContent, или текущий контент адаптации
+    const contentToSave = content || editedContent[adaptationType] || adaptations[adaptationType]?.content
     if (!contentToSave) {
       toast({
-        title: "Нет изменений",
-        description: "Нет несохраненных изменений для сохранения.",
+        title: "Нет контента",
+        description: "Нет контента для сохранения. Сначала создайте адаптацию.",
         variant: "destructive",
       })
       return
@@ -1217,6 +1217,39 @@ export default function CourseAdaptationPage() {
                       })}
                     </div>
                   )}
+
+                  {/* Кнопка отмены */}
+                  <div className="pt-4 border-t border-[#E5E7EB]">
+                    <button
+                      onClick={() => {
+                        setIsAdapting(false)
+                        setAdaptingTypes([])
+                        setOverallProgress(0)
+                        setAdaptationProgress({})
+                        // Сбрасываем статус processing на pending для всех затронутых типов
+                        setAdaptations(prev => {
+                          const updated = { ...prev }
+                          adaptingTypes.forEach(typeId => {
+                            if (updated[typeId]?.status === 'processing') {
+                              updated[typeId] = {
+                                ...updated[typeId],
+                                status: 'pending',
+                                progress: 0
+                              }
+                            }
+                          })
+                          return updated
+                        })
+                        toast({
+                          title: "Адаптация отменена",
+                          description: "Процесс адаптации был отменён.",
+                        })
+                      }}
+                      className="w-full bg-white text-slate-600 px-6 py-2 border-2 border-slate-300 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-slate-50"
+                    >
+                      Отменить
+                    </button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
