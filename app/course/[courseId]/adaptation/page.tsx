@@ -509,6 +509,10 @@ export default function CourseAdaptationPage() {
   const startAdaptation = async (adaptationType?: string) => {
     if (!selectedLesson) return
 
+    // Захватываем значения в начале функции, чтобы избежать race condition
+    const lessonIdToAdapt = selectedLesson.id
+    const lessonTitleToAdapt = selectedLesson.title
+
     // Определяем типы для адаптации: один конкретный или все
     const typesToAdapt = adaptationType
       ? STUDENT_TYPES.filter(t => t.id === adaptationType)
@@ -534,7 +538,7 @@ export default function CourseAdaptationPage() {
 
     toast({
       title: "Запущена адаптация урока",
-      description: `Адаптация урока «${selectedLesson.title}» для ${typeName} начата. Это может занять несколько минут.`,
+      description: `Адаптация урока «${lessonTitleToAdapt}» для ${typeName} начата. Это может занять несколько минут.`,
     })
 
     const initialAdaptations: Record<string, AdaptationResult> = {}
@@ -624,7 +628,7 @@ export default function CourseAdaptationPage() {
         const result = await response.json()
 
         if (result.success) {
-          await loadAdaptationsFromDB(selectedLesson.id, isAuthor)
+          await loadAdaptationsFromDB(lessonIdToAdapt, isAuthor)
 
           setAdaptations(prev => ({
             ...prev,
@@ -687,13 +691,16 @@ export default function CourseAdaptationPage() {
     setIsAdapting(false)
     setAdaptingTypes([]) // Очищаем список адаптируемых типов
 
-    if (selectedLesson) {
-      await loadAdaptationsFromDB(selectedLesson.id, isAuthor)
-    }
+    // Используем захваченный ID урока
+    await loadAdaptationsFromDB(lessonIdToAdapt, isAuthor)
   }
 
   const regenerateAdaptation = async (adaptationType?: string) => {
     if (!selectedLesson) return
+
+    // Захватываем значения в начале функции, чтобы избежать race condition
+    const lessonIdToAdapt = selectedLesson.id
+    const lessonTitleToAdapt = selectedLesson.title
 
     // Определяем типы для адаптации: один конкретный или все
     const typesToAdapt = adaptationType
@@ -720,7 +727,7 @@ export default function CourseAdaptationPage() {
 
     toast({
       title: "Перегенерация адаптации урока",
-      description: `Адаптация урока «${selectedLesson.title}» перегенерируется для ${typeName}. Старая версия будет удалена.`,
+      description: `Адаптация урока «${lessonTitleToAdapt}» перегенерируется для ${typeName}. Старая версия будет удалена.`,
     })
 
     const initialAdaptations: Record<string, AdaptationResult> = {}
@@ -810,7 +817,7 @@ export default function CourseAdaptationPage() {
         const result = await response.json()
 
         if (result.success) {
-          await loadAdaptationsFromDB(selectedLesson.id, isAuthor)
+          await loadAdaptationsFromDB(lessonIdToAdapt, isAuthor)
 
           setAdaptations(prev => ({
             ...prev,
@@ -873,9 +880,8 @@ export default function CourseAdaptationPage() {
     setIsAdapting(false)
     setAdaptingTypes([]) // Очищаем список адаптируемых типов
 
-    if (selectedLesson) {
-      await loadAdaptationsFromDB(selectedLesson.id)
-    }
+    // Используем захваченный ID урока
+    await loadAdaptationsFromDB(lessonIdToAdapt, isAuthor)
 
     // Показываем итоговый тост только при перегенерации ВСЕХ типов
     // (для одного типа тост уже показан выше)
