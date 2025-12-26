@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+import nodeFetch from 'node-fetch'
+
+const HTTPS_PROXY = process.env.HTTPS_PROXY
+const proxyAgent = HTTPS_PROXY ? new HttpsProxyAgent(HTTPS_PROXY) : undefined
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,15 +60,21 @@ async function transcribeVideoWithAI(videoFile: File): Promise<string> {
       formData.append('model', 'openai/whisper-1')
       formData.append('language', 'ru')
 
-      const response = await fetch('https://openrouter.ai/api/v1/audio/transcriptions', {
+      const fetchOptions: any = {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          'HTTP-Referer': 'https://ruta.education',
+          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://rutaeducation.ru',
           'X-Title': 'Ruta Education',
         },
         body: formData,
-      })
+      }
+
+      if (proxyAgent) {
+        fetchOptions.agent = proxyAgent
+      }
+
+      const response = await nodeFetch('https://openrouter.ai/api/v1/audio/transcriptions', fetchOptions)
 
       if (response.ok) {
         const data = await response.json()

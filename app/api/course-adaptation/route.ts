@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import { HttpsProxyAgent } from 'https-proxy-agent'
+import nodeFetch from 'node-fetch'
+
+const HTTPS_PROXY = process.env.HTTPS_PROXY
+const proxyAgent = HTTPS_PROXY ? new HttpsProxyAgent(HTTPS_PROXY) : undefined
 
 interface AdaptationRequest {
   courseId: string
@@ -539,7 +544,7 @@ async function adaptContentWithAI(prompt: string): Promise<string | null> {
   }
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const fetchOptions: any = {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -558,7 +563,13 @@ async function adaptContentWithAI(prompt: string): Promise<string | null> {
         max_tokens: 4000,
         temperature: 0.7
       })
-    })
+    }
+
+    if (proxyAgent) {
+      fetchOptions.agent = proxyAgent
+    }
+
+    const response = await nodeFetch('https://openrouter.ai/api/v1/chat/completions', fetchOptions)
 
     if (!response.ok) {
       console.error('OpenRouter API error:', response.status, response.statusText)

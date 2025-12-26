@@ -8,6 +8,7 @@ import {
   type AdaptationStatus
 } from '@/lib/adaptation-logic'
 import { HttpsProxyAgent } from 'https-proxy-agent'
+import nodeFetch from 'node-fetch'
 
 // Логируем загрузку модуля
 console.log('📦 [AI Adaptation] Module loaded at:', new Date().toISOString())
@@ -2063,7 +2064,8 @@ export async function POST(request: NextRequest) {
       ]
     }
 
-    const response = await fetch(OPENROUTER_API_URL, {
+    // Используем node-fetch с прокси если он настроен
+    const fetchOptions: any = {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
@@ -2072,7 +2074,14 @@ export async function POST(request: NextRequest) {
         'X-Title': 'Ruta Course Adaptation'
       },
       body: JSON.stringify(openRouterRequestBody)
-    })
+    }
+
+    if (proxyAgent) {
+      fetchOptions.agent = proxyAgent
+      console.log('📡 [AI Adaptation] Using proxy for OpenRouter request')
+    }
+
+    const response = await nodeFetch(OPENROUTER_API_URL, fetchOptions)
 
     console.log('📡 [AI Adaptation] ========== OPENROUTER API RESPONSE ==========')
     console.log('📡 [AI Adaptation] Response status:', response.status)
