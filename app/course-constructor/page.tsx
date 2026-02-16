@@ -445,6 +445,9 @@ export default function CourseConstructor() {
   const [loadingPricing, setLoadingPricing] = useState(false)
   const [updatingPricingId, setUpdatingPricingId] = useState<string | null>(null)
 
+  // Состояние для ИИ-структурирования тезисов
+  const [isStructuringTheses, setIsStructuringTheses] = useState(false)
+
   // Функция загрузки списка студентов с доступом к курсу
   const loadStudentsWithAccess = async () => {
     if (!currentCourseId) {
@@ -1455,6 +1458,38 @@ export default function CourseConstructor() {
         : block,
     )
     updateCourseBlocks(updatedBlocks)
+  }
+
+  const updateBlockTheses = (blockId: string, theses: string) => {
+    const updatedBlocks = courseBlocks.map((block) =>
+      block.id === blockId ? { ...block, theses } : block,
+    )
+    updateCourseBlocks(updatedBlocks)
+  }
+
+  const structureTheses = async () => {
+    const activeBlock = courseBlocks.find((b) => b.id === activeBlockId)
+    if (!activeBlock?.theses?.trim()) return
+
+    setIsStructuringTheses(true)
+    try {
+      const response = await fetch("/api/ai-structure-theses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          theses: activeBlock.theses,
+          blockTitle: activeBlock.title,
+        }),
+      })
+      const data = await response.json()
+      if (data.success && data.structured) {
+        updateBlockTheses(activeBlockId, data.structured)
+      }
+    } catch (error) {
+      console.error("Error structuring theses:", error)
+    } finally {
+      setIsStructuringTheses(false)
+    }
   }
 
   const addElement = (blockId: string, elementType: CourseElement["type"], educationalType?: EducationalBlockType) => {
