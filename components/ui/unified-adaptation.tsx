@@ -997,6 +997,8 @@ export function UnifiedAdaptation({
   const renderAdaptationBlock = (blockId: string, block: AdaptationBlock, blockNumber: number) => {
     const isExpanded = expandedBlocks.includes(blockId)
     const isCompleted = completedBlocks.includes(blockId)
+    const blockInfo = getLessonBlockForAdaptedBlock(blockId)
+    const isMetaBlock = blockInfo && ['introduction', 'navigation', 'conclusion'].includes(blockInfo.blockType)
 
     return (
       <Card
@@ -1004,7 +1006,9 @@ export function UnifiedAdaptation({
         className={`border ${
           isCompleted
             ? 'border-[#10B981] bg-green-50'
-            : 'border-[#E5E7EB]'
+            : isMetaBlock
+              ? 'bg-[#F0F7FA] border-[#659AB8]'
+              : 'border-[#E5E7EB]'
         }`}
       >
         <CardHeader
