@@ -2871,9 +2871,13 @@ export default function CourseConstructor() {
                   <p className="text-sm text-slate-600">Перетаскивайте элементы для изменения порядка</p>
                 </CardHeader>
                 <CardContent>
+                  {(() => {
+                    const activeBlock = courseBlocks.find((b) => b.id === activeBlockId)
+                    const isMainBlock = activeBlock && ['main_block_1', 'main_block_2', 'main_block_3'].includes(activeBlock.type)
+
+                    const elementsList = (
                   <div className="space-y-4">
-                    {courseBlocks
-                      .find((b) => b.id === activeBlockId)
+                    {activeBlock
                       ?.elements.map((element) => {
                         const Icon = getElementIcon(element.type, element.educationalType)
                         return (
@@ -3240,6 +3244,50 @@ export default function CourseConstructor() {
                       </CardContent>
                     </Card>
                   </div>
+                    )
+
+                    if (isMainBlock) {
+                      return (
+                        <div className="grid grid-cols-5 gap-4">
+                          <div className="col-span-2">
+                            <Card className="bg-[#FDF8F3] border-[#E5E7EB]">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center gap-2">
+                                  <LightbulbIcon className="w-5 h-5 text-[#5589a7]" />
+                                  <h3 className="text-sm font-semibold text-[#5589a7]">Тезисы блока</h3>
+                                </div>
+                                <p className="text-xs text-slate-500 mt-1">
+                                  Запишите ключевые мысли и тезисы, которые хотите раскрыть в этом блоке
+                                </p>
+                              </CardHeader>
+                              <CardContent>
+                                <Textarea
+                                  value={activeBlock?.theses || ""}
+                                  onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
+                                  placeholder="Например:&#10;— Основная идея блока&#10;— Ключевой термин и его определение&#10;— Пример из практики&#10;— Вывод, который должен сделать ученик"
+                                  rows={12}
+                                  className="bg-white text-sm"
+                                />
+                                <Button
+                                  onClick={structureTheses}
+                                  disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
+                                  className="w-full mt-3 bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                                  size="sm"
+                                >
+                                  {isStructuringTheses ? "Структурирую..." : "Структурировать"}
+                                </Button>
+                              </CardContent>
+                            </Card>
+                          </div>
+                          <div className="col-span-3">
+                            {elementsList}
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return elementsList
+                  })()}
                 </CardContent>
               </Card>
             ) : (
