@@ -445,6 +445,14 @@ export default function CourseConstructor() {
   const [loadingPricing, setLoadingPricing] = useState(false)
   const [updatingPricingId, setUpdatingPricingId] = useState<string | null>(null)
 
+  // Состояние для ИИ-структурирования тезисов
+  const [isStructuringTheses, setIsStructuringTheses] = useState(false)
+
+  // Состояния для секции "Финальная настройка"
+  const [isFinalSetupExpanded, setIsFinalSetupExpanded] = useState(false)
+  const [selectedMetaTemplate, setSelectedMetaTemplate] = useState<'expectations' | 'anxiety' | 'format' | null>(null)
+  const [isGeneratingMeta, setIsGeneratingMeta] = useState(false)
+
   // Функция загрузки списка студентов с доступом к курсу
   const loadStudentsWithAccess = async () => {
     if (!currentCourseId) {
@@ -1455,6 +1463,95 @@ export default function CourseConstructor() {
         : block,
     )
     updateCourseBlocks(updatedBlocks)
+  }
+
+  const getEducationalContentLength = () => {
+    return courseBlocks
+      .filter((block) => block.category === 'educational')
+      .reduce((total, block) => {
+        return total + block.elements.reduce((sum, el) => sum + (el.content?.length || 0), 0)
+      }, 0)
+  }
+
+  const updateBlockTheses = (blockId: string, theses: string) => {
+    const updatedBlocks = courseBlocks.map((block) =>
+      block.id === blockId ? { ...block, theses } : block,
+    )
+    updateCourseBlocks(updatedBlocks)
+  }
+
+  const structureTheses = async () => {
+    const activeBlock = courseBlocks.find((b) => b.id === activeBlockId)
+    if (!activeBlock?.theses?.trim()) return
+
+    setIsStructuringTheses(true)
+    try {
+      const response = await fetch("/api/ai-structure-theses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          theses: activeBlock.theses,
+          blockTitle: activeBlock.title,
+        }),
+      })
+      const data = await response.json()
+      if (data.success && data.structured) {
+        updateBlockTheses(activeBlockId, data.structured)
+      }
+    } catch (error) {
+      console.error("Error structuring theses:", error)
+    } finally {
+      setIsStructuringTheses(false)
+    }
+  }
+
+  const generateMetaBlockContent = async () => {
+    if (!selectedMetaTemplate) return
+    const introBlock = courseBlocks.find((b) => b.type === 'introduction')
+    if (!introBlock) return
+
+    const lessonContent = courseBlocks
+      .filter((b) => b.category === 'educational')
+      .map((b) => b.elements.map((el) => el.content).filter(Boolean).join('\n'))
+      .filter(Boolean)
+      .join('\n\n')
+
+    const lessonTitle = courseLessons.find((l) => l.id === activeLessonId)?.title || ''
+
+    setIsGeneratingMeta(true)
+    try {
+      const response = await fetch("/api/ai-generate-meta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          template: selectedMetaTemplate,
+          lessonContent,
+          lessonTitle,
+        }),
+      })
+      const data = await response.json()
+      if (data.success && data.generatedText) {
+        // Добавляем сгенерированный текст как новый элемент или в первый текстовый элемент
+        const textElement = introBlock.elements.find((el) => el.type === 'text')
+        if (textElement) {
+          updateElementContent(introBlock.id, textElement.id, data.generatedText)
+        } else {
+          addElement(introBlock.id, "text")
+          // Обновляем после добавления
+          setTimeout(() => {
+            const updatedBlock = courseBlocks.find((b) => b.type === 'introduction')
+            const newEl = updatedBlock?.elements[updatedBlock.elements.length - 1]
+            if (newEl) {
+              updateElementContent(introBlock.id, newEl.id, data.generatedText)
+            }
+          }, 100)
+        }
+      }
+    } catch (error) {
+      console.error("Error generating meta block content:", error)
+    } finally {
+      setIsGeneratingMeta(false)
+    }
   }
 
   const addElement = (blockId: string, elementType: CourseElement["type"], educationalType?: EducationalBlockType) => {
@@ -2715,7 +2812,7 @@ export default function CourseConstructor() {
                   <div className="flex items-center justify-between">
                     <h2 className="text-lg font-bold text-[#659AB8]">Блоки урока</h2>
                     <button
-                      onClick={() => addBlock("introduction")}
+                      onClick={() => addBlock("main_block_1")}
                       className="bg-[#659AB8] text-white w-8 h-8 border-2 border-[#659AB8] rounded-lg font-semibold transition-colors duration-200 hover:bg-[#5589a7] hover:border-[#5589a7] flex items-center justify-center"
                       title="Добавить блок"
                     >
@@ -2726,7 +2823,7 @@ export default function CourseConstructor() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="space-y-2 p-6">
-                    {courseBlocks.map((block) => {
+                    {courseBlocks.filter((b) => b.type !== 'introduction').map((block) => {
                       const completedElements = block.elements.filter((el) => el.completed).length
                       const totalElements = block.elements.length
 
@@ -2790,9 +2887,9 @@ export default function CourseConstructor() {
                         <p className="text-slate-600 text-sm mb-3">Нет блоков в уроке</p>
                         <div className="flex flex-wrap gap-1 justify-center">
                           {[
-                            { type: "introduction", label: "Дополнительный блок" },
                             { type: "main_block_1", label: "Основной блок" },
                             { type: "intermediate_practice", label: "Практика" },
+                            { type: "intermediate_test", label: "Тест" },
                           ].map(({ type, label }) => (
                             <Button
                               key={type}
@@ -2836,9 +2933,13 @@ export default function CourseConstructor() {
                   <p className="text-sm text-slate-600">Перетаскивайте элементы для изменения порядка</p>
                 </CardHeader>
                 <CardContent>
+                  {(() => {
+                    const activeBlock = courseBlocks.find((b) => b.id === activeBlockId)
+                    const isMainBlock = activeBlock && ['main_block_1', 'main_block_2', 'main_block_3'].includes(activeBlock.type)
+
+                    const elementsList = (
                   <div className="space-y-4">
-                    {courseBlocks
-                      .find((b) => b.id === activeBlockId)
+                    {activeBlock
                       ?.elements.map((element) => {
                         const Icon = getElementIcon(element.type, element.educationalType)
                         return (
@@ -3205,6 +3306,50 @@ export default function CourseConstructor() {
                       </CardContent>
                     </Card>
                   </div>
+                    )
+
+                    if (isMainBlock) {
+                      return (
+                        <div className="grid grid-cols-5 gap-4">
+                          <div className="col-span-2">
+                            <Card className="bg-[#FDF8F3] border-[#E5E7EB]">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center gap-2">
+                                  <LightbulbIcon className="w-5 h-5 text-[#5589a7]" />
+                                  <h3 className="text-sm font-semibold text-[#5589a7]">Тезисы блока</h3>
+                                </div>
+                                <p className="text-xs text-slate-500 mt-1">
+                                  Запишите ключевые мысли и тезисы, которые хотите раскрыть в этом блоке
+                                </p>
+                              </CardHeader>
+                              <CardContent>
+                                <Textarea
+                                  value={activeBlock?.theses || ""}
+                                  onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
+                                  placeholder="Например:&#10;— Основная идея блока&#10;— Ключевой термин и его определение&#10;— Пример из практики&#10;— Вывод, который должен сделать ученик"
+                                  rows={12}
+                                  className="bg-white text-sm"
+                                />
+                                <Button
+                                  onClick={structureTheses}
+                                  disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
+                                  className="w-full mt-3 bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                                  size="sm"
+                                >
+                                  {isStructuringTheses ? "Структурирую..." : "Структурировать"}
+                                </Button>
+                              </CardContent>
+                            </Card>
+                          </div>
+                          <div className="col-span-3">
+                            {elementsList}
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return elementsList
+                  })()}
                 </CardContent>
               </Card>
             ) : (
@@ -3332,6 +3477,178 @@ export default function CourseConstructor() {
             </Card>
           </div>
         </div>
+
+        {/* Финальная настройка - показываем когда набрано 500+ символов в образовательных блоках */}
+        {activeLessonId && getEducationalContentLength() >= 500 && (
+          <Card className="mt-8 bg-[#F8FAFB] border-[#E5E7EB] rounded-xl">
+            <CardContent className="p-6 sm:p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                  <ClipboardListIcon className="w-5 h-5 text-[#5589a7]" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-[#5589a7]">Финальная настройка</h3>
+                  <p className="text-sm text-slate-500">Настройте дополнительные блоки урока</p>
+                </div>
+              </div>
+
+              {/* Карточка "Как работать с уроком" */}
+              <Card className="bg-white border-[#E5E7EB]">
+                <CardContent className="p-5">
+                  {/* Заголовок с кнопкой раскрытия */}
+                  <div
+                    className="flex items-center justify-between cursor-pointer"
+                    onClick={() => setIsFinalSetupExpanded(!isFinalSetupExpanded)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                        <BookOpenIcon className="w-4 h-4 text-[#5589a7]" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-[#111827]">Как работать с уроком</h4>
+                        <p className="text-xs text-slate-500">Инструкция для ученика перед началом урока</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-xs text-slate-400">
+                        {courseBlocks.find((b) => b.type === 'introduction')?.elements.some((el) => el.content?.trim())
+                          ? <span className="text-green-600">Заполнено</span>
+                          : <span>Не заполнено</span>
+                        }
+                      </div>
+                      <span className={`text-[#659AB8] text-sm transition-transform ${isFinalSetupExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    </div>
+                  </div>
+
+                  {/* Раскрывающийся редактор */}
+                  {isFinalSetupExpanded && (() => {
+                    const introBlock = courseBlocks.find((b) => b.type === 'introduction')
+                    if (!introBlock) return null
+
+                    return (
+                      <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
+                        {/* Информационный блок */}
+                        <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                          <p className="text-sm text-slate-600">
+                            Этот блок поможет ученику понять, как устроен урок, чего ожидать и как получить максимум пользы. Он отображается первым в ленте ученика.
+                          </p>
+                        </div>
+
+                        {/* Шаблоны для ИИ-генерации */}
+                        <div>
+                          <h5 className="text-sm font-medium text-[#111827] mb-3">Выберите шаблон для ИИ-генерации:</h5>
+                          <div className="space-y-2">
+                            {[
+                              { id: 'expectations' as const, label: 'Ожидания от урока', desc: 'Что узнает ученик, какие навыки получит' },
+                              { id: 'anxiety' as const, label: 'Снятие тревоги', desc: 'Поддержка и мотивация перед сложной темой' },
+                              { id: 'format' as const, label: 'Формат работы', desc: 'Как устроен урок, сколько времени займёт' },
+                            ].map((tmpl) => (
+                              <label
+                                key={tmpl.id}
+                                className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                                  selectedMetaTemplate === tmpl.id
+                                    ? 'border-[#659AB8] bg-[#659AB8]/5'
+                                    : 'border-[#E5E7EB] hover:border-[#659AB8]/50'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="metaTemplate"
+                                  checked={selectedMetaTemplate === tmpl.id}
+                                  onChange={() => setSelectedMetaTemplate(tmpl.id)}
+                                  className="mt-1 accent-[#659AB8]"
+                                />
+                                <div>
+                                  <span className="text-sm font-medium text-[#111827]">{tmpl.label}</span>
+                                  <p className="text-xs text-slate-500">{tmpl.desc}</p>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                          <Button
+                            onClick={generateMetaBlockContent}
+                            disabled={isGeneratingMeta || !selectedMetaTemplate}
+                            className="mt-3 bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                            size="sm"
+                          >
+                            {isGeneratingMeta ? "Генерирую черновик..." : "Сгенерировать черновик"}
+                          </Button>
+                        </div>
+
+                        {/* Список элементов introduction блока */}
+                        <div>
+                          <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
+                          <div className="space-y-3">
+                            {introBlock.elements.map((element) => {
+                              const Icon = getElementIcon(element.type, element.educationalType)
+                              return (
+                                <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Icon className="w-4 h-4 text-[#659AB8]" />
+                                      <span className="text-sm font-medium text-[#659AB8]">
+                                        {getElementLabel(element.type, element.educationalType)}
+                                      </span>
+                                    </div>
+                                    <button
+                                      onClick={() => removeElement(introBlock.id, element.id)}
+                                      className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
+                                    >
+                                      <TrashIcon className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  {element.type === "title" ? (
+                                    <Input
+                                      value={element.content}
+                                      onChange={(e) => updateElementContent(introBlock.id, element.id, e.target.value)}
+                                      placeholder="Заголовок блока"
+                                      className="h-9 text-sm"
+                                    />
+                                  ) : (
+                                    <Textarea
+                                      value={element.content || ""}
+                                      onChange={(e) => updateElementContent(introBlock.id, element.id, e.target.value)}
+                                      placeholder="Введите текст..."
+                                      rows={3}
+                                      className="text-sm"
+                                    />
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Кнопки добавления элементов — только базовые типы (Task 8) */}
+                        <div>
+                          <p className="text-xs text-slate-400 mb-2">Это инструктивный блок — задания и тесты добавляются в блок «Практика»</p>
+                          <div className="flex flex-wrap gap-2">
+                            {[
+                              { type: "text" as const, label: "Текст" },
+                              { type: "video" as const, label: "Видео" },
+                              { type: "audio" as const, label: "Аудио" },
+                              { type: "image" as const, label: "Изображение" },
+                            ].map(({ type, label }) => (
+                              <Button
+                                key={type}
+                                onClick={() => addElement(introBlock.id, type)}
+                                size="sm"
+                                variant="secondary"
+                                className="text-xs border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
+                              >
+                                + {label}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
+                </CardContent>
+              </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Тарифы и оплата - At Bottom */}
         {currentCourseId && (

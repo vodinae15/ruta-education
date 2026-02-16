@@ -16,6 +16,10 @@ export interface CourseBlock {
   elements: CourseElement[]
   required: boolean
   completed: boolean
+  theses?: string
+  category?: 'educational' | 'meta'
+  authorOrder?: number
+  studentOrder?: number
 }
 
 export interface CourseElement {
@@ -289,6 +293,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'meta',
     },
     {
       id: "navigation",
@@ -299,6 +304,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'meta',
     },
     {
       id: "main_block_1",
@@ -309,6 +315,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "intermediate_practice",
@@ -319,6 +326,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "main_block_2",
@@ -329,6 +337,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "intermediate_test",
@@ -339,6 +348,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "main_block_3",
@@ -349,6 +359,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "conclusion",
@@ -359,6 +370,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: true,
       completed: false,
+      category: 'meta',
     },
     {
       id: "bonus_support",
@@ -369,6 +381,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       elements: [],
       required: false,
       completed: false,
+      category: 'educational',
     },
   ]
 
@@ -565,6 +578,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'meta',
     },
     {
       id: "navigation",
@@ -578,6 +592,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'meta',
     },
     {
       id: "main_block_1",
@@ -592,6 +607,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "intermediate_practice",
@@ -606,6 +622,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "main_block_2",
@@ -619,6 +636,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "intermediate_test",
@@ -632,6 +650,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "main_block_3",
@@ -645,6 +664,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'educational',
     },
     {
       id: "conclusion",
@@ -659,6 +679,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: true,
       completed: false,
+      category: 'meta',
     },
     {
       id: "bonus_support",
@@ -672,6 +693,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: false,
       completed: false,
+      category: 'educational',
     },
   ]
 
