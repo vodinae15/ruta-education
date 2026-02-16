@@ -691,6 +691,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       ],
       required: false,
       completed: false,
+      category: 'educational',
     },
   ]
 
