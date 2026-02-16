@@ -1460,6 +1460,14 @@ export default function CourseConstructor() {
     updateCourseBlocks(updatedBlocks)
   }
 
+  const getEducationalContentLength = () => {
+    return courseBlocks
+      .filter((block) => block.category === 'educational')
+      .reduce((total, block) => {
+        return total + block.elements.reduce((sum, el) => sum + (el.content?.length || 0), 0)
+      }, 0)
+  }
+
   const updateBlockTheses = (blockId: string, theses: string) => {
     const updatedBlocks = courseBlocks.map((block) =>
       block.id === blockId ? { ...block, theses } : block,
@@ -3415,6 +3423,46 @@ export default function CourseConstructor() {
             </Card>
           </div>
         </div>
+
+        {/* Финальная настройка - показываем когда набрано 500+ символов в образовательных блоках */}
+        {activeLessonId && getEducationalContentLength() >= 500 && (
+          <Card className="mt-8 bg-[#F8FAFB] border-[#E5E7EB] rounded-xl">
+            <CardContent className="p-6 sm:p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                  <ClipboardListIcon className="w-5 h-5 text-[#5589a7]" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-[#5589a7]">Финальная настройка</h3>
+                  <p className="text-sm text-slate-500">Настройте дополнительные блоки урока</p>
+                </div>
+              </div>
+
+              {/* Карточка "Как работать с уроком" — будет заполнена в Step D */}
+              <Card className="bg-white border-[#E5E7EB]">
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                        <BookOpenIcon className="w-4 h-4 text-[#5589a7]" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-[#111827]">Как работать с уроком</h4>
+                        <p className="text-xs text-slate-500">Инструкция для ученика перед началом урока</p>
+                      </div>
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      {courseBlocks.find((b) => b.type === 'introduction')?.elements.some((el) => el.content?.trim())
+                        ? <span className="text-green-600">Заполнено</span>
+                        : <span>Не заполнено</span>
+                      }
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Тарифы и оплата - At Bottom */}
         {currentCourseId && (
