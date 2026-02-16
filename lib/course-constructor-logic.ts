@@ -18,6 +18,8 @@ export interface CourseBlock {
   completed: boolean
   theses?: string
   category?: 'educational' | 'meta'
+  authorOrder?: number
+  studentOrder?: number
 }
 
 export interface CourseElement {

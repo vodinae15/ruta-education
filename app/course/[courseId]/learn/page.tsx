@@ -160,6 +160,22 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
     // Метаданные материалов загружаются в loadOriginalContentForLesson для избежания дублирования
   }, [currentMode, params.courseId])
 
+  // Переупорядочивание блоков для ученика по studentOrder
+  const reorderBlocksForStudent = (blocks: any[]) => {
+    if (!blocks || blocks.length === 0) return blocks
+
+    // Если у блоков нет studentOrder, возвращаем как есть
+    const hasStudentOrder = blocks.some((b) => typeof b.studentOrder === 'number')
+    if (!hasStudentOrder) return blocks
+
+    // Сортируем по studentOrder (блоки без studentOrder идут в конец)
+    return [...blocks].sort((a, b) => {
+      const orderA = typeof a.studentOrder === 'number' ? a.studentOrder : Infinity
+      const orderB = typeof b.studentOrder === 'number' ? b.studentOrder : Infinity
+      return orderA - orderB
+    })
+  }
+
   // Загрузка оригинального контента урока
   const loadOriginalContentForLesson = useCallback(async (lessonData: any) => {
     if (!lessonData?.id) return
@@ -173,8 +189,9 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
 
       if (lessonError || !lessonDataFromDB) {
         // Используем данные из lessonData, если загрузка из БД не удалась
+        const reorderedBlocks = reorderBlocksForStudent(lessonData.blocks || [])
         const originalContent = {
-          blocks: (lessonData.blocks || []).map((block: any, index: number) => ({
+          blocks: reorderedBlocks.map((block: any, index: number) => ({
             title: block.title || `Блок ${index + 1}`,
             content: block.content || block.text || "",
             type: block.type || "text",
@@ -186,9 +203,10 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
         return
       }
 
-      // Преобразуем блоки урока в формат оригинального контента
+      // Преобразуем блоки урока в формат оригинального контента (с учётом studentOrder)
+      const reorderedBlocks = reorderBlocksForStudent(lessonDataFromDB.blocks || [])
       const originalContent = {
-        blocks: (lessonDataFromDB.blocks || []).map((block: any, index: number) => ({
+        blocks: reorderedBlocks.map((block: any, index: number) => ({
           title: block.title || `Блок ${index + 1}`,
           content: block.content || block.text || "",
           type: block.type || "text",
@@ -210,9 +228,10 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
       }
     } catch (error) {
       console.error("Error loading original content:", error)
-      // Используем данные из lessonData как fallback
+      // Используем данные из lessonData как fallback (с учётом studentOrder)
+      const reorderedBlocks = reorderBlocksForStudent(lessonData.blocks || [])
       const originalContent = {
-        blocks: (lessonData.blocks || []).map((block: any, index: number) => ({
+        blocks: reorderedBlocks.map((block: any, index: number) => ({
           title: block.title || `Блок ${index + 1}`,
           content: block.content || block.text || "",
           type: block.type || "text",
@@ -864,7 +883,7 @@ export default function StudentLearningPage({ params }: { params: { courseId: st
                               isStudent={true}
                               courseId={params.courseId}
                               lessonId={currentLessonData.id}
-                              lessonBlocks={currentLessonData.blocks || []}
+                              lessonBlocks={reorderBlocksForStudent(currentLessonData.blocks || [])}
                               materialsAnalysis={materialsAnalysis}
                               studentType={studentSession?.student_type}
                               onProgressUpdate={(progress, completedBlocks) => {
