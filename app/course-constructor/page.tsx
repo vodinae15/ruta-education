@@ -3696,6 +3696,111 @@ export default function CourseConstructor() {
                                         placeholder="Заголовок блока"
                                         className="h-9 text-sm"
                                       />
+                                    ) : element.type === "audio" ? (
+                                      <AudioUploadV2
+                                        courseId={currentCourseId || ""}
+                                        lessonId={undefined}
+                                        blockId={introBlock.id}
+                                        elementId={element.id}
+                                        initialAudioUrl={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileUrl || element.content
+                                                } catch {
+                                                  return element.content
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialFileId={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileId
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        onAudioUpload={(fileId, fileUrl, fileName) => {
+                                          const audioData = JSON.stringify({
+                                            fileId,
+                                            fileUrl,
+                                            fileName,
+                                            uploadedAt: new Date().toISOString(),
+                                          })
+                                          updateElementContent(introBlock.id, element.id, audioData)
+                                        }}
+                                      />
+                                    ) : element.type === "video" ? (
+                                      <VideoUploadV2
+                                        courseId={currentCourseId || ""}
+                                        lessonId={undefined}
+                                        blockId={introBlock.id}
+                                        elementId={element.id}
+                                        initialVideoUrl={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileUrl || element.content
+                                                } catch {
+                                                  return element.content
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialFileId={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileId
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialFileName={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileName
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialSource={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.source
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        onVideoUpload={(fileId, fileUrl, fileName, source) => {
+                                          const videoData = JSON.stringify({
+                                            fileId,
+                                            fileUrl,
+                                            fileName,
+                                            source: source || "file",
+                                            uploadedAt: new Date().toISOString(),
+                                          })
+                                          updateElementContent(introBlock.id, element.id, videoData)
+                                        }}
+                                      />
                                     ) : (
                                       <Textarea
                                         value={element.content || ""}
@@ -3893,13 +3998,120 @@ export default function CourseConstructor() {
                                         <TrashIcon className="w-3 h-3" />
                                       </button>
                                     </div>
-                                    <Textarea
-                                      value={element.content || ""}
-                                      onChange={(e) => updateElementContent(conclusionBlock.id, element.id, e.target.value)}
-                                      placeholder="Введите текст..."
-                                      rows={3}
-                                      className="text-sm"
-                                    />
+                                    {element.type === "audio" ? (
+                                      <AudioUploadV2
+                                        courseId={currentCourseId || ""}
+                                        lessonId={undefined}
+                                        blockId={conclusionBlock.id}
+                                        elementId={element.id}
+                                        initialAudioUrl={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileUrl || element.content
+                                                } catch {
+                                                  return element.content
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialFileId={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileId
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        onAudioUpload={(fileId, fileUrl, fileName) => {
+                                          const audioData = JSON.stringify({
+                                            fileId,
+                                            fileUrl,
+                                            fileName,
+                                            uploadedAt: new Date().toISOString(),
+                                          })
+                                          updateElementContent(conclusionBlock.id, element.id, audioData)
+                                        }}
+                                      />
+                                    ) : element.type === "video" ? (
+                                      <VideoUploadV2
+                                        courseId={currentCourseId || ""}
+                                        lessonId={undefined}
+                                        blockId={conclusionBlock.id}
+                                        elementId={element.id}
+                                        initialVideoUrl={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileUrl || element.content
+                                                } catch {
+                                                  return element.content
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialFileId={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileId
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialFileName={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.fileName
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        initialSource={
+                                          element.content
+                                            ? (() => {
+                                                try {
+                                                  const parsed = JSON.parse(element.content)
+                                                  return parsed.source
+                                                } catch {
+                                                  return undefined
+                                                }
+                                              })()
+                                            : undefined
+                                        }
+                                        onVideoUpload={(fileId, fileUrl, fileName, source) => {
+                                          const videoData = JSON.stringify({
+                                            fileId,
+                                            fileUrl,
+                                            fileName,
+                                            source: source || "file",
+                                            uploadedAt: new Date().toISOString(),
+                                          })
+                                          updateElementContent(conclusionBlock.id, element.id, videoData)
+                                        }}
+                                      />
+                                    ) : (
+                                      <Textarea
+                                        value={element.content || ""}
+                                        onChange={(e) => updateElementContent(conclusionBlock.id, element.id, e.target.value)}
+                                        placeholder="Введите текст..."
+                                        rows={3}
+                                        className="text-sm"
+                                      />
+                                    )}
                                   </div>
                                 )
                               })}
