@@ -995,6 +995,9 @@ export default function CourseConstructor() {
               }
             } else if (course.modules && course.modules.blocks) {
               // Миграция старых курсов: создаем урок из существующих блоков
+              console.log('[DEBUG MIGRATION] Old course detected with modules.blocks')
+              console.log('[DEBUG MIGRATION] course.modules.blocks:', course.modules.blocks)
+              console.log('[DEBUG MIGRATION] blocks count:', course.modules.blocks.length)
               const migrationLesson: CourseLesson = {
                 id: "migration-lesson",
                 title: "Основной урок",
@@ -1003,10 +1006,12 @@ export default function CourseConstructor() {
                 blocks: course.modules.blocks,
                 completed: false,
               }
+              console.log('[DEBUG MIGRATION] Created migrationLesson:', migrationLesson)
               setCourseLessons([migrationLesson])
               setActiveLessonId(migrationLesson.id)
               setCourseBlocks(migrationLesson.blocks)
               setActiveBlockId(getFirstMainBlockId(migrationLesson.blocks))
+              console.log('[DEBUG MIGRATION] State set - activeLessonId: migration-lesson')
             }
 
             setLastSavedAt(new Date(course.updated_at || Date.now()))
@@ -1850,6 +1855,12 @@ export default function CourseConstructor() {
   }
 
   const addBlock = (blockType: CourseBlock["type"]) => {
+    console.log('[DEBUG addBlock] Called with blockType:', blockType)
+    console.log('[DEBUG addBlock] Current courseBlocks:', courseBlocks)
+    console.log('[DEBUG addBlock] courseBlocks.length:', courseBlocks.length)
+    console.log('[DEBUG addBlock] activeLessonId:', activeLessonId)
+    console.log('[DEBUG addBlock] courseLessons:', courseLessons)
+
     const blockTitles = {
       introduction: "Дополнительный блок",
       navigation: "Навигация",
