@@ -3316,17 +3316,17 @@ export default function CourseConstructor() {
                               <CardHeader className="pb-3">
                                 <div className="flex items-center gap-2">
                                   <LightbulbIcon className="w-5 h-5 text-[#5589a7]" />
-                                  <h3 className="text-sm font-semibold text-[#5589a7]">Тезисы блока</h3>
+                                  <h3 className="text-sm font-semibold text-[#5589a7]">Тезисы</h3>
                                 </div>
                                 <p className="text-xs text-slate-500 mt-1">
-                                  Запишите ключевые мысли и тезисы, которые хотите раскрыть в этом блоке
+                                  Набросайте мысли — ученики это не увидят
                                 </p>
                               </CardHeader>
                               <CardContent>
                                 <Textarea
                                   value={activeBlock?.theses || ""}
                                   onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
-                                  placeholder="Например:&#10;— Основная идея блока&#10;— Ключевой термин и его определение&#10;— Пример из практики&#10;— Вывод, который должен сделать ученик"
+                                  placeholder="О чём хотите рассказать? Какие ключевые мысли?"
                                   rows={12}
                                   className="bg-white text-sm"
                                 />
