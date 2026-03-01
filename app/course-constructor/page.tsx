@@ -450,6 +450,7 @@ export default function CourseConstructor() {
   const [thesesCopied, setThesesCopied] = useState(false)
 
   // Состояния для секции "Финальная настройка"
+  const [showFinalSetupModal, setShowFinalSetupModal] = useState(false)
   const [isFinalSetupExpanded, setIsFinalSetupExpanded] = useState(false)
   const [isNavigationExpanded, setIsNavigationExpanded] = useState(false)
   const [isConclusionExpanded, setIsConclusionExpanded] = useState(false)
@@ -2672,7 +2673,15 @@ export default function CourseConstructor() {
       />
 
       {/* Mode badge at bottom */}
-      <div className="fixed bottom-6 right-6 z-40">
+      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+        {activeLessonId && getEducationalContentLength() >= 500 && (
+          <button
+            onClick={() => setShowFinalSetupModal(true)}
+            className="text-sm px-4 py-2 rounded-lg bg-[#f59e0b] text-white font-semibold shadow-lg hover:bg-[#d97706] transition-colors animate-pulse"
+          >
+            Финальная настройка
+          </button>
+        )}
         <span className="text-sm px-4 py-2 rounded-lg bg-[#659AB8] text-white font-semibold shadow-lg">
           {constructorMode === "standard" ? "Стандартная сборка" : "По типу автора"}
         </span>
@@ -3557,150 +3566,151 @@ export default function CourseConstructor() {
           </div>
         </div>
 
-        {/* Финальная настройка - показываем когда набрано 500+ символов в образовательных блоках */}
-        {activeLessonId && getEducationalContentLength() >= 500 && (
-          <Card className="mt-8 bg-[#F8FAFB] border-[#E5E7EB] rounded-xl">
-            <CardContent className="p-6 sm:p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
-                  <ClipboardListIcon className="w-5 h-5 text-[#5589a7]" />
+        {/* Модалка "Финальная настройка" */}
+        {showFinalSetupModal && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                    <ClipboardListIcon className="w-5 h-5 text-[#5589a7]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#5589a7]">Финальная настройка</h3>
+                    <p className="text-sm text-slate-500">Настройте дополнительные блоки урока</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-[#5589a7]">Финальная настройка</h3>
-                  <p className="text-sm text-slate-500">Настройте дополнительные блоки урока</p>
-                </div>
+                <button
+                  onClick={() => setShowFinalSetupModal(false)}
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-500"
+                >
+                  <XIcon className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* Карточка "Как работать с уроком" */}
-              <Card className="bg-white border-[#E5E7EB]">
-                <CardContent className="p-5">
-                  {/* Заголовок с кнопкой раскрытия */}
-                  <div
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => setIsFinalSetupExpanded(!isFinalSetupExpanded)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
-                        <BookOpenIcon className="w-4 h-4 text-[#5589a7]" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-[#111827]">Как работать с уроком</h4>
-                        <p className="text-xs text-slate-500">Инструкция для ученика перед началом урока</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-xs text-slate-400">
-                        {courseBlocks.find((b) => b.type === 'introduction')?.elements.some((el) => el.content?.trim())
-                          ? <span className="text-green-600">Заполнено</span>
-                          : <span>Не заполнено</span>
-                        }
-                      </div>
-                      <span className={`text-[#659AB8] text-sm transition-transform ${isFinalSetupExpanded ? 'rotate-180' : ''}`}>▼</span>
-                    </div>
-                  </div>
-
-                  {/* Раскрывающийся редактор */}
-                  {isFinalSetupExpanded && (() => {
-                    const introBlock = courseBlocks.find((b) => b.type === 'introduction')
-                    if (!introBlock) return null
-
-                    return (
-                      <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
-                        {/* Информационный блок */}
-                        <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
-                          <p className="text-sm text-slate-600">
-                            Этот блок поможет ученику понять, как устроен урок, чего ожидать и как получить максимум пользы. Он отображается первым в ленте ученика.
-                          </p>
+              <div className="p-6 space-y-4">
+                {/* Карточка "Как работать с уроком" */}
+                <Card className="bg-white border-[#E5E7EB]">
+                  <CardContent className="p-5">
+                    <div
+                      className="flex items-center justify-between cursor-pointer"
+                      onClick={() => setIsFinalSetupExpanded(!isFinalSetupExpanded)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                          <BookOpenIcon className="w-4 h-4 text-[#5589a7]" />
                         </div>
-
-                        {/* Шаблоны для ИИ-генерации */}
                         <div>
-                          <h5 className="text-sm font-medium text-[#111827] mb-3">Выберите шаблон для ИИ-генерации:</h5>
-                          <div className="space-y-2">
-                            {[
-                              { id: 'expectations' as const, label: 'Ожидания от урока', desc: 'Что узнает ученик, какие навыки получит' },
-                              { id: 'anxiety' as const, label: 'Снятие тревоги', desc: 'Поддержка и мотивация перед сложной темой' },
-                              { id: 'format' as const, label: 'Формат работы', desc: 'Как устроен урок, сколько времени займёт' },
-                            ].map((tmpl) => (
-                              <label
-                                key={tmpl.id}
-                                className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
-                                  selectedMetaTemplate === tmpl.id
-                                    ? 'border-[#659AB8] bg-[#659AB8]/5'
-                                    : 'border-[#E5E7EB] hover:border-[#659AB8]/50'
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name="metaTemplate"
-                                  checked={selectedMetaTemplate === tmpl.id}
-                                  onChange={() => setSelectedMetaTemplate(tmpl.id)}
-                                  className="mt-1 accent-[#659AB8]"
-                                />
-                                <div>
-                                  <span className="text-sm font-medium text-[#111827]">{tmpl.label}</span>
-                                  <p className="text-xs text-slate-500">{tmpl.desc}</p>
-                                </div>
-                              </label>
-                            ))}
+                          <h4 className="font-medium text-[#111827]">Как работать с уроком</h4>
+                          <p className="text-xs text-slate-500">Инструкция для ученика перед началом урока</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-xs text-slate-400">
+                          {courseBlocks.find((b) => b.type === 'introduction')?.elements.some((el) => el.content?.trim())
+                            ? <span className="text-green-600">Заполнено</span>
+                            : <span>Не заполнено</span>
+                          }
+                        </div>
+                        <span className={`text-[#659AB8] text-sm transition-transform ${isFinalSetupExpanded ? 'rotate-180' : ''}`}>▼</span>
+                      </div>
+                    </div>
+
+                    {isFinalSetupExpanded && (() => {
+                      const introBlock = courseBlocks.find((b) => b.type === 'introduction')
+                      if (!introBlock) return null
+
+                      return (
+                        <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
+                          <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                            <p className="text-sm text-slate-600">
+                              Этот блок поможет ученику понять, как устроен урок, чего ожидать и как получить максимум пользы.
+                            </p>
                           </div>
-                          <Button
-                            onClick={generateMetaBlockContent}
-                            disabled={isGeneratingMeta || !selectedMetaTemplate}
-                            className="mt-3 bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
-                            size="sm"
-                          >
-                            {isGeneratingMeta ? "Генерирую черновик..." : "Сгенерировать черновик"}
-                          </Button>
-                        </div>
 
-                        {/* Список элементов introduction блока */}
-                        <div>
-                          <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
-                          <div className="space-y-3">
-                            {introBlock.elements.map((element) => {
-                              const Icon = getElementIcon(element.type, element.educationalType)
-                              return (
-                                <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                      <Icon className="w-4 h-4 text-[#659AB8]" />
-                                      <span className="text-sm font-medium text-[#659AB8]">
-                                        {getElementLabel(element.type, element.educationalType)}
-                                      </span>
-                                    </div>
-                                    <button
-                                      onClick={() => removeElement(introBlock.id, element.id)}
-                                      className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
-                                    >
-                                      <TrashIcon className="w-3 h-3" />
-                                    </button>
+                          <div>
+                            <h5 className="text-sm font-medium text-[#111827] mb-3">Выберите шаблон для ИИ-генерации:</h5>
+                            <div className="space-y-2">
+                              {[
+                                { id: 'expectations' as const, label: 'Ожидания от урока', desc: 'Что узнает ученик, какие навыки получит' },
+                                { id: 'anxiety' as const, label: 'Снятие тревоги', desc: 'Поддержка и мотивация перед сложной темой' },
+                                { id: 'format' as const, label: 'Формат работы', desc: 'Как устроен урок, сколько времени займёт' },
+                              ].map((tmpl) => (
+                                <label
+                                  key={tmpl.id}
+                                  className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                                    selectedMetaTemplate === tmpl.id
+                                      ? 'border-[#659AB8] bg-[#659AB8]/5'
+                                      : 'border-[#E5E7EB] hover:border-[#659AB8]/50'
+                                  }`}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="metaTemplate"
+                                    checked={selectedMetaTemplate === tmpl.id}
+                                    onChange={() => setSelectedMetaTemplate(tmpl.id)}
+                                    className="mt-1 accent-[#659AB8]"
+                                  />
+                                  <div>
+                                    <span className="text-sm font-medium text-[#111827]">{tmpl.label}</span>
+                                    <p className="text-xs text-slate-500">{tmpl.desc}</p>
                                   </div>
-                                  {element.type === "title" ? (
-                                    <Input
-                                      value={element.content}
-                                      onChange={(e) => updateElementContent(introBlock.id, element.id, e.target.value)}
-                                      placeholder="Заголовок блока"
-                                      className="h-9 text-sm"
-                                    />
-                                  ) : (
-                                    <Textarea
-                                      value={element.content || ""}
-                                      onChange={(e) => updateElementContent(introBlock.id, element.id, e.target.value)}
-                                      placeholder="Введите текст..."
-                                      rows={3}
-                                      className="text-sm"
-                                    />
-                                  )}
-                                </div>
-                              )
-                            })}
+                                </label>
+                              ))}
+                            </div>
+                            <Button
+                              onClick={generateMetaBlockContent}
+                              disabled={isGeneratingMeta || !selectedMetaTemplate}
+                              className="mt-3 bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                              size="sm"
+                            >
+                              {isGeneratingMeta ? "Генерирую черновик..." : "Сгенерировать черновик"}
+                            </Button>
                           </div>
-                        </div>
 
-                        {/* Кнопки добавления элементов — только базовые типы (Task 8) */}
-                        <div>
-                          <p className="text-xs text-slate-400 mb-2">Это инструктивный блок — задания и тесты добавляются в блок «Практика»</p>
+                          <div>
+                            <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
+                            <div className="space-y-3">
+                              {introBlock.elements.map((element) => {
+                                const Icon = getElementIcon(element.type, element.educationalType)
+                                return (
+                                  <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <div className="flex items-center gap-2">
+                                        <Icon className="w-4 h-4 text-[#659AB8]" />
+                                        <span className="text-sm font-medium text-[#659AB8]">
+                                          {getElementLabel(element.type, element.educationalType)}
+                                        </span>
+                                      </div>
+                                      <button
+                                        onClick={() => removeElement(introBlock.id, element.id)}
+                                        className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
+                                      >
+                                        <TrashIcon className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                    {element.type === "title" ? (
+                                      <Input
+                                        value={element.content}
+                                        onChange={(e) => updateElementContent(introBlock.id, element.id, e.target.value)}
+                                        placeholder="Заголовок блока"
+                                        className="h-9 text-sm"
+                                      />
+                                    ) : (
+                                      <Textarea
+                                        value={element.content || ""}
+                                        onChange={(e) => updateElementContent(introBlock.id, element.id, e.target.value)}
+                                        placeholder="Введите текст..."
+                                        rows={3}
+                                        className="text-sm"
+                                      />
+                                    )}
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+
                           <div className="flex flex-wrap gap-2">
                             {[
                               { type: "text" as const, label: "Текст" },
@@ -3719,192 +3729,183 @@ export default function CourseConstructor() {
                             ))}
                           </div>
                         </div>
-                      </div>
-                    )
-                  })()}
-                </CardContent>
-              </Card>
+                      )
+                    })()}
+                  </CardContent>
+                </Card>
 
-              {/* Карточка "Навигация" */}
-              <Card className="bg-white border-[#E5E7EB] mt-4">
-                <CardContent className="p-5">
-                  <div
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
-                        <ClipboardListIcon className="w-4 h-4 text-[#5589a7]" />
+                {/* Карточка "Навигация" */}
+                <Card className="bg-white border-[#E5E7EB]">
+                  <CardContent className="p-5">
+                    <div
+                      className="flex items-center justify-between cursor-pointer"
+                      onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                          <ClipboardListIcon className="w-4 h-4 text-[#5589a7]" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-[#111827]">Навигация</h4>
+                          <p className="text-xs text-slate-500">Структура урока для ученика (опционально)</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-medium text-[#111827]">Навигация</h4>
-                        <p className="text-xs text-slate-500">Структура урока для ученика (опционально)</p>
+                      <div className="flex items-center gap-3">
+                        <div className="text-xs text-slate-400">
+                          {courseBlocks.find((b) => b.type === 'navigation')?.elements.some((el) => el.content?.trim())
+                            ? <span className="text-green-600">Заполнено</span>
+                            : <span>Не заполнено</span>
+                          }
+                        </div>
+                        <span className={`text-[#659AB8] text-sm transition-transform ${isNavigationExpanded ? 'rotate-180' : ''}`}>▼</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-xs text-slate-400">
-                        {courseBlocks.find((b) => b.type === 'navigation')?.elements.some((el) => el.content?.trim())
-                          ? <span className="text-green-600">Заполнено</span>
-                          : <span>Не заполнено</span>
-                        }
-                      </div>
-                      <span className={`text-[#659AB8] text-sm transition-transform ${isNavigationExpanded ? 'rotate-180' : ''}`}>▼</span>
-                    </div>
-                  </div>
 
-                  {isNavigationExpanded && (() => {
-                    const navBlock = courseBlocks.find((b) => b.type === 'navigation')
-                    if (!navBlock) return null
+                    {isNavigationExpanded && (() => {
+                      const navBlock = courseBlocks.find((b) => b.type === 'navigation')
+                      if (!navBlock) return null
 
-                    return (
-                      <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
-                        <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
-                          <p className="text-sm text-slate-600">
-                            Этот блок покажет ученику структуру урока и поможет сориентироваться. Заполняется опционально.
-                          </p>
-                        </div>
-
-                        {/* Кнопка ИИ-генерации навигации */}
-                        <div>
-                          <Button
-                            onClick={generateNavigationContent}
-                            disabled={isGeneratingNavigation}
-                            className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
-                            size="sm"
-                          >
-                            {isGeneratingNavigation ? "Генерирую структуру..." : "Сгенерировать структуру урока"}
-                          </Button>
-                          <p className="text-xs text-slate-400 mt-2">ИИ создаст навигацию на основе содержимого блоков урока</p>
-                        </div>
-
-                        <div>
-                          <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
-                          <div className="space-y-3">
-                            {navBlock.elements.map((element) => {
-                              const Icon = getElementIcon(element.type, element.educationalType)
-                              return (
-                                <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                      <Icon className="w-4 h-4 text-[#659AB8]" />
-                                      <span className="text-sm font-medium text-[#659AB8]">
-                                        {getElementLabel(element.type, element.educationalType)}
-                                      </span>
-                                    </div>
-                                    <button
-                                      onClick={() => removeElement(navBlock.id, element.id)}
-                                      className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
-                                    >
-                                      <TrashIcon className="w-3 h-3" />
-                                    </button>
-                                  </div>
-                                  <Textarea
-                                    value={element.content || ""}
-                                    onChange={(e) => updateElementContent(navBlock.id, element.id, e.target.value)}
-                                    placeholder="Введите текст..."
-                                    rows={3}
-                                    className="text-sm"
-                                  />
-                                </div>
-                              )
-                            })}
+                      return (
+                        <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
+                          <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                            <p className="text-sm text-slate-600">
+                              Этот блок покажет ученику структуру урока и поможет сориентироваться.
+                            </p>
                           </div>
-                        </div>
 
-                        <div>
-                          <p className="text-xs text-slate-400 mb-2">Навигационный блок — добавляйте только текстовые элементы</p>
-                          <div className="flex flex-wrap gap-2">
+                          <div>
                             <Button
-                              onClick={() => addElement(navBlock.id, "text")}
+                              onClick={generateNavigationContent}
+                              disabled={isGeneratingNavigation}
+                              className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
                               size="sm"
-                              variant="secondary"
-                              className="text-xs border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
                             >
-                              + Текст
+                              {isGeneratingNavigation ? "Генерирую структуру..." : "Сгенерировать структуру урока"}
                             </Button>
+                            <p className="text-xs text-slate-400 mt-2">ИИ создаст навигацию на основе содержимого блоков урока</p>
                           </div>
-                        </div>
-                      </div>
-                    )
-                  })()}
-                </CardContent>
-              </Card>
 
-              {/* Карточка "Интеграция и завершение" */}
-              <Card className="bg-white border-[#E5E7EB] mt-4">
-                <CardContent className="p-5">
-                  <div
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => setIsConclusionExpanded(!isConclusionExpanded)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
-                        <CheckCircleIcon className="w-4 h-4 text-[#5589a7]" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-[#111827]">Интеграция и завершение</h4>
-                        <p className="text-xs text-slate-500">Итоги урока и следующие шаги</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-xs text-slate-400">
-                        {courseBlocks.find((b) => b.type === 'conclusion')?.elements.some((el) => el.content?.trim())
-                          ? <span className="text-green-600">Заполнено</span>
-                          : <span>Не заполнено</span>
-                        }
-                      </div>
-                      <span className={`text-[#659AB8] text-sm transition-transform ${isConclusionExpanded ? 'rotate-180' : ''}`}>▼</span>
-                    </div>
-                  </div>
-
-                  {isConclusionExpanded && (() => {
-                    const conclusionBlock = courseBlocks.find((b) => b.type === 'conclusion')
-                    if (!conclusionBlock) return null
-
-                    return (
-                      <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
-                        <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
-                          <p className="text-sm text-slate-600">
-                            Подведите итоги урока: что ученик узнал, какие следующие шаги, как применить знания на практике.
-                          </p>
-                        </div>
-
-                        <div>
-                          <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
-                          <div className="space-y-3">
-                            {conclusionBlock.elements.map((element) => {
-                              const Icon = getElementIcon(element.type, element.educationalType)
-                              return (
-                                <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                      <Icon className="w-4 h-4 text-[#659AB8]" />
-                                      <span className="text-sm font-medium text-[#659AB8]">
-                                        {getElementLabel(element.type, element.educationalType)}
-                                      </span>
+                          <div>
+                            <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
+                            <div className="space-y-3">
+                              {navBlock.elements.map((element) => {
+                                const Icon = getElementIcon(element.type, element.educationalType)
+                                return (
+                                  <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <div className="flex items-center gap-2">
+                                        <Icon className="w-4 h-4 text-[#659AB8]" />
+                                        <span className="text-sm font-medium text-[#659AB8]">
+                                          {getElementLabel(element.type, element.educationalType)}
+                                        </span>
+                                      </div>
+                                      <button
+                                        onClick={() => removeElement(navBlock.id, element.id)}
+                                        className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
+                                      >
+                                        <TrashIcon className="w-3 h-3" />
+                                      </button>
                                     </div>
-                                    <button
-                                      onClick={() => removeElement(conclusionBlock.id, element.id)}
-                                      className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
-                                    >
-                                      <TrashIcon className="w-3 h-3" />
-                                    </button>
+                                    <Textarea
+                                      value={element.content || ""}
+                                      onChange={(e) => updateElementContent(navBlock.id, element.id, e.target.value)}
+                                      placeholder="Введите текст..."
+                                      rows={3}
+                                      className="text-sm"
+                                    />
                                   </div>
-                                  <Textarea
-                                    value={element.content || ""}
-                                    onChange={(e) => updateElementContent(conclusionBlock.id, element.id, e.target.value)}
-                                    placeholder="Введите текст..."
-                                    rows={3}
-                                    className="text-sm"
-                                  />
-                                </div>
-                              )
-                            })}
+                                )
+                              })}
+                            </div>
                           </div>
-                        </div>
 
+                          <Button
+                            onClick={() => addElement(navBlock.id, "text")}
+                            size="sm"
+                            variant="secondary"
+                            className="text-xs border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
+                          >
+                            + Текст
+                          </Button>
+                        </div>
+                      )
+                    })()}
+                  </CardContent>
+                </Card>
+
+                {/* Карточка "Интеграция и завершение" */}
+                <Card className="bg-white border-[#E5E7EB]">
+                  <CardContent className="p-5">
+                    <div
+                      className="flex items-center justify-between cursor-pointer"
+                      onClick={() => setIsConclusionExpanded(!isConclusionExpanded)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                          <CheckCircleIcon className="w-4 h-4 text-[#5589a7]" />
+                        </div>
                         <div>
-                          <p className="text-xs text-slate-400 mb-2">Добавляйте текст, видео или аудио для подведения итогов</p>
+                          <h4 className="font-medium text-[#111827]">Интеграция и завершение</h4>
+                          <p className="text-xs text-slate-500">Итоги урока и следующие шаги</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-xs text-slate-400">
+                          {courseBlocks.find((b) => b.type === 'conclusion')?.elements.some((el) => el.content?.trim())
+                            ? <span className="text-green-600">Заполнено</span>
+                            : <span>Не заполнено</span>
+                          }
+                        </div>
+                        <span className={`text-[#659AB8] text-sm transition-transform ${isConclusionExpanded ? 'rotate-180' : ''}`}>▼</span>
+                      </div>
+                    </div>
+
+                    {isConclusionExpanded && (() => {
+                      const conclusionBlock = courseBlocks.find((b) => b.type === 'conclusion')
+                      if (!conclusionBlock) return null
+
+                      return (
+                        <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
+                          <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                            <p className="text-sm text-slate-600">
+                              Подведите итоги урока: что ученик узнал, какие следующие шаги, как применить знания.
+                            </p>
+                          </div>
+
+                          <div>
+                            <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
+                            <div className="space-y-3">
+                              {conclusionBlock.elements.map((element) => {
+                                const Icon = getElementIcon(element.type, element.educationalType)
+                                return (
+                                  <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <div className="flex items-center gap-2">
+                                        <Icon className="w-4 h-4 text-[#659AB8]" />
+                                        <span className="text-sm font-medium text-[#659AB8]">
+                                          {getElementLabel(element.type, element.educationalType)}
+                                        </span>
+                                      </div>
+                                      <button
+                                        onClick={() => removeElement(conclusionBlock.id, element.id)}
+                                        className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
+                                      >
+                                        <TrashIcon className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                    <Textarea
+                                      value={element.content || ""}
+                                      onChange={(e) => updateElementContent(conclusionBlock.id, element.id, e.target.value)}
+                                      placeholder="Введите текст..."
+                                      rows={3}
+                                      className="text-sm"
+                                    />
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+
                           <div className="flex flex-wrap gap-2">
                             {[
                               { type: "text" as const, label: "Текст" },
@@ -3923,13 +3924,13 @@ export default function CourseConstructor() {
                             ))}
                           </div>
                         </div>
-                      </div>
-                    )
-                  })()}
-                </CardContent>
-              </Card>
-            </CardContent>
-          </Card>
+                      )
+                    })()}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Тарифы и оплата - At Bottom */}
