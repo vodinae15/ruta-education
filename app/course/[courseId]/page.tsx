@@ -229,50 +229,124 @@ export default function StudentCoursePage() {
               <div className="text-sm text-slate-500 mb-2 capitalize">{element.educationalType || element.type}</div>
 
               {element.type === "video" && element.content ? (
-                <div className="space-y-2">
-                  <div className="aspect-video bg-slate-100 rounded-lg flex items-center justify-center">
-                    <p className="text-slate-500">Видео: {element.content}</p>
-                  </div>
-                  {!isCompleted && (
-                    <Button
-                      size="sm"
-                      onClick={() => markElementCompleted(element.id)}
-                      className="bg-[#659AB8] hover:bg-[#659AB8]/90"
-                    >
-                      Отметить как просмотренное
-                    </Button>
-                  )}
-                </div>
+                (() => {
+                  let videoUrl = element.content
+                  let source = "file"
+                  try {
+                    const parsed = JSON.parse(element.content)
+                    videoUrl = parsed.fileUrl || element.content
+                    source = parsed.source || "file"
+                  } catch {
+                    // content is plain URL
+                  }
+
+                  const isYouTube = videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")
+                  const isVimeo = videoUrl.includes("vimeo.com")
+
+                  const getYouTubeId = (url: string) => {
+                    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)
+                    return match ? match[1] : null
+                  }
+
+                  const getVimeoId = (url: string) => {
+                    const match = url.match(/vimeo\.com\/(\d+)/)
+                    return match ? match[1] : null
+                  }
+
+                  return (
+                    <div className="space-y-2">
+                      <div className="aspect-video bg-slate-100 rounded-lg overflow-hidden">
+                        {isYouTube ? (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${getYouTubeId(videoUrl)}`}
+                            className="w-full h-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        ) : isVimeo ? (
+                          <iframe
+                            src={`https://player.vimeo.com/video/${getVimeoId(videoUrl)}`}
+                            className="w-full h-full"
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            allowFullScreen
+                          />
+                        ) : (
+                          <video
+                            src={videoUrl}
+                            controls
+                            className="w-full h-full object-contain"
+                          />
+                        )}
+                      </div>
+                      {!isCompleted && (
+                        <Button
+                          size="sm"
+                          onClick={() => markElementCompleted(element.id)}
+                          className="bg-[#659AB8] hover:bg-[#659AB8]/90"
+                        >
+                          Отметить как просмотренное
+                        </Button>
+                      )}
+                    </div>
+                  )
+                })()
               ) : element.type === "audio" && element.content ? (
-                <div className="space-y-2">
-                  <div className="p-4 bg-slate-100 rounded-lg">
-                    <p className="text-slate-600">Аудио: {element.content}</p>
-                  </div>
-                  {!isCompleted && (
-                    <Button
-                      size="sm"
-                      onClick={() => markElementCompleted(element.id)}
-                      className="bg-[#659AB8] hover:bg-[#659AB8]/90"
-                    >
-                      Отметить как прослушанное
-                    </Button>
-                  )}
-                </div>
+                (() => {
+                  let audioUrl = element.content
+                  let fileName = ""
+                  try {
+                    const parsed = JSON.parse(element.content)
+                    audioUrl = parsed.fileUrl || element.content
+                    fileName = parsed.fileName || ""
+                  } catch {
+                    // content is plain URL
+                  }
+
+                  return (
+                    <div className="space-y-2">
+                      <div className="p-4 bg-slate-100 rounded-lg">
+                        {fileName && <p className="text-sm text-slate-600 mb-2">{fileName}</p>}
+                        <audio src={audioUrl} controls className="w-full" />
+                      </div>
+                      {!isCompleted && (
+                        <Button
+                          size="sm"
+                          onClick={() => markElementCompleted(element.id)}
+                          className="bg-[#659AB8] hover:bg-[#659AB8]/90"
+                        >
+                          Отметить как прослушанное
+                        </Button>
+                      )}
+                    </div>
+                  )
+                })()
               ) : element.type === "image" && element.content ? (
-                <div className="space-y-2">
-                  <div className="aspect-video bg-slate-100 rounded-lg flex items-center justify-center">
-                    <p className="text-slate-500">Изображение: {element.content}</p>
-                  </div>
-                  {!isCompleted && (
-                    <Button
-                      size="sm"
-                      onClick={() => markElementCompleted(element.id)}
-                      className="bg-[#659AB8] hover:bg-[#659AB8]/90"
-                    >
-                      Отметить как изученное
-                    </Button>
-                  )}
-                </div>
+                (() => {
+                  let imageUrl = element.content
+                  try {
+                    const parsed = JSON.parse(element.content)
+                    imageUrl = parsed.fileUrl || element.content
+                  } catch {
+                    // content is plain URL
+                  }
+
+                  return (
+                    <div className="space-y-2">
+                      <div className="rounded-lg overflow-hidden">
+                        <img src={imageUrl} alt="" className="w-full h-auto" />
+                      </div>
+                      {!isCompleted && (
+                        <Button
+                          size="sm"
+                          onClick={() => markElementCompleted(element.id)}
+                          className="bg-[#659AB8] hover:bg-[#659AB8]/90"
+                        >
+                          Отметить как изученное
+                        </Button>
+                      )}
+                    </div>
+                  )
+                })()
               ) : element.type === "task" ? (
                 <div className="space-y-3">
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
