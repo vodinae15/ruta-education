@@ -796,6 +796,7 @@ export default function CourseConstructor() {
     // Это предотвращает перезапись БД данных локальными после успешного сохранения
     if (courseTitle.trim() && saveStatus !== "saved") {
       const draftData = {
+        courseId: currentCourseId, // ВАЖНО: сохраняем ID курса для проверки при загрузке
         title: courseTitle,
         description: courseDescription,
         lessons: courseLessons,
@@ -804,7 +805,7 @@ export default function CourseConstructor() {
       }
       localStorage.setItem("courseConstructorDraft", JSON.stringify(draftData))
     }
-  }, [courseTitle, courseDescription, courseLessons, courseBlocks, saveStatus])
+  }, [courseTitle, courseDescription, courseLessons, courseBlocks, saveStatus, currentCourseId])
 
   const checkAuthorProfile = async () => {
     try {
@@ -946,24 +947,45 @@ export default function CourseConstructor() {
           let useLocalData = false
           let draftTimestamp: Date | null = null
 
+          console.log('[DEBUG LOAD] Checking localStorage draft...')
+          console.log('[DEBUG LOAD] Current course ID:', course.id)
+          console.log('[DEBUG LOAD] Draft exists:', !!draftString)
+
           if (draftString) {
             try {
               const draft = JSON.parse(draftString)
+              console.log('[DEBUG LOAD] Draft parsed:', {
+                title: draft.title,
+                lessonsCount: draft.lessons?.length,
+                blocksInFirstLesson: draft.lessons?.[0]?.blocks?.length,
+                timestamp: draft.timestamp,
+                courseId: draft.courseId
+              })
               draftTimestamp = new Date(draft.timestamp)
               const courseUpdatedAt = new Date(course.updated_at || 0)
 
               // Используем локальные данные если они свежее или равны (с учетом задержки 5 сек)
               const timeDiff = draftTimestamp.getTime() - courseUpdatedAt.getTime()
-              if (timeDiff >= -5000) {
+              console.log('[DEBUG LOAD] Time diff (localStorage - DB):', timeDiff, 'ms')
+
+              // ВАЖНО: проверяем что draft для того же курса!
+              const isSameCourse = draft.courseId === course.id
+              console.log('[DEBUG LOAD] Is same course:', isSameCourse, '(draft:', draft.courseId, 'current:', course.id, ')')
+              console.log('[DEBUG LOAD] Will use localStorage:', timeDiff >= -5000 && isSameCourse)
+
+              if (timeDiff >= -5000 && isSameCourse) {
                 // localStorage новее или почти равен БД (разница меньше 5 сек)
                 useLocalData = true
                 setCourseTitle(draft.title || "")
                 setCourseDescription(draft.description || "")
                 if (draft.lessons && draft.lessons.length > 0) {
+                  console.log('[DEBUG LOAD] Loading from localStorage - blocks:', draft.lessons[0].blocks?.length)
                   setCourseLessons(draft.lessons)
                   setActiveLessonId(draft.lessons[0].id)
                   setCourseBlocks(draft.lessons[0].blocks)
                   setActiveBlockId(getFirstMainBlockId(draft.lessons[0].blocks))
+                } else {
+                  console.log('[DEBUG LOAD] WARNING: localStorage has no lessons or empty lessons!')
                 }
 
                 // Если разница больше 1 секунды - данные еще не сохранены
