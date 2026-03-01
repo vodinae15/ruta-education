@@ -1891,6 +1891,58 @@ export default function CourseConstructor() {
     setActiveBlockId(newBlock.id)
   }
 
+  // Открытие модалки "Финальная настройка" с автосозданием отсутствующих мета-блоков
+  const openFinalSetupModal = () => {
+    const metaBlocksToCreate: { type: CourseBlock["type"]; title: string; description: string }[] = []
+
+    // Проверяем наличие introduction
+    if (!courseBlocks.find((b) => b.type === 'introduction')) {
+      metaBlocksToCreate.push({
+        type: 'introduction',
+        title: 'Как работать с уроком',
+        description: 'Инструкция для ученика перед началом урока'
+      })
+    }
+
+    // Проверяем наличие navigation
+    if (!courseBlocks.find((b) => b.type === 'navigation')) {
+      metaBlocksToCreate.push({
+        type: 'navigation',
+        title: 'Навигация',
+        description: 'Структура урока для ученика'
+      })
+    }
+
+    // Проверяем наличие conclusion
+    if (!courseBlocks.find((b) => b.type === 'conclusion')) {
+      metaBlocksToCreate.push({
+        type: 'conclusion',
+        title: 'Интеграция и завершение',
+        description: 'Итоги урока и следующие шаги'
+      })
+    }
+
+    // Если есть блоки для создания - создаём их
+    if (metaBlocksToCreate.length > 0) {
+      const newBlocks: ExtendedCourseBlock[] = metaBlocksToCreate.map((meta) => ({
+        id: `${meta.type}-${Date.now()}`,
+        type: meta.type,
+        title: meta.title,
+        description: meta.description,
+        elements: [],
+        required: meta.type !== 'navigation',
+        completed: false,
+        mode: "lesson" as const,
+        category: 'meta' as const,
+      }))
+
+      const updatedBlocks = [...courseBlocks, ...newBlocks]
+      updateCourseBlocks(updatedBlocks)
+    }
+
+    setShowFinalSetupModal(true)
+  }
+
   // Функции для работы с данными режимов
   const saveModeData = (mode: "standard" | "personalized") => {
     const modeData = {
@@ -2739,7 +2791,7 @@ export default function CourseConstructor() {
       <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
         {activeLessonId && getEducationalContentLength() >= 500 && (
           <button
-            onClick={() => setShowFinalSetupModal(true)}
+            onClick={openFinalSetupModal}
             className="text-sm px-4 py-2 rounded-lg bg-[#f59e0b] text-white font-semibold shadow-lg hover:bg-[#d97706] transition-colors"
           >
             Финальная настройка
