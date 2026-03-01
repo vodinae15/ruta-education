@@ -3627,7 +3627,6 @@ export default function CourseConstructor() {
                               { type: "text" as const, label: "Текст" },
                               { type: "video" as const, label: "Видео" },
                               { type: "audio" as const, label: "Аудио" },
-                              { type: "image" as const, label: "Изображение" },
                             ].map(({ type, label }) => (
                               <Button
                                 key={type}
