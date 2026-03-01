@@ -454,6 +454,7 @@ export default function CourseConstructor() {
   const [isConclusionExpanded, setIsConclusionExpanded] = useState(false)
   const [selectedMetaTemplate, setSelectedMetaTemplate] = useState<'expectations' | 'anxiety' | 'format' | null>(null)
   const [isGeneratingMeta, setIsGeneratingMeta] = useState(false)
+  const [isGeneratingNavigation, setIsGeneratingNavigation] = useState(false)
 
   // Функция загрузки списка студентов с доступом к курсу
   const loadStudentsWithAccess = async () => {
@@ -1553,6 +1554,55 @@ export default function CourseConstructor() {
       console.error("Error generating meta block content:", error)
     } finally {
       setIsGeneratingMeta(false)
+    }
+  }
+
+  const generateNavigationContent = async () => {
+    const navBlock = courseBlocks.find((b) => b.type === 'navigation')
+    if (!navBlock) return
+
+    // Собираем информацию о блоках урока для генерации навигации
+    const blocksInfo = courseBlocks
+      .filter((b) => b.category === 'educational')
+      .map((b) => {
+        const content = b.elements.map((el) => el.content).filter(Boolean).join(' ').substring(0, 200)
+        return `${b.title}: ${content || 'содержание не заполнено'}`
+      })
+      .join('\n')
+
+    const lessonTitle = courseLessons.find((l) => l.id === activeLessonId)?.title || ''
+
+    setIsGeneratingNavigation(true)
+    try {
+      const response = await fetch("/api/ai-generate-meta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          template: 'navigation',
+          lessonContent: blocksInfo,
+          lessonTitle,
+        }),
+      })
+      const data = await response.json()
+      if (data.success && data.generatedText) {
+        const textElement = navBlock.elements.find((el) => el.type === 'text')
+        if (textElement) {
+          updateElementContent(navBlock.id, textElement.id, data.generatedText)
+        } else {
+          addElement(navBlock.id, "text")
+          setTimeout(() => {
+            const updatedBlock = courseBlocks.find((b) => b.type === 'navigation')
+            const newEl = updatedBlock?.elements[updatedBlock.elements.length - 1]
+            if (newEl) {
+              updateElementContent(navBlock.id, newEl.id, data.generatedText)
+            }
+          }, 100)
+        }
+      }
+    } catch (error) {
+      console.error("Error generating navigation content:", error)
+    } finally {
+      setIsGeneratingNavigation(false)
     }
   }
 
@@ -3685,6 +3735,19 @@ export default function CourseConstructor() {
                           <p className="text-sm text-slate-600">
                             Этот блок покажет ученику структуру урока и поможет сориентироваться. Заполняется опционально.
                           </p>
+                        </div>
+
+                        {/* Кнопка ИИ-генерации навигации */}
+                        <div>
+                          <Button
+                            onClick={generateNavigationContent}
+                            disabled={isGeneratingNavigation}
+                            className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                            size="sm"
+                          >
+                            {isGeneratingNavigation ? "Генерирую структуру..." : "Сгенерировать структуру урока"}
+                          </Button>
+                          <p className="text-xs text-slate-400 mt-2">ИИ создаст навигацию на основе содержимого блоков урока</p>
                         </div>
 
                         <div>
