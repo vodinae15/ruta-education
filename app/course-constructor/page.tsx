@@ -3362,40 +3362,42 @@ export default function CourseConstructor() {
 
                     if (isMainBlock) {
                       return (
-                        <div className="grid grid-cols-5 gap-4">
-                          <div className="col-span-2">
-                            <Card className="bg-[#FDF8F3] border-[#E5E7EB]">
-                              <CardHeader className="pb-3">
+                        <div className="space-y-6">
+                          {/* Тезисы сверху */}
+                          <Card className="bg-[#FDF8F3] border-[#E5E7EB]">
+                            <CardHeader className="pb-3">
+                              <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                   <LightbulbIcon className="w-5 h-5 text-[#5589a7]" />
                                   <h3 className="text-sm font-semibold text-[#5589a7]">Тезисы</h3>
+                                  <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded">для вас, ученики не видят</span>
                                 </div>
-                                <p className="text-xs text-slate-500 mt-1">
-                                  Набросайте мысли — ученики это не увидят
-                                </p>
-                              </CardHeader>
-                              <CardContent>
-                                <Textarea
-                                  value={activeBlock?.theses || ""}
-                                  onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
-                                  placeholder="О чём хотите рассказать? Какие ключевые мысли?"
-                                  rows={12}
-                                  className="bg-white text-sm"
-                                />
                                 <Button
                                   onClick={structureTheses}
                                   disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
-                                  className="w-full mt-3 bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                                  className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
                                   size="sm"
                                 >
-                                  {isStructuringTheses ? "Структурирую..." : "Структурировать"}
+                                  {isStructuringTheses ? "Структурирую..." : "✨ Структурировать в элементы"}
                                 </Button>
-                              </CardContent>
-                            </Card>
-                          </div>
-                          <div className="col-span-3">
-                            {elementsList}
-                          </div>
+                              </div>
+                              <p className="text-xs text-slate-500 mt-1">
+                                Напишите основные мысли урока — ИИ превратит их в готовые элементы
+                              </p>
+                            </CardHeader>
+                            <CardContent className="pt-0">
+                              <Textarea
+                                value={activeBlock?.theses || ""}
+                                onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
+                                placeholder="Например: Объяснить что такое переменные. Показать примеры. Дать практическое задание на закрепление..."
+                                rows={3}
+                                className="bg-white text-sm resize-none"
+                              />
+                            </CardContent>
+                          </Card>
+
+                          {/* Элементы снизу */}
+                          {elementsList}
                         </div>
                       )
                     }
