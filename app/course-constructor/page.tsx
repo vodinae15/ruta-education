@@ -3377,9 +3377,12 @@ export default function CourseConstructor() {
                                 className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 h-auto whitespace-nowrap"
                                 size="sm"
                               >
-                                {isStructuringTheses ? "..." : "✨ В элементы"}
+                                {isStructuringTheses ? "..." : "✨ Структурировать"}
                               </Button>
                             </div>
+                            <p className="text-xs text-slate-400 mt-2">
+                              Набросайте мысли — ученики это не увидят. Нажмите «Структурировать» — AI сгруппирует заметки в логичный список.
+                            </p>
                           </div>
 
                           {/* Элементы */}
