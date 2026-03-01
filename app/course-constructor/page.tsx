@@ -653,6 +653,12 @@ export default function CourseConstructor() {
     })
   }
 
+  // Helper: найти первый основной блок для показа тезисов
+  const getFirstMainBlockId = (blocks: CourseBlock[]) => {
+    const mainBlock = blocks.find(b => ['main_block_1', 'main_block_2', 'main_block_3'].includes(b.type))
+    return mainBlock?.id || blocks[0]?.id || ""
+  }
+
   const addLesson = () => {
     const newLesson: CourseLesson = {
       id: Date.now().toString(),
@@ -666,7 +672,7 @@ export default function CourseConstructor() {
     setCourseLessons((prev) => [...prev, newLesson])
     setActiveLessonId(newLesson.id)
     setCourseBlocks(newLesson.blocks)
-    setActiveBlockId(newLesson.blocks[0]?.id || "")
+    setActiveBlockId(getFirstMainBlockId(newLesson.blocks))
   }
 
   const removeLesson = (lessonId: string) => {
@@ -677,7 +683,7 @@ export default function CourseConstructor() {
       if (remainingLessons.length > 0) {
         setActiveLessonId(remainingLessons[0].id)
         setCourseBlocks(remainingLessons[0].blocks)
-        setActiveBlockId(remainingLessons[0].blocks[0]?.id || "")
+        setActiveBlockId(getFirstMainBlockId(remainingLessons[0].blocks))
       } else {
         setActiveLessonId("")
         setCourseBlocks([])
@@ -699,7 +705,7 @@ export default function CourseConstructor() {
     if (lesson) {
       setActiveLessonId(lessonId)
       setCourseBlocks(lesson.blocks)
-      setActiveBlockId(lesson.blocks[0]?.id || "")
+      setActiveBlockId(getFirstMainBlockId(lesson.blocks))
     }
   }
 
@@ -954,7 +960,7 @@ export default function CourseConstructor() {
                   setCourseLessons(draft.lessons)
                   setActiveLessonId(draft.lessons[0].id)
                   setCourseBlocks(draft.lessons[0].blocks)
-                  setActiveBlockId(draft.lessons[0].blocks[0]?.id || "")
+                  setActiveBlockId(getFirstMainBlockId(draft.lessons[0].blocks))
                 }
 
                 // Если разница больше 1 секунды - данные еще не сохранены
@@ -982,7 +988,7 @@ export default function CourseConstructor() {
                 const firstLesson = course.modules.lessons[0]
                 setActiveLessonId(firstLesson.id)
                 setCourseBlocks(firstLesson.blocks)
-                setActiveBlockId(firstLesson.blocks[0]?.id || "")
+                setActiveBlockId(getFirstMainBlockId(firstLesson.blocks))
               }
             } else if (course.modules && course.modules.blocks) {
               // Миграция старых курсов: создаем урок из существующих блоков
@@ -997,7 +1003,7 @@ export default function CourseConstructor() {
               setCourseLessons([migrationLesson])
               setActiveLessonId(migrationLesson.id)
               setCourseBlocks(migrationLesson.blocks)
-              setActiveBlockId(migrationLesson.blocks[0]?.id || "")
+              setActiveBlockId(getFirstMainBlockId(migrationLesson.blocks))
             }
 
             setLastSavedAt(new Date(course.updated_at || Date.now()))
@@ -1020,7 +1026,7 @@ export default function CourseConstructor() {
             setCourseLessons(draft.lessons)
             setActiveLessonId(draft.lessons[0].id)
             setCourseBlocks(draft.lessons[0].blocks)
-            setActiveBlockId(draft.lessons[0].blocks[0]?.id || "")
+            setActiveBlockId(getFirstMainBlockId(draft.lessons[0].blocks))
           }
           setSaveStatus("unsaved")
           toast({
@@ -1334,7 +1340,7 @@ export default function CourseConstructor() {
         }
         setCourseLessons([firstLesson])
         setCourseBlocks(extendedBlocks)
-        setActiveBlockId(extendedBlocks[0]?.id || "")
+        setActiveBlockId(getFirstMainBlockId(extendedBlocks))
       }
     } else {
       const standardTemplate = getStandardTemplate()
@@ -1358,7 +1364,7 @@ export default function CourseConstructor() {
         }
         setCourseLessons([firstLesson])
         setCourseBlocks(extendedBlocks)
-        setActiveBlockId(extendedBlocks[0]?.id || "")
+        setActiveBlockId(getFirstMainBlockId(extendedBlocks))
       }
     }
   }
@@ -1850,7 +1856,7 @@ export default function CourseConstructor() {
           setCourseLessons(modeData.lessons)
           setActiveLessonId(modeData.lessons[0].id)
           setCourseBlocks(modeData.lessons[0].blocks)
-          setActiveBlockId(modeData.lessons[0].blocks[0]?.id || "")
+          setActiveBlockId(getFirstMainBlockId(modeData.lessons[0].blocks))
         } else {
           // Если нет данных режима, загружаем шаблон
           if (authorProfile) {
