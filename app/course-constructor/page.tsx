@@ -29,6 +29,7 @@ import {
   FileTextIcon,
   ImageIcon,
   CheckCircleIcon,
+  CheckIcon,
   MessageCircleIcon,
   DownloadIcon,
   HelpCircleIcon,
@@ -42,6 +43,7 @@ import {
   TargetIcon,
   XIcon,
   UsersIcon,
+  CopyIcon,
 } from "@/components/ui/icons"
 
 import { Notification } from "@/components/ui/notification"
@@ -447,6 +449,7 @@ export default function CourseConstructor() {
 
   // Состояние для ИИ-структурирования тезисов
   const [isStructuringTheses, setIsStructuringTheses] = useState(false)
+  const [thesesCopied, setThesesCopied] = useState(false)
 
   // Состояния для секции "Финальная настройка"
   const [isFinalSetupExpanded, setIsFinalSetupExpanded] = useState(false)
@@ -3380,7 +3383,7 @@ export default function CourseConstructor() {
                                   className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 py-1 h-auto"
                                   size="sm"
                                 >
-                                  {isStructuringTheses ? "Структурирую..." : "✨ Структурировать"}
+                                  {isStructuringTheses ? "Структурирую..." : "Структурировать"}
                                 </Button>
                               </div>
                               <Textarea
@@ -3403,13 +3406,24 @@ export default function CourseConstructor() {
                                   <Button
                                     onClick={() => {
                                       navigator.clipboard.writeText(activeBlock.thesesStructured || "")
-                                      toast({ title: "Скопировано", description: "План скопирован в буфер обмена" })
+                                      setThesesCopied(true)
+                                      setTimeout(() => setThesesCopied(false), 2000)
                                     }}
                                     variant="ghost"
-                                    className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto"
+                                    className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto flex items-center gap-1"
                                     size="sm"
                                   >
-                                    Копировать
+                                    {thesesCopied ? (
+                                      <>
+                                        <CheckIcon className="w-3 h-3" />
+                                        Скопировано
+                                      </>
+                                    ) : (
+                                      <>
+                                        <CopyIcon className="w-3 h-3" />
+                                        Копировать
+                                      </>
+                                    )}
                                   </Button>
                                 </div>
                                 <div className="bg-white border border-[#E5E7EB] rounded-md p-3 text-sm text-slate-700 whitespace-pre-wrap">
