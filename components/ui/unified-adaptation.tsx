@@ -2108,9 +2108,8 @@ export function UnifiedAdaptation({
               }}
             >
               <CardHeader className="p-6">
-                <CardTitle className="text-lg text-[#1E293B] flex items-center gap-2">
-                  <span>📋</span>
-                  <span>{contentToDisplay.howToWork.title || 'Как работать с уроком'}</span>
+                <CardTitle className="text-lg text-[#1E293B]">
+                  {contentToDisplay.howToWork.title || 'Как работать с уроком'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0">
