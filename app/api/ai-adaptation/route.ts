@@ -99,7 +99,7 @@ function handleDatabaseError(error: any, context: string): { isJwtExpired: boole
 }
 
 // Функция трансформации нового формата AI (плоского) в старый формат (с intro/content/adaptation)
-function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' | 'visual' | 'auditory' | 'kinesthetic', originalBlocks?: Array<{title: string, content: string, type: string}>): AdaptationContent {
+function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' | 'visual' | 'auditory' | 'kinesthetic'): AdaptationContent {
   console.log('🔄 [Transform] Transforming new format to legacy format for type:', adaptationType)
 
   const legacyContent: any = {}
@@ -116,11 +116,10 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
 
     console.log(`🔄 [Transform] Processing ${blockKey}:`, Object.keys(newBlock))
 
-    // Берём заголовок из оригинального блока, если он есть
-    const originalBlockTitle = originalBlocks && originalBlocks[i - 1] ? originalBlocks[i - 1].title : null
-    const blockTitle = originalBlockTitle || `Блок ${i}`
+    // Используем простое название "Блок N"
+    const blockTitle = `Блок ${i}`
 
-    console.log(`🔄 [Transform] Block ${i} title: "${blockTitle}" (from original: ${!!originalBlockTitle})`)
+    console.log(`🔄 [Transform] Block ${i} title: "${blockTitle}"`)
 
     // Создаем базовую структуру блока
     legacyContent[blockKey] = {
@@ -2256,7 +2255,7 @@ export async function POST(request: NextRequest) {
 
     // Трансформируем новый формат AI в старый формат (с intro/content/adaptation)
     console.log('🔄 [AI Adaptation] ========== TRANSFORMING FORMAT ==========')
-    adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType, lessonContent.blocks)
+    adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType)
     console.log('✅ [AI Adaptation] Format transformation complete')
 
     // Собираем ВСЕ медиа-элементы из оригинальных блоков и помещаем ТОЛЬКО в block4
