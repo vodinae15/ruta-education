@@ -17,6 +17,7 @@ export interface CourseBlock {
   required: boolean
   completed: boolean
   theses?: string
+  thesesStructured?: string
   category?: 'educational' | 'meta'
   authorOrder?: number
   studentOrder?: number

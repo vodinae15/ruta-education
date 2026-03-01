@@ -1492,7 +1492,13 @@ export default function CourseConstructor() {
       })
       const data = await response.json()
       if (data.success && data.structured) {
-        updateBlockTheses(activeBlockId, data.structured)
+        // Сохраняем структурированный результат отдельно (черновик остаётся)
+        const updatedBlocks = courseBlocks.map((block) =>
+          block.id === activeBlockId
+            ? { ...block, thesesStructured: data.structured }
+            : block
+        )
+        updateCourseBlocks(updatedBlocks)
       }
     } catch (error) {
       console.error("Error structuring theses:", error)
@@ -3356,33 +3362,61 @@ export default function CourseConstructor() {
                     if (isMainBlock) {
                       return (
                         <div className="space-y-4">
-                          {/* Тезисы - компактный блок */}
+                          {/* Тезисы - два поля */}
                           <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-3">
-                            <div className="flex items-center gap-2 mb-2">
+                            <div className="flex items-center gap-2 mb-3">
                               <LightbulbIcon className="w-4 h-4 text-[#5589a7]" />
                               <span className="text-sm font-medium text-[#5589a7]">Тезисы</span>
                               <span className="text-xs text-slate-400">(только для вас)</span>
                             </div>
-                            <div className="flex gap-2">
+
+                            {/* Черновик */}
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-medium text-slate-500">Черновик</span>
+                                <Button
+                                  onClick={structureTheses}
+                                  disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
+                                  className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 py-1 h-auto"
+                                  size="sm"
+                                >
+                                  {isStructuringTheses ? "Структурирую..." : "✨ Структурировать"}
+                                </Button>
+                              </div>
                               <Textarea
                                 value={activeBlock?.theses || ""}
                                 onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
-                                placeholder="Основные мысли урока..."
-                                rows={2}
-                                className="bg-white text-sm resize-none flex-1"
+                                placeholder="Набросайте мысли, идеи, ключевые тезисы..."
+                                rows={3}
+                                className="bg-white text-sm resize-none"
                               />
-                              <Button
-                                onClick={structureTheses}
-                                disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
-                                className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 h-auto whitespace-nowrap"
-                                size="sm"
-                              >
-                                {isStructuringTheses ? "..." : "✨ Структурировать"}
-                              </Button>
+                              <p className="text-xs text-slate-400">
+                                Пишите свободно — ученики это не увидят. Можно структурировать несколько раз.
+                              </p>
                             </div>
-                            <p className="text-xs text-slate-400 mt-2">
-                              Набросайте мысли — ученики это не увидят. Нажмите «Структурировать» — AI сгруппирует заметки в логичный список.
-                            </p>
+
+                            {/* Результат структурирования */}
+                            {activeBlock?.thesesStructured && (
+                              <div className="mt-4 pt-3 border-t border-[#E5E7EB] space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-medium text-slate-500">Структурированный план</span>
+                                  <Button
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(activeBlock.thesesStructured || "")
+                                      toast({ title: "Скопировано", description: "План скопирован в буфер обмена" })
+                                    }}
+                                    variant="ghost"
+                                    className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto"
+                                    size="sm"
+                                  >
+                                    Копировать
+                                  </Button>
+                                </div>
+                                <div className="bg-white border border-[#E5E7EB] rounded-md p-3 text-sm text-slate-700 whitespace-pre-wrap">
+                                  {activeBlock.thesesStructured}
+                                </div>
+                              </div>
+                            )}
                           </div>
 
                           {/* Элементы */}
