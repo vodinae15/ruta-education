@@ -354,6 +354,17 @@ export default function CourseAdaptationPage() {
   }
 
   useEffect(() => {
+    // Сбрасываем состояние при смене курса
+    setSelectedLesson(null)
+    setLessons([])
+    setAdaptations({})
+    setCourse(null)
+    setMaterialsAnalysis(null)
+    setEditedContent({})
+    setCurrentMode('original')
+    setLoading(true)
+    setError(null)
+
     const loadData = async () => {
       try {
         const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser()
