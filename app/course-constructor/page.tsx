@@ -3362,41 +3362,34 @@ export default function CourseConstructor() {
 
                     if (isMainBlock) {
                       return (
-                        <div className="space-y-6">
-                          {/* Тезисы сверху */}
-                          <Card className="bg-[#FDF8F3] border-[#E5E7EB]">
-                            <CardHeader className="pb-3">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <LightbulbIcon className="w-5 h-5 text-[#5589a7]" />
-                                  <h3 className="text-sm font-semibold text-[#5589a7]">Тезисы</h3>
-                                  <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded">для вас, ученики не видят</span>
-                                </div>
-                                <Button
-                                  onClick={structureTheses}
-                                  disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
-                                  className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
-                                  size="sm"
-                                >
-                                  {isStructuringTheses ? "Структурирую..." : "✨ Структурировать в элементы"}
-                                </Button>
-                              </div>
-                              <p className="text-xs text-slate-500 mt-1">
-                                Напишите основные мысли урока — ИИ превратит их в готовые элементы
-                              </p>
-                            </CardHeader>
-                            <CardContent className="pt-0">
+                        <div className="space-y-4">
+                          {/* Тезисы - компактный блок */}
+                          <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-3">
+                            <div className="flex items-center gap-2 mb-2">
+                              <LightbulbIcon className="w-4 h-4 text-[#5589a7]" />
+                              <span className="text-sm font-medium text-[#5589a7]">Тезисы</span>
+                              <span className="text-xs text-slate-400">(только для вас)</span>
+                            </div>
+                            <div className="flex gap-2">
                               <Textarea
                                 value={activeBlock?.theses || ""}
                                 onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
-                                placeholder="Например: Объяснить что такое переменные. Показать примеры. Дать практическое задание на закрепление..."
-                                rows={3}
-                                className="bg-white text-sm resize-none"
+                                placeholder="Основные мысли урока..."
+                                rows={2}
+                                className="bg-white text-sm resize-none flex-1"
                               />
-                            </CardContent>
-                          </Card>
+                              <Button
+                                onClick={structureTheses}
+                                disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
+                                className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 h-auto whitespace-nowrap"
+                                size="sm"
+                              >
+                                {isStructuringTheses ? "..." : "✨ В элементы"}
+                              </Button>
+                            </div>
+                          </div>
 
-                          {/* Элементы снизу */}
+                          {/* Элементы */}
                           {elementsList}
                         </div>
                       )
