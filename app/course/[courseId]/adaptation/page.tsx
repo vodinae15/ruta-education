@@ -243,7 +243,10 @@ export default function CourseAdaptationPage() {
                 block2: data.adaptation.block2,
                 block3: data.adaptation.block3,
                 block4: data.adaptation.block4,
-                block5: data.adaptation.block5
+                block5: data.adaptation.block5,
+                howToWork: data.adaptation.howToWork,
+                navigation: data.adaptation.navigation,
+                conclusion: data.adaptation.conclusion
               }
 
               loadedAdaptations[type] = {
@@ -354,6 +357,17 @@ export default function CourseAdaptationPage() {
   }
 
   useEffect(() => {
+    // Сбрасываем состояние при смене курса
+    setSelectedLesson(null)
+    setLessons([])
+    setAdaptations({})
+    setCourse(null)
+    setMaterialsAnalysis(null)
+    setEditedContent({})
+    setCurrentMode('original')
+    setLoading(true)
+    setError(null)
+
     const loadData = async () => {
       try {
         const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser()

@@ -796,6 +796,7 @@ export default function CourseConstructor() {
     // Это предотвращает перезапись БД данных локальными после успешного сохранения
     if (courseTitle.trim() && saveStatus !== "saved") {
       const draftData = {
+        courseId: currentCourseId, // ВАЖНО: сохраняем ID курса для проверки при загрузке
         title: courseTitle,
         description: courseDescription,
         lessons: courseLessons,
@@ -804,7 +805,7 @@ export default function CourseConstructor() {
       }
       localStorage.setItem("courseConstructorDraft", JSON.stringify(draftData))
     }
-  }, [courseTitle, courseDescription, courseLessons, courseBlocks, saveStatus])
+  }, [courseTitle, courseDescription, courseLessons, courseBlocks, saveStatus, currentCourseId])
 
   const checkAuthorProfile = async () => {
     try {
@@ -882,6 +883,14 @@ export default function CourseConstructor() {
       return
     }
 
+    // Проверяем, не открываем ли мы ДРУГОЙ курс - тогда очищаем draft от старого курса
+    const savedCourseId = localStorage.getItem("currentCourseId")
+    if (courseIdFromUrl && savedCourseId && courseIdFromUrl !== savedCourseId) {
+      console.log("[v0] Opening different course, clearing old draft")
+      console.log("[v0] Old course:", savedCourseId, "New course:", courseIdFromUrl)
+      localStorage.removeItem("courseConstructorDraft")
+    }
+
     const courseIdFromStorage = localStorage.getItem("currentCourseId")
     const courseId = courseIdFromUrl || courseIdFromStorage
 
@@ -954,7 +963,11 @@ export default function CourseConstructor() {
 
               // Используем локальные данные если они свежее или равны (с учетом задержки 5 сек)
               const timeDiff = draftTimestamp.getTime() - courseUpdatedAt.getTime()
-              if (timeDiff >= -5000) {
+
+              // ВАЖНО: проверяем что draft для того же курса!
+              const isSameCourse = draft.courseId === course.id
+
+              if (timeDiff >= -5000 && isSameCourse) {
                 // localStorage новее или почти равен БД (разница меньше 5 сек)
                 useLocalData = true
                 setCourseTitle(draft.title || "")
@@ -1878,6 +1891,58 @@ export default function CourseConstructor() {
     setActiveBlockId(newBlock.id)
   }
 
+  // Открытие модалки "Финальная настройка" с автосозданием отсутствующих мета-блоков
+  const openFinalSetupModal = () => {
+    const metaBlocksToCreate: { type: CourseBlock["type"]; title: string; description: string }[] = []
+
+    // Проверяем наличие introduction
+    if (!courseBlocks.find((b) => b.type === 'introduction')) {
+      metaBlocksToCreate.push({
+        type: 'introduction',
+        title: 'Как работать с уроком',
+        description: 'Инструкция для ученика перед началом урока'
+      })
+    }
+
+    // Проверяем наличие navigation
+    if (!courseBlocks.find((b) => b.type === 'navigation')) {
+      metaBlocksToCreate.push({
+        type: 'navigation',
+        title: 'Навигация',
+        description: 'Структура урока для ученика'
+      })
+    }
+
+    // Проверяем наличие conclusion
+    if (!courseBlocks.find((b) => b.type === 'conclusion')) {
+      metaBlocksToCreate.push({
+        type: 'conclusion',
+        title: 'Интеграция и завершение',
+        description: 'Итоги урока и следующие шаги'
+      })
+    }
+
+    // Если есть блоки для создания - создаём их
+    if (metaBlocksToCreate.length > 0) {
+      const newBlocks: ExtendedCourseBlock[] = metaBlocksToCreate.map((meta) => ({
+        id: `${meta.type}-${Date.now()}`,
+        type: meta.type,
+        title: meta.title,
+        description: meta.description,
+        elements: [],
+        required: meta.type !== 'navigation',
+        completed: false,
+        mode: "lesson" as const,
+        category: 'meta' as const,
+      }))
+
+      const updatedBlocks = [...courseBlocks, ...newBlocks]
+      updateCourseBlocks(updatedBlocks)
+    }
+
+    setShowFinalSetupModal(true)
+  }
+
   // Функции для работы с данными режимов
   const saveModeData = (mode: "standard" | "personalized") => {
     const modeData = {
@@ -2022,6 +2087,7 @@ export default function CourseConstructor() {
       // Обновляем localStorage с новым timestamp (НЕ удаляем!)
       // Это позволит при перезагрузке понять, что данные актуальные
       const draftData = {
+        courseId: data.courseId || courseId || currentCourseId, // ВАЖНО: сохраняем courseId
         title: courseTitle,
         description: courseDescription,
         lessons: courseLessons,
@@ -2726,7 +2792,7 @@ export default function CourseConstructor() {
       <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
         {activeLessonId && getEducationalContentLength() >= 500 && (
           <button
-            onClick={() => setShowFinalSetupModal(true)}
+            onClick={openFinalSetupModal}
             className="text-sm px-4 py-2 rounded-lg bg-[#f59e0b] text-white font-semibold shadow-lg hover:bg-[#d97706] transition-colors"
           >
             Финальная настройка
@@ -3419,74 +3485,71 @@ export default function CourseConstructor() {
                   </div>
                     )
 
-                    if (isMainBlock) {
-                      return (
-                        <div className="space-y-4">
-                          {/* Тезисы - два поля */}
-                          <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-3">
-                            <div className="flex items-center gap-2 mb-3">
-                              <LightbulbIcon className="w-4 h-4 text-[#5589a7]" />
-                              <span className="text-sm font-medium text-[#5589a7]">Тезисы</span>
-                              <span className="text-xs text-slate-400">(только для вас)</span>
-                            </div>
-
-                            {/* Черновик */}
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs font-medium text-slate-500">Черновик</span>
-                                <Button
-                                  onClick={structureTheses}
-                                  disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
-                                  className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 py-1 h-auto"
-                                  size="sm"
-                                >
-                                  {isStructuringTheses ? "Структурирую..." : "Структурировать"}
-                                </Button>
-                              </div>
-                              <Textarea
-                                value={activeBlock?.theses || ""}
-                                onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
-                                placeholder="Набросайте мысли, идеи, ключевые тезисы..."
-                                rows={3}
-                                className="bg-white text-sm resize-none"
-                              />
-                              <p className="text-xs text-slate-400">
-                                Пишите свободно — ученики это не увидят. Можно структурировать несколько раз.
-                              </p>
-                            </div>
-
-                            {/* Результат структурирования */}
-                            {activeBlock?.thesesStructured && (
-                              <div className="mt-4 pt-3 border-t border-[#E5E7EB] space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs font-medium text-slate-500">Структурированный план</span>
-                                  <Button
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(activeBlock.thesesStructured || "")
-                                      setThesesCopied(true)
-                                      setTimeout(() => setThesesCopied(false), 2000)
-                                    }}
-                                    variant="ghost"
-                                    className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto"
-                                    size="sm"
-                                  >
-                                    {thesesCopied ? "Скопировано" : "Копировать"}
-                                  </Button>
-                                </div>
-                                <div className="bg-white border border-[#E5E7EB] rounded-md p-3 text-sm text-slate-700 whitespace-pre-wrap">
-                                  {activeBlock.thesesStructured}
-                                </div>
-                              </div>
-                            )}
+                    // Тезисы показываются для ВСЕХ типов блоков
+                    return (
+                      <div className="space-y-4">
+                        {/* Тезисы - два поля */}
+                        <div className="bg-[#FDF8F3] border border-[#E5E7EB] rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-3">
+                            <LightbulbIcon className="w-4 h-4 text-[#5589a7]" />
+                            <span className="text-sm font-medium text-[#5589a7]">Тезисы</span>
+                            <span className="text-xs text-slate-400">(только для вас)</span>
                           </div>
 
-                          {/* Элементы */}
-                          {elementsList}
-                        </div>
-                      )
-                    }
+                          {/* Черновик */}
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-medium text-slate-500">Черновик</span>
+                              <Button
+                                onClick={structureTheses}
+                                disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
+                                className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 py-1 h-auto"
+                                size="sm"
+                              >
+                                {isStructuringTheses ? "Структурирую..." : "Структурировать"}
+                              </Button>
+                            </div>
+                            <Textarea
+                              value={activeBlock?.theses || ""}
+                              onChange={(e) => updateBlockTheses(activeBlockId, e.target.value)}
+                              placeholder="Набросайте мысли, идеи, ключевые тезисы..."
+                              rows={3}
+                              className="bg-white text-sm resize-none"
+                            />
+                            <p className="text-xs text-slate-400">
+                              Пишите свободно — ученики это не увидят. Можно структурировать несколько раз.
+                            </p>
+                          </div>
 
-                    return elementsList
+                          {/* Результат структурирования */}
+                          {activeBlock?.thesesStructured && (
+                            <div className="mt-4 pt-3 border-t border-[#E5E7EB] space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-medium text-slate-500">Структурированный план</span>
+                                <Button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(activeBlock.thesesStructured || "")
+                                    setThesesCopied(true)
+                                    setTimeout(() => setThesesCopied(false), 2000)
+                                  }}
+                                  variant="ghost"
+                                  className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto"
+                                  size="sm"
+                                >
+                                  {thesesCopied ? "Скопировано" : "Копировать"}
+                                </Button>
+                              </div>
+                              <div className="bg-white border border-[#E5E7EB] rounded-md p-3 text-sm text-slate-700 whitespace-pre-wrap">
+                                {activeBlock.thesesStructured}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Элементы */}
+                        {elementsList}
+                      </div>
+                    )
                   })()}
                 </CardContent>
               </Card>

@@ -284,31 +284,33 @@ export interface CourseLesson {
 }
 
 export const getTemplateForAuthorType = (authorType: string): CourseTemplate => {
+  // =====================================================
+  // ПОРЯДОК ДЛЯ АВТОРА (как создавать):
+  // =====================================================
+  // 1. Объяснение темы + тезисы (main_block_1, main_block_2, main_block_3)
+  // 2. Практика (intermediate_practice)
+  // 3. Проверка знаний (intermediate_test)
+  // 4. Бонус (bonus_support) - опционально
+  // --- Секция «Финальная настройка» появляется после ≥500 символов ---
+  // 5. Как работать с уроком (introduction) - мета
+  // 6. Навигация (navigation) - мета, опционально
+  // 7. Интеграция и завершение (conclusion) - мета
+  //
+  // =====================================================
+  // ПОРЯДОК ДЛЯ УЧЕНИКА (studentOrder):
+  // =====================================================
+  // 1. Как работать с уроком (introduction)
+  // 2. Навигация (navigation) - если есть
+  // 3. Объяснение темы (main_block_1)
+  // 4. Объяснение темы (main_block_2) - если есть
+  // 5. Объяснение темы (main_block_3) - если есть
+  // 6. Практика (intermediate_practice)
+  // 7. Проверка знаний (intermediate_test)
+  // 8. Интеграция и завершение (conclusion)
+  // 9. Бонус (bonus_support) - если есть
+
   const baseBlocks: CourseBlock[] = [
-    {
-      id: "introduction",
-      type: "introduction",
-      title: "Как работать с уроком",
-      description: "Инструкция для ученика перед началом урока",
-      purpose: "Объяснить ученику, зачем нужен урок и что он получит",
-      elements: [],
-      required: true,
-      completed: false,
-      category: 'meta',
-      studentOrder: 1, // Первым для ученика
-    },
-    {
-      id: "navigation",
-      type: "navigation",
-      title: "Навигация",
-      description: "Структура урока для ученика",
-      purpose: "Помочь ученику сориентироваться в структуре урока",
-      elements: [],
-      required: false,
-      completed: false,
-      category: 'meta',
-      studentOrder: 2, // Вторым для ученика
-    },
+    // === ОБРАЗОВАТЕЛЬНЫЕ БЛОКИ (видны автору в "Блоки урока") ===
     {
       id: "main_block_1",
       type: "main_block_1",
@@ -322,40 +324,16 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       studentOrder: 3,
     },
     {
-      id: "intermediate_practice",
-      type: "intermediate_practice",
-      title: "Промежуточная практика",
-      description: "Закрепление материала через действие",
-      purpose: "Помочь ученику применить полученные знания на практике",
-      elements: [],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 5,
-    },
-    {
       id: "main_block_2",
       type: "main_block_2",
       title: "Основной блок 2",
       description: "Вторая ключевая тема урока",
       purpose: "Развить тему или дать дополнительные важные знания",
       elements: [],
-      required: true,
+      required: false,
       completed: false,
       category: 'educational',
       studentOrder: 4,
-    },
-    {
-      id: "intermediate_test",
-      type: "intermediate_test",
-      title: "Промежуточный тест",
-      description: "Проверка понимания материала",
-      purpose: "Убедиться, что ученик усвоил пройденный материал",
-      elements: [],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 6,
     },
     {
       id: "main_block_3",
@@ -364,22 +342,34 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       description: "Третья ключевая тема или углубление",
       purpose: "Завершить изучение темы или дать продвинутые знания",
       elements: [],
+      required: false,
+      completed: false,
+      category: 'educational',
+      studentOrder: 5,
+    },
+    {
+      id: "intermediate_practice",
+      type: "intermediate_practice",
+      title: "Практика",
+      description: "Закрепление материала через действие",
+      purpose: "Помочь ученику применить полученные знания на практике",
+      elements: [],
+      required: true,
+      completed: false,
+      category: 'educational',
+      studentOrder: 6,
+    },
+    {
+      id: "intermediate_test",
+      type: "intermediate_test",
+      title: "Проверка знаний",
+      description: "Проверка понимания материала",
+      purpose: "Убедиться, что ученик усвоил пройденный материал",
+      elements: [],
       required: true,
       completed: false,
       category: 'educational',
       studentOrder: 7,
-    },
-    {
-      id: "conclusion",
-      type: "conclusion",
-      title: "Интеграция и завершение",
-      description: "Итоги урока и следующие шаги",
-      purpose: "Подвести итоги и дать ученику план дальнейших действий",
-      elements: [],
-      required: true,
-      completed: false,
-      category: 'meta',
-      studentOrder: 8,
     },
     {
       id: "bonus_support",
@@ -392,6 +382,43 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       completed: false,
       category: 'educational',
       studentOrder: 9,
+    },
+    // === МЕТА-БЛОКИ (видны в "Финальной настройке") ===
+    {
+      id: "introduction",
+      type: "introduction",
+      title: "Как работать с уроком",
+      description: "Инструкция для ученика перед началом урока",
+      purpose: "Объяснить ученику, зачем нужен урок и что он получит",
+      elements: [],
+      required: true,
+      completed: false,
+      category: 'meta',
+      studentOrder: 1,
+    },
+    {
+      id: "navigation",
+      type: "navigation",
+      title: "Навигация",
+      description: "Структура урока для ученика",
+      purpose: "Помочь ученику сориентироваться в структуре урока",
+      elements: [],
+      required: false,
+      completed: false,
+      category: 'meta',
+      studentOrder: 2,
+    },
+    {
+      id: "conclusion",
+      type: "conclusion",
+      title: "Интеграция и завершение",
+      description: "Итоги урока и следующие шаги",
+      purpose: "Подвести итоги и дать ученику план дальнейших действий",
+      elements: [],
+      required: true,
+      completed: false,
+      category: 'meta',
+      studentOrder: 8,
     },
   ]
 
@@ -574,7 +601,104 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
 }
 
 export const getStandardTemplate = (): CourseTemplate => {
+  // Порядок блоков такой же как в getTemplateForAuthorType
+  // Автор: сначала образовательные, потом мета-блоки
+  // Ученик: сортировка по studentOrder
   const baseBlocks: CourseBlock[] = [
+    // === ОБРАЗОВАТЕЛЬНЫЕ БЛОКИ ===
+    {
+      id: "main_block_1",
+      type: "main_block_1",
+      title: "Основной блок 1",
+      description: "Первая ключевая тема урока",
+      purpose: "Дать основные знания по первой важной теме",
+      elements: [
+        { id: "main1_theory", type: "text", content: "", required: true, completed: false },
+        { id: "main1_example", type: "text", content: "", required: true, completed: false },
+        { id: "main1_task", type: "task", content: "", required: true, completed: false },
+      ],
+      required: true,
+      completed: false,
+      category: 'educational',
+      studentOrder: 3,
+    },
+    {
+      id: "main_block_2",
+      type: "main_block_2",
+      title: "Основной блок 2",
+      description: "Вторая ключевая тема урока",
+      purpose: "Развить тему или дать дополнительные важные знания",
+      elements: [
+        { id: "main2_development", type: "text", content: "", required: true, completed: false },
+        { id: "main2_connection", type: "text", content: "", required: true, completed: false },
+      ],
+      required: false,
+      completed: false,
+      category: 'educational',
+      studentOrder: 4,
+    },
+    {
+      id: "main_block_3",
+      type: "main_block_3",
+      title: "Основной блок 3",
+      description: "Третья ключевая тема или углубление",
+      purpose: "Завершить изучение темы или дать продвинутые знания",
+      elements: [
+        { id: "main3_advanced", type: "text", content: "", required: true, completed: false },
+        { id: "main3_application", type: "task", content: "", required: true, completed: false },
+      ],
+      required: false,
+      completed: false,
+      category: 'educational',
+      studentOrder: 5,
+    },
+    {
+      id: "intermediate_practice",
+      type: "intermediate_practice",
+      title: "Практика",
+      description: "Закрепление материала через действие",
+      purpose: "Помочь ученику применить полученные знания на практике",
+      elements: [
+        { id: "practice_task", type: "task", content: "", required: true, completed: false },
+        { id: "practice_instruction", type: "text", content: "", required: true, completed: false },
+        { id: "practice_criteria", type: "text", content: "", required: true, completed: false },
+      ],
+      required: true,
+      completed: false,
+      category: 'educational',
+      studentOrder: 6,
+    },
+    {
+      id: "intermediate_test",
+      type: "intermediate_test",
+      title: "Проверка знаний",
+      description: "Проверка понимания материала",
+      purpose: "Убедиться, что ученик усвоил пройденный материал",
+      elements: [
+        { id: "test_questions", type: "test", content: "", required: true, completed: false },
+        { id: "test_feedback", type: "text", content: "", required: false, completed: false },
+      ],
+      required: true,
+      completed: false,
+      category: 'educational',
+      studentOrder: 7,
+    },
+    {
+      id: "bonus_support",
+      type: "bonus_support",
+      title: "Бонус и поддержка",
+      description: "Дополнительные материалы и поддержка",
+      purpose: "Предоставить дополнительные ресурсы и возможности для связи",
+      elements: [
+        { id: "bonus_materials", type: "file", content: "", required: false, completed: false },
+        { id: "support_contact", type: "text", content: "", required: false, completed: false },
+      ],
+      required: false,
+      completed: false,
+      category: 'educational',
+      studentOrder: 9,
+    },
+    // === МЕТА-БЛОКИ (в "Финальной настройке") ===
     {
       id: "introduction",
       type: "introduction",
@@ -607,83 +731,6 @@ export const getStandardTemplate = (): CourseTemplate => {
       studentOrder: 2,
     },
     {
-      id: "main_block_1",
-      type: "main_block_1",
-      title: "Основной блок 1",
-      description: "Первая ключевая тема урока",
-      purpose: "Дать основные знания по первой важной теме",
-      elements: [
-        { id: "main1_theory", type: "text", content: "", required: true, completed: false },
-        { id: "main1_example", type: "text", content: "", required: true, completed: false },
-        { id: "main1_task", type: "task", content: "", required: true, completed: false },
-      ],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 3,
-    },
-    {
-      id: "intermediate_practice",
-      type: "intermediate_practice",
-      title: "Промежуточная практика",
-      description: "Закрепление материала через действие",
-      purpose: "Помочь ученику применить полученные знания на практике",
-      elements: [
-        { id: "practice_task", type: "task", content: "", required: true, completed: false },
-        { id: "practice_instruction", type: "text", content: "", required: true, completed: false },
-        { id: "practice_criteria", type: "text", content: "", required: true, completed: false },
-      ],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 5,
-    },
-    {
-      id: "main_block_2",
-      type: "main_block_2",
-      title: "Основной блок 2",
-      description: "Вторая ключевая тема урока",
-      purpose: "Развить тему или дать дополнительные важные знания",
-      elements: [
-        { id: "main2_development", type: "text", content: "", required: true, completed: false },
-        { id: "main2_connection", type: "text", content: "", required: true, completed: false },
-      ],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 4,
-    },
-    {
-      id: "intermediate_test",
-      type: "intermediate_test",
-      title: "Промежуточный тест",
-      description: "Проверка понимания материала",
-      purpose: "Убедиться, что ученик усвоил пройденный материал",
-      elements: [
-        { id: "test_questions", type: "test", content: "", required: true, completed: false },
-        { id: "test_feedback", type: "text", content: "", required: false, completed: false },
-      ],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 6,
-    },
-    {
-      id: "main_block_3",
-      type: "main_block_3",
-      title: "Основной блок 3",
-      description: "Третья ключевая тема или углубление",
-      purpose: "Завершить изучение темы или дать продвинутые знания",
-      elements: [
-        { id: "main3_advanced", type: "text", content: "", required: true, completed: false },
-        { id: "main3_application", type: "task", content: "", required: true, completed: false },
-      ],
-      required: true,
-      completed: false,
-      category: 'educational',
-      studentOrder: 7,
-    },
-    {
       id: "conclusion",
       type: "conclusion",
       title: "Интеграция и завершение",
@@ -698,21 +745,6 @@ export const getStandardTemplate = (): CourseTemplate => {
       completed: false,
       category: 'meta',
       studentOrder: 8,
-    },
-    {
-      id: "bonus_support",
-      type: "bonus_support",
-      title: "Бонус и поддержка",
-      description: "Дополнительные материалы и поддержка",
-      purpose: "Предоставить дополнительные ресурсы и возможности для связи",
-      elements: [
-        { id: "bonus_materials", type: "file", content: "", required: false, completed: false },
-        { id: "support_contact", type: "text", content: "", required: false, completed: false },
-      ],
-      required: false,
-      completed: false,
-      category: 'educational',
-      studentOrder: 9,
     },
   ]
 
