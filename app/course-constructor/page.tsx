@@ -457,6 +457,7 @@ export default function CourseConstructor() {
   const [selectedMetaTemplate, setSelectedMetaTemplate] = useState<'expectations' | 'anxiety' | 'format' | null>(null)
   const [isGeneratingMeta, setIsGeneratingMeta] = useState(false)
   const [isGeneratingNavigation, setIsGeneratingNavigation] = useState(false)
+  const [isGeneratingConclusion, setIsGeneratingConclusion] = useState(false)
 
   // Функция загрузки списка студентов с доступом к курсу
   const loadStudentsWithAccess = async () => {
@@ -1607,6 +1608,55 @@ export default function CourseConstructor() {
     }
   }
 
+  const generateConclusionContent = async () => {
+    const conclusionBlock = courseBlocks.find((b) => b.type === 'conclusion')
+    if (!conclusionBlock) return
+
+    // Собираем информацию о блоках урока для генерации заключения
+    const blocksInfo = courseBlocks
+      .filter((b) => b.category === 'educational')
+      .map((b) => {
+        const content = b.elements.map((el) => el.content).filter(Boolean).join(' ').substring(0, 200)
+        return `${b.title}: ${content || 'содержание не заполнено'}`
+      })
+      .join('\n')
+
+    const lessonTitle = courseLessons.find((l) => l.id === activeLessonId)?.title || ''
+
+    setIsGeneratingConclusion(true)
+    try {
+      const response = await fetch("/api/ai-generate-meta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          template: 'conclusion',
+          lessonContent: blocksInfo,
+          lessonTitle,
+        }),
+      })
+      const data = await response.json()
+      if (data.success && data.generatedText) {
+        const textElement = conclusionBlock.elements.find((el) => el.type === 'text')
+        if (textElement) {
+          updateElementContent(conclusionBlock.id, textElement.id, data.generatedText)
+        } else {
+          addElement(conclusionBlock.id, "text")
+          setTimeout(() => {
+            const updatedBlock = courseBlocks.find((b) => b.type === 'conclusion')
+            const newEl = updatedBlock?.elements[updatedBlock.elements.length - 1]
+            if (newEl) {
+              updateElementContent(conclusionBlock.id, newEl.id, data.generatedText)
+            }
+          }, 100)
+        }
+      }
+    } catch (error) {
+      console.error("Error generating conclusion content:", error)
+    } finally {
+      setIsGeneratingConclusion(false)
+    }
+  }
+
   const addElement = (blockId: string, elementType: CourseElement["type"], educationalType?: EducationalBlockType) => {
     const newElement: ExtendedCourseElement = {
       id: Date.now().toString(),
@@ -2677,7 +2727,7 @@ export default function CourseConstructor() {
         {activeLessonId && getEducationalContentLength() >= 500 && (
           <button
             onClick={() => setShowFinalSetupModal(true)}
-            className="text-sm px-4 py-2 rounded-lg bg-[#f59e0b] text-white font-semibold shadow-lg hover:bg-[#d97706] transition-colors animate-pulse"
+            className="text-sm px-4 py-2 rounded-lg bg-[#f59e0b] text-white font-semibold shadow-lg hover:bg-[#d97706] transition-colors"
           >
             Финальная настройка
           </button>
@@ -3975,6 +4025,17 @@ export default function CourseConstructor() {
                             <p className="text-sm text-slate-600">
                               Подведите итоги урока: что ученик узнал, какие следующие шаги, как применить знания.
                             </p>
+                          </div>
+
+                          <div>
+                            <Button
+                              onClick={generateConclusionContent}
+                              disabled={isGeneratingConclusion}
+                              className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-sm"
+                              size="sm"
+                            >
+                              {isGeneratingConclusion ? "Генерирую итоги..." : "Сгенерировать итоги урока"}
+                            </Button>
                           </div>
 
                           <div>
