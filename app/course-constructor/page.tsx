@@ -1443,21 +1443,8 @@ export default function CourseConstructor() {
   }
 
   useEffect(() => {
-    const { mode, courseId } = determineCourseMode()
-
-    switch (mode) {
-      case "new":
-        initializeNewCourse()
-        break
-      case "edit":
-        if (courseId) {
-          loadExistingCourse(courseId).then(() => {
-            // Auto-select first block after loading
-            setTimeout(() => setActiveBlockId(courseBlocks[0]?.id || "1"), 200)
-          })
-        }
-        break
-    }
+    // Логика инициализации теперь полностью в loadSavedCourse
+    // который вызывается после загрузки профиля в checkAuthorProfile
   }, [])
 
   const updateElementContent = (blockId: string, elementId: string, content: string) => {
