@@ -883,6 +883,14 @@ export default function CourseConstructor() {
       return
     }
 
+    // Проверяем, не открываем ли мы ДРУГОЙ курс - тогда очищаем draft от старого курса
+    const savedCourseId = localStorage.getItem("currentCourseId")
+    if (courseIdFromUrl && savedCourseId && courseIdFromUrl !== savedCourseId) {
+      console.log("[v0] Opening different course, clearing old draft")
+      console.log("[v0] Old course:", savedCourseId, "New course:", courseIdFromUrl)
+      localStorage.removeItem("courseConstructorDraft")
+    }
+
     const courseIdFromStorage = localStorage.getItem("currentCourseId")
     const courseId = courseIdFromUrl || courseIdFromStorage
 
@@ -947,31 +955,17 @@ export default function CourseConstructor() {
           let useLocalData = false
           let draftTimestamp: Date | null = null
 
-          console.log('[DEBUG LOAD] Checking localStorage draft...')
-          console.log('[DEBUG LOAD] Current course ID:', course.id)
-          console.log('[DEBUG LOAD] Draft exists:', !!draftString)
-
           if (draftString) {
             try {
               const draft = JSON.parse(draftString)
-              console.log('[DEBUG LOAD] Draft parsed:', {
-                title: draft.title,
-                lessonsCount: draft.lessons?.length,
-                blocksInFirstLesson: draft.lessons?.[0]?.blocks?.length,
-                timestamp: draft.timestamp,
-                courseId: draft.courseId
-              })
               draftTimestamp = new Date(draft.timestamp)
               const courseUpdatedAt = new Date(course.updated_at || 0)
 
               // Используем локальные данные если они свежее или равны (с учетом задержки 5 сек)
               const timeDiff = draftTimestamp.getTime() - courseUpdatedAt.getTime()
-              console.log('[DEBUG LOAD] Time diff (localStorage - DB):', timeDiff, 'ms')
 
               // ВАЖНО: проверяем что draft для того же курса!
               const isSameCourse = draft.courseId === course.id
-              console.log('[DEBUG LOAD] Is same course:', isSameCourse, '(draft:', draft.courseId, 'current:', course.id, ')')
-              console.log('[DEBUG LOAD] Will use localStorage:', timeDiff >= -5000 && isSameCourse)
 
               if (timeDiff >= -5000 && isSameCourse) {
                 // localStorage новее или почти равен БД (разница меньше 5 сек)
@@ -979,13 +973,10 @@ export default function CourseConstructor() {
                 setCourseTitle(draft.title || "")
                 setCourseDescription(draft.description || "")
                 if (draft.lessons && draft.lessons.length > 0) {
-                  console.log('[DEBUG LOAD] Loading from localStorage - blocks:', draft.lessons[0].blocks?.length)
                   setCourseLessons(draft.lessons)
                   setActiveLessonId(draft.lessons[0].id)
                   setCourseBlocks(draft.lessons[0].blocks)
                   setActiveBlockId(getFirstMainBlockId(draft.lessons[0].blocks))
-                } else {
-                  console.log('[DEBUG LOAD] WARNING: localStorage has no lessons or empty lessons!')
                 }
 
                 // Если разница больше 1 секунды - данные еще не сохранены
@@ -1017,9 +1008,6 @@ export default function CourseConstructor() {
               }
             } else if (course.modules && course.modules.blocks) {
               // Миграция старых курсов: создаем урок из существующих блоков
-              console.log('[DEBUG MIGRATION] Old course detected with modules.blocks')
-              console.log('[DEBUG MIGRATION] course.modules.blocks:', course.modules.blocks)
-              console.log('[DEBUG MIGRATION] blocks count:', course.modules.blocks.length)
               const migrationLesson: CourseLesson = {
                 id: "migration-lesson",
                 title: "Основной урок",
@@ -1028,12 +1016,10 @@ export default function CourseConstructor() {
                 blocks: course.modules.blocks,
                 completed: false,
               }
-              console.log('[DEBUG MIGRATION] Created migrationLesson:', migrationLesson)
               setCourseLessons([migrationLesson])
               setActiveLessonId(migrationLesson.id)
               setCourseBlocks(migrationLesson.blocks)
               setActiveBlockId(getFirstMainBlockId(migrationLesson.blocks))
-              console.log('[DEBUG MIGRATION] State set - activeLessonId: migration-lesson')
             }
 
             setLastSavedAt(new Date(course.updated_at || Date.now()))
@@ -1877,12 +1863,6 @@ export default function CourseConstructor() {
   }
 
   const addBlock = (blockType: CourseBlock["type"]) => {
-    console.log('[DEBUG addBlock] Called with blockType:', blockType)
-    console.log('[DEBUG addBlock] Current courseBlocks:', courseBlocks)
-    console.log('[DEBUG addBlock] courseBlocks.length:', courseBlocks.length)
-    console.log('[DEBUG addBlock] activeLessonId:', activeLessonId)
-    console.log('[DEBUG addBlock] courseLessons:', courseLessons)
-
     const blockTitles = {
       introduction: "Дополнительный блок",
       navigation: "Навигация",
