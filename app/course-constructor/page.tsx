@@ -2087,6 +2087,7 @@ export default function CourseConstructor() {
       // Обновляем localStorage с новым timestamp (НЕ удаляем!)
       // Это позволит при перезагрузке понять, что данные актуальные
       const draftData = {
+        courseId: data.courseId || courseId || currentCourseId, // ВАЖНО: сохраняем courseId
         title: courseTitle,
         description: courseDescription,
         lessons: courseLessons,
