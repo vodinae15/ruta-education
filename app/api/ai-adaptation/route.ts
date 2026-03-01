@@ -99,7 +99,7 @@ function handleDatabaseError(error: any, context: string): { isJwtExpired: boole
 }
 
 // Функция трансформации нового формата AI (плоского) в старый формат (с intro/content/adaptation)
-function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' | 'visual' | 'auditory' | 'kinesthetic'): AdaptationContent {
+function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' | 'visual' | 'auditory' | 'kinesthetic', originalBlocks?: Array<{title: string, content: string, type: string}>): AdaptationContent {
   console.log('🔄 [Transform] Transforming new format to legacy format for type:', adaptationType)
 
   const legacyContent: any = {}
@@ -116,6 +116,12 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
 
     console.log(`🔄 [Transform] Processing ${blockKey}:`, Object.keys(newBlock))
 
+    // Берём заголовок из оригинального блока, если он есть
+    const originalBlockTitle = originalBlocks && originalBlocks[i - 1] ? originalBlocks[i - 1].title : null
+    const blockTitle = originalBlockTitle || `Блок ${i}`
+
+    console.log(`🔄 [Transform] Block ${i} title: "${blockTitle}" (from original: ${!!originalBlockTitle})`)
+
     // Создаем базовую структуру блока
     legacyContent[blockKey] = {
       intro: {
@@ -123,7 +129,7 @@ function transformNewFormatToLegacy(newFormat: any, adaptationType: 'original' |
         type: 'intro'
       },
       content: {
-        title: `Блок ${i}`,
+        title: blockTitle,
         text: newBlock.mainText || `Основное содержание раздела ${i}. Материал адаптирован под ваш стиль обучения.`,
         type: 'text',
         elements: []
@@ -2250,7 +2256,7 @@ export async function POST(request: NextRequest) {
 
     // Трансформируем новый формат AI в старый формат (с intro/content/adaptation)
     console.log('🔄 [AI Adaptation] ========== TRANSFORMING FORMAT ==========')
-    adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType)
+    adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType, lessonContent.blocks)
     console.log('✅ [AI Adaptation] Format transformation complete')
 
     // Собираем ВСЕ медиа-элементы из оригинальных блоков и помещаем ТОЛЬКО в block4
