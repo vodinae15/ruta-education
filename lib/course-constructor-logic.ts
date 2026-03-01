@@ -287,24 +287,26 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
     {
       id: "introduction",
       type: "introduction",
-      title: "Дополнительный блок",
-      description: "Познакомьте с уроком и объясните его ценность",
+      title: "Как работать с уроком",
+      description: "Инструкция для ученика перед началом урока",
       purpose: "Объяснить ученику, зачем нужен урок и что он получит",
       elements: [],
       required: true,
       completed: false,
       category: 'meta',
+      studentOrder: 1, // Первым для ученика
     },
     {
       id: "navigation",
       type: "navigation",
       title: "Навигация",
-      description: "Инструкция по прохождению урока",
+      description: "Структура урока для ученика",
       purpose: "Помочь ученику сориентироваться в структуре урока",
       elements: [],
-      required: true,
+      required: false,
       completed: false,
       category: 'meta',
+      studentOrder: 2, // Вторым для ученика
     },
     {
       id: "main_block_1",
@@ -316,6 +318,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 3,
     },
     {
       id: "intermediate_practice",
@@ -327,6 +330,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 5,
     },
     {
       id: "main_block_2",
@@ -338,6 +342,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 4,
     },
     {
       id: "intermediate_test",
@@ -349,6 +354,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 6,
     },
     {
       id: "main_block_3",
@@ -360,17 +366,19 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 7,
     },
     {
       id: "conclusion",
       type: "conclusion",
-      title: "Итог и завершение",
-      description: "Подведение итогов урока",
+      title: "Интеграция и завершение",
+      description: "Итоги урока и следующие шаги",
       purpose: "Подвести итоги и дать ученику план дальнейших действий",
       elements: [],
       required: true,
       completed: false,
       category: 'meta',
+      studentOrder: 8,
     },
     {
       id: "bonus_support",
@@ -382,6 +390,7 @@ export const getTemplateForAuthorType = (authorType: string): CourseTemplate => 
       required: false,
       completed: false,
       category: 'educational',
+      studentOrder: 9,
     },
   ]
 
@@ -568,8 +577,8 @@ export const getStandardTemplate = (): CourseTemplate => {
     {
       id: "introduction",
       type: "introduction",
-      title: "Дополнительный блок",
-      description: "Познакомьте с уроком и объясните его ценность",
+      title: "Как работать с уроком",
+      description: "Инструкция для ученика перед началом урока",
       purpose: "Объяснить ученику, зачем нужен урок и что он получит",
       elements: [
         { id: "intro_title", type: "title", content: "", required: true, completed: false },
@@ -579,20 +588,22 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'meta',
+      studentOrder: 1,
     },
     {
       id: "navigation",
       type: "navigation",
       title: "Навигация",
-      description: "Инструкция по прохождению урока",
+      description: "Структура урока для ученика",
       purpose: "Помочь ученику сориентироваться в структуре урока",
       elements: [
         { id: "nav_structure", type: "text", content: "", required: true, completed: false },
         { id: "nav_instructions", type: "text", content: "", required: false, completed: false },
       ],
-      required: true,
+      required: false,
       completed: false,
       category: 'meta',
+      studentOrder: 2,
     },
     {
       id: "main_block_1",
@@ -608,6 +619,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 3,
     },
     {
       id: "intermediate_practice",
@@ -623,6 +635,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 5,
     },
     {
       id: "main_block_2",
@@ -637,6 +650,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 4,
     },
     {
       id: "intermediate_test",
@@ -651,6 +665,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 6,
     },
     {
       id: "main_block_3",
@@ -665,12 +680,13 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'educational',
+      studentOrder: 7,
     },
     {
       id: "conclusion",
       type: "conclusion",
-      title: "Итог и завершение",
-      description: "Подведение итогов урока",
+      title: "Интеграция и завершение",
+      description: "Итоги урока и следующие шаги",
       purpose: "Подвести итоги и дать ученику план дальнейших действий",
       elements: [
         { id: "conclusion_summary", type: "text", content: "", required: true, completed: false },
@@ -680,6 +696,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: true,
       completed: false,
       category: 'meta',
+      studentOrder: 8,
     },
     {
       id: "bonus_support",
@@ -694,6 +711,7 @@ export const getStandardTemplate = (): CourseTemplate => {
       required: false,
       completed: false,
       category: 'educational',
+      studentOrder: 9,
     },
   ]
 
