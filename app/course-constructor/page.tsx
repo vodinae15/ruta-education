@@ -29,7 +29,6 @@ import {
   FileTextIcon,
   ImageIcon,
   CheckCircleIcon,
-  CheckIcon,
   MessageCircleIcon,
   DownloadIcon,
   HelpCircleIcon,
@@ -43,7 +42,6 @@ import {
   TargetIcon,
   XIcon,
   UsersIcon,
-  CopyIcon,
 } from "@/components/ui/icons"
 
 import { Notification } from "@/components/ui/notification"
@@ -3410,20 +3408,10 @@ export default function CourseConstructor() {
                                       setTimeout(() => setThesesCopied(false), 2000)
                                     }}
                                     variant="ghost"
-                                    className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto flex items-center gap-1"
+                                    className="text-xs text-slate-500 hover:text-[#5589a7] px-2 py-1 h-auto"
                                     size="sm"
                                   >
-                                    {thesesCopied ? (
-                                      <>
-                                        <CheckIcon className="w-3 h-3" />
-                                        Скопировано
-                                      </>
-                                    ) : (
-                                      <>
-                                        <CopyIcon className="w-3 h-3" />
-                                        Копировать
-                                      </>
-                                    )}
+                                    {thesesCopied ? "Скопировано" : "Копировать"}
                                   </Button>
                                 </div>
                                 <div className="bg-white border border-[#E5E7EB] rounded-md p-3 text-sm text-slate-700 whitespace-pre-wrap">
