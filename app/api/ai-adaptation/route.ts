@@ -2258,6 +2258,58 @@ export async function POST(request: NextRequest) {
     adaptedContent = transformNewFormatToLegacy(adaptedContent, normalizedType)
     console.log('✅ [AI Adaptation] Format transformation complete')
 
+    // Копируем блоки финальной настройки (без AI-адаптации)
+    console.log('🔄 [AI Adaptation] ========== COPYING FINAL SETUP BLOCKS ==========')
+    lessonContent.blocks.forEach((block: any) => {
+      const blockType = block.type?.toLowerCase()
+
+      if (blockType === 'introduction') {
+        // Собираем контент из элементов блока
+        const textContent = (block.elements || [])
+          .filter((el: any) => el.type === 'text')
+          .map((el: any) => el.content || '')
+          .join('\n\n')
+
+        adaptedContent.howToWork = {
+          title: block.title || 'Как работать с уроком',
+          content: textContent || block.content || '',
+          elements: block.elements || [],
+          type: 'introduction'
+        }
+        console.log('✅ [AI Adaptation] Copied "Как работать с уроком" block')
+      }
+
+      if (blockType === 'navigation') {
+        const textContent = (block.elements || [])
+          .filter((el: any) => el.type === 'text')
+          .map((el: any) => el.content || '')
+          .join('\n\n')
+
+        adaptedContent.navigation = {
+          title: block.title || 'Навигация',
+          content: textContent || block.content || '',
+          elements: block.elements || [],
+          type: 'navigation'
+        }
+        console.log('✅ [AI Adaptation] Copied "Навигация" block')
+      }
+
+      if (blockType === 'conclusion') {
+        const textContent = (block.elements || [])
+          .filter((el: any) => el.type === 'text')
+          .map((el: any) => el.content || '')
+          .join('\n\n')
+
+        adaptedContent.conclusion = {
+          title: block.title || 'Интеграция и завершение',
+          content: textContent || block.content || '',
+          elements: block.elements || [],
+          type: 'conclusion'
+        }
+        console.log('✅ [AI Adaptation] Copied "Интеграция и завершение" block')
+      }
+    })
+
     // Собираем ВСЕ медиа-элементы из оригинальных блоков и помещаем ТОЛЬКО в block4
     console.log('🔄 [AI Adaptation] Copying ALL media elements to block4...')
     const allMediaElements: any[] = []

@@ -2098,6 +2098,75 @@ export function UnifiedAdaptation({
       {/* Приоритет: адаптированный контент > базовый контент при недостатке материалов > оригинальный контент */}
       {showAdaptedContent && contentToDisplay ? (
         <div className="space-y-4">
+          {/* Блок "Как работать с уроком" - первый, с особым стилем */}
+          {contentToDisplay.howToWork && (contentToDisplay.howToWork.content || (contentToDisplay.howToWork.elements && contentToDisplay.howToWork.elements.length > 0)) && (
+            <Card
+              className="border border-[#659AB8]"
+              style={{
+                backgroundColor: '#F0F7FA',
+                borderRadius: '12px'
+              }}
+            >
+              <CardHeader className="p-6">
+                <CardTitle className="text-lg text-[#1E293B]">
+                  {contentToDisplay.howToWork.title || 'Как работать с уроком'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                {/* Текстовый контент */}
+                {contentToDisplay.howToWork.content && (
+                  <div className="prose prose-sm max-w-none text-[#374151]">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {contentToDisplay.howToWork.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
+                {/* Медиа-элементы */}
+                {contentToDisplay.howToWork.elements && contentToDisplay.howToWork.elements.length > 0 && (
+                  <div className="mt-4 space-y-4">
+                    {contentToDisplay.howToWork.elements.filter(el => ['video', 'audio', 'image'].includes(el.type)).map((element, idx) => {
+                      if (element.type === 'video') {
+                        let videoUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          videoUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <video key={idx} controls className="w-full rounded-lg" src={videoUrl}>
+                            Ваш браузер не поддерживает видео
+                          </video>
+                        )
+                      }
+                      if (element.type === 'audio') {
+                        let audioUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          audioUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <audio key={idx} controls className="w-full" src={audioUrl}>
+                            Ваш браузер не поддерживает аудио
+                          </audio>
+                        )
+                      }
+                      if (element.type === 'image') {
+                        let imageUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          imageUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <img key={idx} src={imageUrl} alt="" className="w-full rounded-lg" />
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* В режиме редактирования показываем все блоки, даже пустые */}
           {(isEditing || isBlockValid(contentToDisplay.block1)) && renderAdaptationBlock('block1', contentToDisplay.block1, 1)}
           {(isEditing || isBlockValid(contentToDisplay.block2)) && renderAdaptationBlock('block2', contentToDisplay.block2, 2)}
