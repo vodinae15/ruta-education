@@ -1478,7 +1478,7 @@ export default function CourseConstructor() {
 
   const structureTheses = async () => {
     const activeBlock = courseBlocks.find((b) => b.id === activeBlockId)
-    if (!activeBlock?.theses?.trim()) return
+    if (!activeBlock?.theses?.trim() || activeBlock?.thesesStructured) return
 
     setIsStructuringTheses(true)
     try {
@@ -1492,7 +1492,13 @@ export default function CourseConstructor() {
       })
       const data = await response.json()
       if (data.success && data.structured) {
-        updateBlockTheses(activeBlockId, data.structured)
+        // Обновляем тезисы и устанавливаем флаг что структурирование уже было
+        const updatedBlocks = courseBlocks.map((block) =>
+          block.id === activeBlockId
+            ? { ...block, theses: data.structured, thesesStructured: true }
+            : block
+        )
+        updateCourseBlocks(updatedBlocks)
       }
     } catch (error) {
       console.error("Error structuring theses:", error)
@@ -3373,15 +3379,22 @@ export default function CourseConstructor() {
                               />
                               <Button
                                 onClick={structureTheses}
-                                disabled={isStructuringTheses || !activeBlock?.theses?.trim()}
-                                className="bg-[#659AB8] hover:bg-[#5589a7] text-white text-xs px-3 h-auto whitespace-nowrap"
+                                disabled={isStructuringTheses || !activeBlock?.theses?.trim() || activeBlock?.thesesStructured}
+                                className={`text-white text-xs px-3 h-auto whitespace-nowrap ${
+                                  activeBlock?.thesesStructured
+                                    ? "bg-slate-400 cursor-not-allowed"
+                                    : "bg-[#659AB8] hover:bg-[#5589a7]"
+                                }`}
                                 size="sm"
                               >
-                                {isStructuringTheses ? "..." : "✨ Структурировать"}
+                                {isStructuringTheses ? "..." : activeBlock?.thesesStructured ? "✓ Структурировано" : "✨ Структурировать"}
                               </Button>
                             </div>
                             <p className="text-xs text-slate-400 mt-2">
-                              Набросайте мысли — ученики это не увидят. Нажмите «Структурировать» — AI сгруппирует заметки в логичный список.
+                              {activeBlock?.thesesStructured
+                                ? "Тезисы структурированы. Вы можете редактировать их и использовать как план для блока."
+                                : "Набросайте мысли — ученики это не увидят. Нажмите «Структурировать» — AI сгруппирует заметки в логичный список."
+                              }
                             </p>
                           </div>
 
