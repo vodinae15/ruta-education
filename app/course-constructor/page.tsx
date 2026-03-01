@@ -450,6 +450,8 @@ export default function CourseConstructor() {
 
   // Состояния для секции "Финальная настройка"
   const [isFinalSetupExpanded, setIsFinalSetupExpanded] = useState(false)
+  const [isNavigationExpanded, setIsNavigationExpanded] = useState(false)
+  const [isConclusionExpanded, setIsConclusionExpanded] = useState(false)
   const [selectedMetaTemplate, setSelectedMetaTemplate] = useState<'expectations' | 'anxiety' | 'format' | null>(null)
   const [isGeneratingMeta, setIsGeneratingMeta] = useState(false)
 
@@ -2823,7 +2825,7 @@ export default function CourseConstructor() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="space-y-2 p-6">
-                    {courseBlocks.filter((b) => b.type !== 'introduction').map((block) => {
+                    {courseBlocks.filter((b) => !['introduction', 'navigation', 'conclusion'].includes(b.type)).map((block) => {
                       const completedElements = block.elements.filter((el) => el.completed).length
                       const totalElements = block.elements.length
 
@@ -3631,6 +3633,197 @@ export default function CourseConstructor() {
                               <Button
                                 key={type}
                                 onClick={() => addElement(introBlock.id, type)}
+                                size="sm"
+                                variant="secondary"
+                                className="text-xs border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
+                              >
+                                + {label}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
+                </CardContent>
+              </Card>
+
+              {/* Карточка "Навигация" */}
+              <Card className="bg-white border-[#E5E7EB] mt-4">
+                <CardContent className="p-5">
+                  <div
+                    className="flex items-center justify-between cursor-pointer"
+                    onClick={() => setIsNavigationExpanded(!isNavigationExpanded)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                        <ClipboardListIcon className="w-4 h-4 text-[#5589a7]" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-[#111827]">Навигация</h4>
+                        <p className="text-xs text-slate-500">Структура урока для ученика (опционально)</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-xs text-slate-400">
+                        {courseBlocks.find((b) => b.type === 'navigation')?.elements.some((el) => el.content?.trim())
+                          ? <span className="text-green-600">Заполнено</span>
+                          : <span>Не заполнено</span>
+                        }
+                      </div>
+                      <span className={`text-[#659AB8] text-sm transition-transform ${isNavigationExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    </div>
+                  </div>
+
+                  {isNavigationExpanded && (() => {
+                    const navBlock = courseBlocks.find((b) => b.type === 'navigation')
+                    if (!navBlock) return null
+
+                    return (
+                      <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
+                        <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                          <p className="text-sm text-slate-600">
+                            Этот блок покажет ученику структуру урока и поможет сориентироваться. Заполняется опционально.
+                          </p>
+                        </div>
+
+                        <div>
+                          <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
+                          <div className="space-y-3">
+                            {navBlock.elements.map((element) => {
+                              const Icon = getElementIcon(element.type, element.educationalType)
+                              return (
+                                <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Icon className="w-4 h-4 text-[#659AB8]" />
+                                      <span className="text-sm font-medium text-[#659AB8]">
+                                        {getElementLabel(element.type, element.educationalType)}
+                                      </span>
+                                    </div>
+                                    <button
+                                      onClick={() => removeElement(navBlock.id, element.id)}
+                                      className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
+                                    >
+                                      <TrashIcon className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <Textarea
+                                    value={element.content || ""}
+                                    onChange={(e) => updateElementContent(navBlock.id, element.id, e.target.value)}
+                                    placeholder="Введите текст..."
+                                    rows={3}
+                                    className="text-sm"
+                                  />
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-slate-400 mb-2">Навигационный блок — добавляйте только текстовые элементы</p>
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              onClick={() => addElement(navBlock.id, "text")}
+                              size="sm"
+                              variant="secondary"
+                              className="text-xs border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
+                            >
+                              + Текст
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
+                </CardContent>
+              </Card>
+
+              {/* Карточка "Интеграция и завершение" */}
+              <Card className="bg-white border-[#E5E7EB] mt-4">
+                <CardContent className="p-5">
+                  <div
+                    className="flex items-center justify-between cursor-pointer"
+                    onClick={() => setIsConclusionExpanded(!isConclusionExpanded)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-[#659AB8]/10 rounded-full flex items-center justify-center">
+                        <CheckCircleIcon className="w-4 h-4 text-[#5589a7]" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-[#111827]">Интеграция и завершение</h4>
+                        <p className="text-xs text-slate-500">Итоги урока и следующие шаги</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-xs text-slate-400">
+                        {courseBlocks.find((b) => b.type === 'conclusion')?.elements.some((el) => el.content?.trim())
+                          ? <span className="text-green-600">Заполнено</span>
+                          : <span>Не заполнено</span>
+                        }
+                      </div>
+                      <span className={`text-[#659AB8] text-sm transition-transform ${isConclusionExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    </div>
+                  </div>
+
+                  {isConclusionExpanded && (() => {
+                    const conclusionBlock = courseBlocks.find((b) => b.type === 'conclusion')
+                    if (!conclusionBlock) return null
+
+                    return (
+                      <div className="mt-5 pt-5 border-t border-[#E5E7EB] space-y-5">
+                        <div className="p-4 bg-[#E8F4FA] border border-[#CDE6F9] rounded-lg">
+                          <p className="text-sm text-slate-600">
+                            Подведите итоги урока: что ученик узнал, какие следующие шаги, как применить знания на практике.
+                          </p>
+                        </div>
+
+                        <div>
+                          <h5 className="text-sm font-medium text-[#111827] mb-3">Содержимое блока:</h5>
+                          <div className="space-y-3">
+                            {conclusionBlock.elements.map((element) => {
+                              const Icon = getElementIcon(element.type, element.educationalType)
+                              return (
+                                <div key={element.id} className="border border-[#E5E7EB] rounded-lg p-3">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Icon className="w-4 h-4 text-[#659AB8]" />
+                                      <span className="text-sm font-medium text-[#659AB8]">
+                                        {getElementLabel(element.type, element.educationalType)}
+                                      </span>
+                                    </div>
+                                    <button
+                                      onClick={() => removeElement(conclusionBlock.id, element.id)}
+                                      className="text-slate-400 hover:text-red-500 h-6 w-6 p-0 flex items-center justify-center"
+                                    >
+                                      <TrashIcon className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <Textarea
+                                    value={element.content || ""}
+                                    onChange={(e) => updateElementContent(conclusionBlock.id, element.id, e.target.value)}
+                                    placeholder="Введите текст..."
+                                    rows={3}
+                                    className="text-sm"
+                                  />
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-slate-400 mb-2">Добавляйте текст, видео или аудио для подведения итогов</p>
+                          <div className="flex flex-wrap gap-2">
+                            {[
+                              { type: "text" as const, label: "Текст" },
+                              { type: "video" as const, label: "Видео" },
+                              { type: "audio" as const, label: "Аудио" },
+                            ].map(({ type, label }) => (
+                              <Button
+                                key={type}
+                                onClick={() => addElement(conclusionBlock.id, type)}
                                 size="sm"
                                 variant="secondary"
                                 className="text-xs border-[#659AB8] text-[#659AB8] hover:bg-[#659AB8]/10"
