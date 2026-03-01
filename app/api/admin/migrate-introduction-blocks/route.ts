@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from "@supabase/supabase-js"
 
 export const dynamic = 'force-dynamic'
 
@@ -12,19 +12,23 @@ export async function POST(request: NextRequest) {
   try {
     console.log("🔄 [Migration] Starting introduction blocks migration...")
 
-    const supabase = await createClient()
+    // Получаем параметры
+    const { courseId, dryRun = false, adminKey } = await request.json().catch(() => ({}))
 
-    // Проверяем авторизацию
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
+    // Проверяем секретный ключ
+    const expectedKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(-12)
+    if (!adminKey || adminKey !== expectedKey) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized" },
+        { success: false, error: "Unauthorized. Provide adminKey (last 12 chars of service role key)" },
         { status: 401 }
       )
     }
 
-    // Получаем параметры
-    const { courseId, dryRun = false } = await request.json().catch(() => ({}))
+    // Используем service role для доступа к данным
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
     // Загружаем уроки
     let query = supabase

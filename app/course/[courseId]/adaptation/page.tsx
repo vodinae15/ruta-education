@@ -1278,6 +1278,7 @@ export default function CourseAdaptationPage() {
                             isStudent={!isAuthor}
                             courseId={courseId}
                             lessonId={selectedLesson.id}
+                            lessonBlocks={selectedLesson.blocks || []}
                             materialsAnalysis={materialsAnalysis}
                             isEditing={isAuthor && isEditing}
                             onAdaptedContentChange={isAuthor ? (content) => handleAdaptedContentChange(currentMode, content) : undefined}
