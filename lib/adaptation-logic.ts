@@ -56,6 +56,14 @@ export interface AdaptationBlock {
   }
 }
 
+// Структура блока финальной настройки (без адаптации AI)
+export interface FinalSetupBlock {
+  title: string
+  content: string
+  elements?: ContentElement[]
+  type: 'introduction' | 'navigation' | 'conclusion'
+}
+
 // Структура адаптированного контента урока
 export interface AdaptationContent {
   block1: AdaptationBlock
@@ -63,6 +71,10 @@ export interface AdaptationContent {
   block3: AdaptationBlock
   block4: AdaptationBlock
   block5: AdaptationBlock
+  // Блоки финальной настройки (копируются без AI-адаптации)
+  howToWork?: FinalSetupBlock  // "Как работать с уроком" - introduction
+  navigation?: FinalSetupBlock  // "Навигация" - navigation
+  conclusion?: FinalSetupBlock  // "Интеграция и завершение" - conclusion
 }
 
 // Структура адаптации урока в БД
@@ -76,6 +88,10 @@ export interface LessonAdaptation {
   block3: AdaptationBlock
   block4: AdaptationBlock
   block5: AdaptationBlock
+  // Блоки финальной настройки
+  howToWork?: FinalSetupBlock
+  navigation?: FinalSetupBlock
+  conclusion?: FinalSetupBlock
   generated_at: string | null
   edited_at: string | null
   edited_by: string | null
