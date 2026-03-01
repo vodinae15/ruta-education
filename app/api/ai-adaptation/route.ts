@@ -2524,6 +2524,9 @@ export async function POST(request: NextRequest) {
             block3: adaptedContent.block3,
             block4: adaptedContent.block4,
             block5: adaptedContent.block5,
+            how_to_work: adaptedContent.howToWork || null,
+            navigation: adaptedContent.navigation || null,
+            conclusion: adaptedContent.conclusion || null,
             status: 'generated',
             generated_at: new Date().toISOString(),
             version: (existing.version || 1) + 1
@@ -2570,6 +2573,9 @@ export async function POST(request: NextRequest) {
             block3: adaptedContent.block3,
             block4: adaptedContent.block4,
             block5: adaptedContent.block5,
+            how_to_work: adaptedContent.howToWork || null,
+            navigation: adaptedContent.navigation || null,
+            conclusion: adaptedContent.conclusion || null,
             status: 'generated',
             generated_at: new Date().toISOString(),
             version: 1
