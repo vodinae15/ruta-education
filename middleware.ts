@@ -3,6 +3,17 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
 export async function middleware(request: NextRequest) {
+  // Блокируем фейковые Server Action запросы (от ботов/сканеров)
+  // Наше приложение не использует Server Actions, поэтому любой такой запрос - это атака
+  const nextAction = request.headers.get('next-action')
+  if (nextAction) {
+    console.log(`🚫 [Middleware] Blocked fake Server Action request: ${nextAction}`)
+    return new NextResponse(
+      JSON.stringify({ error: 'Server Actions not supported' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+
   // Пропускаем API routes без обработки сессии (они обрабатывают авторизацию сами)
   if (request.nextUrl.pathname.startsWith('/api/')) {
     // Для API routes просто пропускаем или добавляем CORS заголовки если нужно
@@ -10,7 +21,7 @@ export async function middleware(request: NextRequest) {
     // API routes обрабатывают CORS сами
     return response
   }
-  
+
   return await updateSession(request)
 }
 
