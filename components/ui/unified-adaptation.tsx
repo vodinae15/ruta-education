@@ -2167,14 +2167,7 @@ export function UnifiedAdaptation({
             </Card>
           )}
 
-          {/* В режиме редактирования показываем все блоки, даже пустые */}
-          {(isEditing || isBlockValid(contentToDisplay.block1)) && renderAdaptationBlock('block1', contentToDisplay.block1, 1)}
-          {(isEditing || isBlockValid(contentToDisplay.block2)) && renderAdaptationBlock('block2', contentToDisplay.block2, 2)}
-          {(isEditing || isBlockValid(contentToDisplay.block3)) && renderAdaptationBlock('block3', contentToDisplay.block3, 3)}
-          {(isEditing || isBlockValid(contentToDisplay.block4)) && renderAdaptationBlock('block4', contentToDisplay.block4, 4)}
-          {(isEditing || isBlockValid(contentToDisplay.block5)) && renderAdaptationBlock('block5', contentToDisplay.block5, 5)}
-
-          {/* Блок "Навигация" */}
+          {/* Блок "Навигация" - второй после "Как работать с уроком" */}
           {contentToDisplay.navigation && (contentToDisplay.navigation.content || (contentToDisplay.navigation.elements && contentToDisplay.navigation.elements.length > 0)) && (
             <Card
               className="border border-[#659AB8]"
@@ -2241,7 +2234,14 @@ export function UnifiedAdaptation({
             </Card>
           )}
 
-          {/* Блок "Интеграция и завершение" */}
+          {/* Основные блоки контента (block1-block5) */}
+          {(isEditing || isBlockValid(contentToDisplay.block1)) && renderAdaptationBlock('block1', contentToDisplay.block1, 1)}
+          {(isEditing || isBlockValid(contentToDisplay.block2)) && renderAdaptationBlock('block2', contentToDisplay.block2, 2)}
+          {(isEditing || isBlockValid(contentToDisplay.block3)) && renderAdaptationBlock('block3', contentToDisplay.block3, 3)}
+          {(isEditing || isBlockValid(contentToDisplay.block4)) && renderAdaptationBlock('block4', contentToDisplay.block4, 4)}
+          {(isEditing || isBlockValid(contentToDisplay.block5)) && renderAdaptationBlock('block5', contentToDisplay.block5, 5)}
+
+          {/* Блок "Интеграция и завершение" - последний */}
           {contentToDisplay.conclusion && (contentToDisplay.conclusion.content || (contentToDisplay.conclusion.elements && contentToDisplay.conclusion.elements.length > 0)) && (
             <Card
               className="border border-[#659AB8]"
