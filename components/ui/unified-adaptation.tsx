@@ -2173,6 +2173,141 @@ export function UnifiedAdaptation({
           {(isEditing || isBlockValid(contentToDisplay.block3)) && renderAdaptationBlock('block3', contentToDisplay.block3, 3)}
           {(isEditing || isBlockValid(contentToDisplay.block4)) && renderAdaptationBlock('block4', contentToDisplay.block4, 4)}
           {(isEditing || isBlockValid(contentToDisplay.block5)) && renderAdaptationBlock('block5', contentToDisplay.block5, 5)}
+
+          {/* Блок "Навигация" */}
+          {contentToDisplay.navigation && (contentToDisplay.navigation.content || (contentToDisplay.navigation.elements && contentToDisplay.navigation.elements.length > 0)) && (
+            <Card
+              className="border border-[#659AB8]"
+              style={{
+                backgroundColor: '#F0F7FA',
+                borderRadius: '12px'
+              }}
+            >
+              <CardHeader className="p-6">
+                <CardTitle className="text-lg text-[#1E293B]">
+                  {contentToDisplay.navigation.title || 'Навигация'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                {contentToDisplay.navigation.content && (
+                  <div className="prose prose-sm max-w-none text-[#374151]">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {contentToDisplay.navigation.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
+                {contentToDisplay.navigation.elements && contentToDisplay.navigation.elements.length > 0 && (
+                  <div className="mt-4 space-y-4">
+                    {contentToDisplay.navigation.elements.filter((el: any) => ['video', 'audio', 'image'].includes(el.type)).map((element: any, idx: number) => {
+                      if (element.type === 'video') {
+                        let videoUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          videoUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <video key={idx} controls className="w-full rounded-lg" src={videoUrl}>
+                            Ваш браузер не поддерживает видео
+                          </video>
+                        )
+                      }
+                      if (element.type === 'audio') {
+                        let audioUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          audioUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <audio key={idx} controls className="w-full" src={audioUrl}>
+                            Ваш браузер не поддерживает аудио
+                          </audio>
+                        )
+                      }
+                      if (element.type === 'image') {
+                        let imageUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          imageUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <img key={idx} src={imageUrl} alt="" className="w-full rounded-lg" />
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Блок "Интеграция и завершение" */}
+          {contentToDisplay.conclusion && (contentToDisplay.conclusion.content || (contentToDisplay.conclusion.elements && contentToDisplay.conclusion.elements.length > 0)) && (
+            <Card
+              className="border border-[#659AB8]"
+              style={{
+                backgroundColor: '#F0F7FA',
+                borderRadius: '12px'
+              }}
+            >
+              <CardHeader className="p-6">
+                <CardTitle className="text-lg text-[#1E293B]">
+                  {contentToDisplay.conclusion.title || 'Интеграция и завершение'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                {contentToDisplay.conclusion.content && (
+                  <div className="prose prose-sm max-w-none text-[#374151]">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {contentToDisplay.conclusion.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
+                {contentToDisplay.conclusion.elements && contentToDisplay.conclusion.elements.length > 0 && (
+                  <div className="mt-4 space-y-4">
+                    {contentToDisplay.conclusion.elements.filter((el: any) => ['video', 'audio', 'image'].includes(el.type)).map((element: any, idx: number) => {
+                      if (element.type === 'video') {
+                        let videoUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          videoUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <video key={idx} controls className="w-full rounded-lg" src={videoUrl}>
+                            Ваш браузер не поддерживает видео
+                          </video>
+                        )
+                      }
+                      if (element.type === 'audio') {
+                        let audioUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          audioUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <audio key={idx} controls className="w-full" src={audioUrl}>
+                            Ваш браузер не поддерживает аудио
+                          </audio>
+                        )
+                      }
+                      if (element.type === 'image') {
+                        let imageUrl = element.content
+                        try {
+                          const parsed = JSON.parse(element.content)
+                          imageUrl = parsed.fileUrl || element.content
+                        } catch {}
+                        return (
+                          <img key={idx} src={imageUrl} alt="" className="w-full rounded-lg" />
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Если все блоки пустые и не в режиме редактирования, показываем сообщение */}
           {!isEditing && !isBlockValid(contentToDisplay.block1) && !isBlockValid(contentToDisplay.block2) && !isBlockValid(contentToDisplay.block3) && !isBlockValid(contentToDisplay.block4) && !isBlockValid(contentToDisplay.block5) && (
             <div className="p-8 text-center text-gray-500">
